@@ -1,7 +1,7 @@
 from types import MappingProxyType
 
 from flask import Blueprint, render_template, request
-from services import namelist_creator, wrf_service
+from services import namelist_creator
 
 NML_PARAMS = (
     "frac_veic1",
@@ -50,10 +50,8 @@ NML_PARAMS = (
 class IndexView:
     def __init__(
         self,
-        wrf_service: wrf_service.SSHWRFService,
         namelist_creator: namelist_creator.NamelistContentCreator,
     ):
-        self.__service = wrf_service
         self.__creator = namelist_creator
 
     def index(self):
@@ -63,8 +61,6 @@ class IndexView:
         data_from_namelist_form = MappingProxyType(request.form)
 
         namelist_data = self.__creator.create_namelist(data_from_namelist_form)
-
-        self.__service.connect_to()
 
         return namelist_data
 
