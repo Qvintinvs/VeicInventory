@@ -1,19 +1,12 @@
 from dependency_injector import containers, providers
-from services import wrf_service
+from services import namelist_creator
+from views import index_view
 
 
 class InventoryAppContainer(containers.DeclarativeContainer):
     config = providers.Configuration()
 
-    connection_settings = providers.Singleton(
-        wrf_service.ConnectionSettings,
-        hostname=config.hostname,
-        username=config.username,
-        password=config.password,
-    )
-
-    service = providers.Singleton(
-        wrf_service.SSHWRFService,
-        settings=connection_settings,
-        namelist_remote_path=config.namelist_remote_path,
+    main_page = providers.Singleton(
+        index_view.IndexView,
+        namelist_creator=namelist_creator.NamelistContentCreator("emission_vehicles"),
     )
