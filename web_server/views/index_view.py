@@ -39,6 +39,6 @@ class IndexView:
 
         index_page.add_url_rule("/", view_func=self.index, methods=["GET"])
 
-        index_page.add_url_rule("/send", view_func=self.send_file, methods=["POST"])
+        index_page.add_url_rule("/send", view_func=self.send, methods=["POST"])
 
         return index_page
