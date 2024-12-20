@@ -1,10 +1,8 @@
 from collections.abc import Iterable
 from typing import NamedTuple
 
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
-
-db = SQLAlchemy(model_class=DeclarativeBase)
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import declarative_base
 
 
 class VehicularData(NamedTuple):
@@ -13,13 +11,16 @@ class VehicularData(NamedTuple):
     subcategory: Iterable[str]
 
 
-class VasquesVehicleModel(db.Model):
-    __tablename__ = "vehicles"
+Base = declarative_base()
 
-    id = db.Column(db.Integer, primary_key=True)
-    year = db.Column(db.Integer, nullable=False)
-    fuel = db.Column(db.String(50), nullable=False)
-    subcategory = db.Column(db.String(100), nullable=False)
+
+class VasquesVehicleModel(Base):
+    __tablename__ = "vehicle"
+
+    id = Column(Integer, primary_key=True)
+    year = Column(Integer, nullable=False)
+    fuel = Column(String(50), nullable=False)
+    subcategory = Column(String(100), nullable=False)
 
     def __init__(self, year: int, fuel: str, subcategory: str):
         self.year = year
@@ -27,7 +28,7 @@ class VasquesVehicleModel(db.Model):
         self.subcategory = subcategory
 
     @classmethod
-    def insert_multiple_vehicles_from(cls, vehicles_data: VehicularData):
+    def create_multiple_vehicles_from(cls, vehicles_data: VehicularData):
         years, fuels, subcategories = vehicles_data
 
         vehicles = (
@@ -35,6 +36,4 @@ class VasquesVehicleModel(db.Model):
             for year, fuel, subcategory in zip(years, fuels, subcategories)
         )
 
-        db.session.add_all(vehicles)
-
-        db.session.commit()
+        return vehicles
