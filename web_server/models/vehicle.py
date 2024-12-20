@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from typing import NamedTuple
 
 from flask_sqlalchemy import SQLAlchemy
@@ -7,9 +8,9 @@ db = SQLAlchemy(model_class=DeclarativeBase)
 
 
 class VehicularData(NamedTuple):
-    year: tuple[int]
-    fuel: tuple[str]
-    subcategory: tuple[str]
+    year: Iterable[int]
+    fuel: Iterable[str]
+    subcategory: Iterable[str]
 
 
 class VasquesVehicleModel(db.Model):
