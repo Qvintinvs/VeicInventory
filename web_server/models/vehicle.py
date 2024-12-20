@@ -9,3 +9,8 @@ class Vehicle(db.Model):
     year = db.Column(db.Integer, nullable=False)
     fuel = db.Column(db.String(50), nullable=False)
     subcategory = db.Column(db.String(100), nullable=False)
+
+    def __init__(self, year: int, fuel: str, subcategory: str):
+        self.year = year
+        self.fuel = fuel
+        self.subcategory = subcategory
