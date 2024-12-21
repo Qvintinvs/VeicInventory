@@ -28,7 +28,7 @@ class VasquesVehicleModel(Base):
         self.subcategory = subcategory
 
     @classmethod
-    def create_multiple_vehicles_from(cls, vehicles_data: VehicularData):
+    def create_vehicles_from(cls, vehicles_data: VehicularData):
         years, fuels, subcategories = vehicles_data
 
         vehicles = (
