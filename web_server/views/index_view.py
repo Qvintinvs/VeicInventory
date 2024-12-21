@@ -26,7 +26,7 @@ class IndexView:
 
         vehicular_data = vehicle.VehicularData(years_to_int, fuels, subcategories)
 
-        vehicle.VasquesVehicleModel.insert_multiple_vehicles_from(vehicular_data)
+        vehicle.VasquesVehicleModel.create_multiple_vehicles_from(vehicular_data)
 
         data_from_namelist_form = MappingProxyType(data)
 
