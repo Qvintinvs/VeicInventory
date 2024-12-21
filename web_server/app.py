@@ -25,6 +25,17 @@ def main():
 
     app.register_error_handler(405, request_method_error)
 
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///instance/app.db"
+
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    db = container.database()
+
+    db.init_app(app)
+
+    with app.app_context():
+        db.create_all()
+
     app.run()
 
 
