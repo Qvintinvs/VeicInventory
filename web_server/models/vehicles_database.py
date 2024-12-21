@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from vasques_vehicle_model import VasquesVehicleModel, VehicularData
+from models.vasques_vehicle_model import VasquesVehicleModel, VehicularData
 
 
 class VehiclesDatabase:
