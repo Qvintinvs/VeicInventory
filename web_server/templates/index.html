@@ -12,7 +12,7 @@
 
     <h1>Informações do Veículo</h1>
 
-    <form action="{{ url_for('index.send_file') }}" method="POST">
+    <form action="{{ url_for('index.send') }}" method="POST">
       <div class="vehicle">
         <label for="year">Ano:</label>
         <input type="number" name="year[]" placeholder="Ex: 2024" required>
