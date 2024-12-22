@@ -1,6 +1,8 @@
 import app_container
 from dotenv import load_dotenv
 from flask import Flask
+from services.namelist_creator import NamelistContentCreator
+from views.index_view import IndexView
 
 
 def request_method_error(error: Exception):
@@ -15,26 +17,23 @@ def main():
 
     container = app_container.InventoryAppContainer()
 
-    main_page = container.main_page()
+    app = Flask(__name__)
+
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
+
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    inventory = container.vehicular_inventory()
+
+    inventory.initialize_database_in(app)
+
+    main_page = IndexView(inventory, NamelistContentCreator("emission_vehicles"))
 
     main_blueprint = main_page.add_to()
-
-    app = Flask(__name__)
 
     app.register_blueprint(main_blueprint)
 
     app.register_error_handler(405, request_method_error)
-
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///instance/app.db"
-
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-    db = container.database()
-
-    db.init_app(app)
-
-    with app.app_context():
-        db.create_all()
 
     app.run()
 
