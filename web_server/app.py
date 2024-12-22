@@ -25,7 +25,7 @@ def main():
 
     app.register_error_handler(405, request_method_error)
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///instance/app.db"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
