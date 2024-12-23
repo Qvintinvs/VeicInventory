@@ -1,14 +1,15 @@
 from types import MappingProxyType
 
 from flask import Blueprint, render_template, request
-from models import vasques_vehicle_model, vehicles_database
+from models.vehicles_database import VehiclesDatabase
+from models.vehicular_data import VehicularData
 from services import namelist_creator
 
 
 class IndexView:
     def __init__(
         self,
-        vehicular_inventory: vehicles_database.VehiclesDatabase,
+        vehicular_inventory: VehiclesDatabase,
         namelist_creator: namelist_creator.NamelistContentCreator,
     ):
         self.__inventory = vehicular_inventory
@@ -26,9 +27,7 @@ class IndexView:
 
         years_to_int = map(int, years)
 
-        vehicular_data = vasques_vehicle_model.VehicularData(
-            years_to_int, fuels, subcategories
-        )
+        vehicular_data = VehicularData(years_to_int, fuels, subcategories)
 
         self.__inventory.insert_vehicles_of(vehicular_data)
 
