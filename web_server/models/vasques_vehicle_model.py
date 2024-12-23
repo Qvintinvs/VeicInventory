@@ -1,15 +1,6 @@
-from collections.abc import Iterable
-from typing import NamedTuple
-
+from models.vehicular_data import VehicularData
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import declarative_base
-
-
-class VehicularData(NamedTuple):
-    year: Iterable[int]
-    fuel: Iterable[str]
-    subcategory: Iterable[str]
-
 
 Base = declarative_base()
 
