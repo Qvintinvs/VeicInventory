@@ -20,3 +20,6 @@ class VehiclesDatabase:
         self.__db.session.add_all(vehicles)
 
         self.__db.session.commit()
+
+    def read_vehicles(self):
+        return self.__db.session.query(VasquesVehicleModel).limit(5).all()
