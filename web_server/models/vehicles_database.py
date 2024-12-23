@@ -5,17 +5,17 @@ from models.vehicular_data import VehicularData
 
 
 class VehiclesDatabase:
-    def __init__(self, db: SQLAlchemy):
-        self.__db = db
+    def __init__(self, sql_db: SQLAlchemy):
+        self.__db = sql_db
 
-    def initialize_database_in(self, app: Flask):
-        self.__db.init_app(app)
+    def initialize_database_in(self, the_app: Flask):
+        self.__db.init_app(the_app)
 
-        with app.app_context():
+        with the_app.app_context():
             self.__db.create_all()
 
-    def insert_vehicles_of(self, veic: VehicularData):
-        vehicles = VasquesVehicleModel.create_vehicles_from(veic)
+    def insert_vehicles_of(self, vehicular_data: VehicularData):
+        vehicles = VasquesVehicleModel.create_vehicles_from(vehicular_data)
 
         self.__db.session.add_all(vehicles)
 
