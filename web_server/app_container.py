@@ -8,5 +8,5 @@ class InventoryAppContainer(containers.DeclarativeContainer):
 
     vehicular_inventory = providers.Singleton(
         vehicles_database.VehiclesDatabase,
-        db=SQLAlchemy(model_class=vasques_vehicle_model.Base),
+        sql_db=SQLAlchemy(model_class=vasques_vehicle_model.Base),
     )
