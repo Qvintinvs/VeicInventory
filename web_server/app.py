@@ -1,8 +1,7 @@
 import app_container
 from dotenv import load_dotenv
 from flask import Flask
-from services import namelist_creator
-from views import index_view
+from views.index_view import IndexView
 
 
 def request_method_error(error: Exception):
@@ -17,24 +16,21 @@ def main():
 
     container = app_container.InventoryAppContainer()
 
-    config = container.config
-
-    config.namelist_remote_path.from_env("NAMELIST_REMOTE_PATH", required=True)
-
-    config.hostname.from_env("SSH_HOST", required=True)
-    config.username.from_env("SSH_USER", required=True)
-    config.password.from_env("SSH_PASS")
-
-    index = index_view.IndexView(
-        container.service(),
-        namelist_creator.NamelistContentCreator("emission_vehicles"),
-    )
-
-    index_blueprint = index.add_to()
-
     app = Flask(__name__)
 
-    app.register_blueprint(index_blueprint)
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
+
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    inventory = container.vehicular_inventory()
+
+    inventory.initialize_database_in(app)
+
+    main_page = IndexView(inventory)
+
+    main_blueprint = main_page.add_to()
+
+    app.register_blueprint(main_blueprint)
 
     app.register_error_handler(405, request_method_error)
 
