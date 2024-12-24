@@ -16,12 +16,21 @@ body {
   position: absolute;
   width: 90%;
   max-width: 600px;
+  min-height: 300px;
   margin: 0 auto;
   background: #fff;
   padding: 20px;
   border-radius: 10px;
   box-sizing: border-box;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
 
 h1 {
@@ -50,6 +59,9 @@ input, select {
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .btn {
