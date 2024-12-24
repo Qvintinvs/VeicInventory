@@ -1,5 +1,5 @@
 from models.vehicular_data import VehicularData
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import CHAR, Column, Integer, String
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
@@ -11,7 +11,7 @@ class VasquesVehicleModel(Base):
     id = Column(Integer, primary_key=True)
     year = Column(Integer, nullable=False)
     fuel = Column(String(50), nullable=False)
-    subcategory = Column(String(100), nullable=False)
+    subcategory = Column(CHAR, nullable=False)
 
     def __init__(self, year: int, fuel: str, subcategory: str):
         self.year = year
