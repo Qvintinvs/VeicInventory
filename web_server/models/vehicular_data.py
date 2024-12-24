@@ -2,6 +2,6 @@ from collections.abc import Iterable
 from typing import NamedTuple
 
 class VehicularData(NamedTuple):
-    year: Iterable[int]
-    fuel: Iterable[str]
-    subcategory: Iterable[str]
+    years: Iterable[int]
+    fuels: Iterable[str]
+    subcategories: Iterable[str]
