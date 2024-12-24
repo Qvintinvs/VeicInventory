@@ -1,7 +1,6 @@
 import app_container
 from dotenv import load_dotenv
 from flask import Flask
-from services.namelist_creator import NamelistContentCreator
 from views.index_view import IndexView
 
 
@@ -27,7 +26,7 @@ def main():
 
     inventory.initialize_database_in(app)
 
-    main_page = IndexView(inventory, NamelistContentCreator("emission_vehicles"))
+    main_page = IndexView(inventory)
 
     main_blueprint = main_page.add_to()
 
