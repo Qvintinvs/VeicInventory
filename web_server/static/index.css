@@ -1,16 +1,26 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content:center;
+}
+
 body {
   font-family: Arial, sans-serif;
-  margin: 20px;
-  padding: 0;
   background-color: #f4f4f9;
+  padding: 0;
 }
 
 .container {
+  position: absolute;
+  width: 90%;
   max-width: 600px;
   margin: 0 auto;
   background: #fff;
   padding: 20px;
   border-radius: 10px;
+  box-sizing: border-box;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
