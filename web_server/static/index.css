@@ -46,6 +46,15 @@ h1 {
   background-color: #fafafa;
 }
 
+@media (max-height: 280px) {
+  .container {
+    height: 100%;
+  }
+  .vehicle {
+    display: none;
+  }
+}
+
 label {
   display: block;
   margin-bottom: 5px;
