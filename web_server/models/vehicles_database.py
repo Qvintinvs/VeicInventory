@@ -15,7 +15,12 @@ class VehiclesDatabase:
             self.__db.create_all()
 
     def insert_vehicles_of(self, vehicular_data: VehicularData):
-        vehicles = VasquesVehicleModel.create_vehicles_from(vehicular_data)
+        years, fuels, subcategories = vehicular_data
+
+        vehicles = (
+            VasquesVehicleModel(year, fuel, subcategory)
+            for year, fuel, subcategory in zip(years, fuels, subcategories)
+        )
 
         self.__db.session.add_all(vehicles)
 

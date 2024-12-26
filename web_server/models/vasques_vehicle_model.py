@@ -1,4 +1,3 @@
-from models.vehicular_data import VehicularData
 from sqlalchemy import CHAR, Column, Integer, String
 from sqlalchemy.orm import declarative_base
 
@@ -17,14 +16,3 @@ class VasquesVehicleModel(Base):
         self.year = year
         self.fuel = fuel
         self.subcategory = subcategory
-
-    @classmethod
-    def create_vehicles_from(cls, vehicles_data: VehicularData):
-        years, fuels, subcategories = vehicles_data
-
-        vehicles = (
-            cls(year, fuel, subcategory)
-            for year, fuel, subcategory in zip(years, fuels, subcategories)
-        )
-
-        return vehicles
