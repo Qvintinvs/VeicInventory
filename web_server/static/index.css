@@ -13,6 +13,8 @@ body {
 }
 
 .container {
+  display: flex;
+  flex-direction: column;
   position: absolute;
   width: 90%;
   max-width: 600px;
@@ -48,9 +50,13 @@ h1 {
 
 @media (max-height: 280px) {
   .container {
+    justify-content:center;
     height: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
   }
-  .vehicle {
+
+  h1, form .btn {
     display: none;
   }
 }
