@@ -84,6 +84,7 @@ input, select {
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+  margin-top: 10px;
 }
 
 .btn:hover {
