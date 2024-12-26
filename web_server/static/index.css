@@ -1,17 +1,38 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content:center;
+}
+
 body {
   font-family: Arial, sans-serif;
-  margin: 20px;
-  padding: 0;
   background-color: #f4f4f9;
+  padding: 0;
 }
 
 .container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: 90%;
   max-width: 600px;
+  min-height: 300px;
   margin: 0 auto;
   background: #fff;
   padding: 20px;
   border-radius: 10px;
+  box-sizing: border-box;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
 
 h1 {
@@ -27,6 +48,19 @@ h1 {
   background-color: #fafafa;
 }
 
+@media (max-height: 280px) {
+  .container {
+    justify-content:center;
+    height: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  h1, form .btn {
+    display: none;
+  }
+}
+
 label {
   display: block;
   margin-bottom: 5px;
@@ -40,6 +74,9 @@ input, select {
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .btn {
@@ -53,6 +90,7 @@ input, select {
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+  margin-top: 10px;
 }
 
 .btn:hover {
