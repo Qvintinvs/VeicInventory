@@ -26,7 +26,7 @@ class IndexView:
 
         self.__inventory.insert_vehicles_of(vehicular_data)
 
-        return self.index()
+        return render_template("index.html", params=vehicular_data)
 
     def add_to(self):
         index_page = Blueprint("index", __name__)
