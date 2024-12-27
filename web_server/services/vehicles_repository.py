@@ -4,7 +4,7 @@ from models.vasques_vehicle_model import VasquesVehicleModel
 from models.vehicular_data import VehicularData
 
 
-class VehiclesDatabase:
+class VehiclesRepository:
     def __init__(self, sql_db: SQLAlchemy):
         self.__db = sql_db
 
