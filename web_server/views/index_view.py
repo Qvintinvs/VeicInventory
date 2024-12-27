@@ -1,12 +1,12 @@
 from flask import Blueprint, render_template, request
-from models.vehicles_database import VehiclesDatabase
-from models.vehicular_data import VehicularData
+from services.vehicles_repository import VehiclesRepository
+from services.vehicular_data import VehicularData
 
 
 class IndexView:
     def __init__(
         self,
-        vehicular_inventory: VehiclesDatabase,
+        vehicular_inventory: VehiclesRepository,
     ):
         self.__inventory = vehicular_inventory
 
@@ -26,7 +26,7 @@ class IndexView:
 
         self.__inventory.insert_vehicles_of(vehicular_data)
 
-        return self.index()
+        return render_template("index.html", params=vehicular_data)
 
     def add_to(self):
         index_page = Blueprint("index", __name__)
