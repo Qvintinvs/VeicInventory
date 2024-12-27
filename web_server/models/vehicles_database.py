@@ -15,11 +15,24 @@ class VehiclesDatabase:
             self.__db.create_all()
 
     def insert_vehicles_of(self, vehicular_data: VehicularData):
-        vehicles = VasquesVehicleModel.create_vehicles_from(vehicular_data)
+        years, fuels, subcategories = vehicular_data
+
+        vehicles = (
+            VasquesVehicleModel(year, fuel, subcategory)
+            for year, fuel, subcategory in zip(years, fuels, subcategories)
+        )
 
         self.__db.session.add_all(vehicles)
 
         self.__db.session.commit()
 
-    def read_vehicles(self):
-        return self.__db.session.query(VasquesVehicleModel).limit(5).all()
+    def read_vehicles_data(self):
+        database_vehicles = self.__db.session.query(VasquesVehicleModel).limit(5).all()
+
+        vehicles_converted_to_data = VehicularData(
+            years=(vehicle.year for vehicle in database_vehicles),
+            fuels=(vehicle.fuel for vehicle in database_vehicles),
+            subcategories=(vehicle.subcategory for vehicle in database_vehicles),
+        )
+
+        return vehicles_converted_to_data
