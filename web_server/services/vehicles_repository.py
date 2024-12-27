@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from models.vasques_vehicle_model import VasquesVehicleModel
-from models.vehicular_data import VehicularData
+from services.vehicular_data import VehicularData
 
 
 class VehiclesRepository:
