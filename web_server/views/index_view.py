@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, redirect, render_template, request, url_for
 from services.vehicles_repository import VehiclesRepository
 from services.vehicular_data import VehicularData
 
@@ -10,8 +10,10 @@ class MainFormView:
     ):
         self.__inventory = vehicular_inventory
 
-    def index(self):
-        return render_template("index.html")
+    def show(self):
+        readed_data = self.__inventory.read_vehicles_data()
+
+        return render_template("index.html", params=readed_data)
 
     def send(self):
         data = request.form
@@ -26,12 +28,12 @@ class MainFormView:
 
         self.__inventory.insert_vehicles_of(vehicular_data)
 
-        return render_template("index.html", params=vehicular_data)
+        return redirect(url_for("form.show"))
 
     def add_to(self):
-        index_page = Blueprint("index", __name__)
+        index_page = Blueprint("form", __name__)
 
-        index_page.add_url_rule("/", view_func=self.index, methods=["GET"])
+        index_page.add_url_rule("/", view_func=self.show, methods=["GET"])
 
         index_page.add_url_rule("/send", view_func=self.send, methods=["POST"])
 
