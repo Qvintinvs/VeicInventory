@@ -1,4 +1,4 @@
-import app_container
+from app_container import InventoryAppContainer
 from dotenv import load_dotenv
 from flask import Flask
 from views.main_form_view import MainFormView
@@ -14,7 +14,7 @@ def main():
     if not could_load_dotenv:
         raise Exception("Missing Dotenv")
 
-    container = app_container.InventoryAppContainer()
+    container = InventoryAppContainer()
 
     app = Flask(__name__)
 
