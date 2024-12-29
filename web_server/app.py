@@ -1,7 +1,7 @@
 import app_container
 from dotenv import load_dotenv
 from flask import Flask
-from views.index_view import IndexView
+from views.index_view import MainFormView
 
 
 def request_method_error(error: Exception):
@@ -26,7 +26,7 @@ def main():
 
     inventory.initialize_database_in(app)
 
-    main_page = IndexView(inventory)
+    main_page = MainFormView(inventory)
 
     main_blueprint = main_page.add_to()
 

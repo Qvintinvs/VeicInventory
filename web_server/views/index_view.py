@@ -3,7 +3,7 @@ from services.vehicles_repository import VehiclesRepository
 from services.vehicular_data import VehicularData
 
 
-class IndexView:
+class MainFormView:
     def __init__(
         self,
         vehicular_inventory: VehiclesRepository,
