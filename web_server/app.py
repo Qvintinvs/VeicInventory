@@ -1,7 +1,7 @@
 import app_container
 from dotenv import load_dotenv
 from flask import Flask
-from views.index_view import MainFormView
+from views.main_form_view import MainFormView
 
 
 def request_method_error(error: Exception):
