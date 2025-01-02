@@ -55,7 +55,7 @@ h1 {
 
 @media (max-height: 280px) {
   .container {
-    justify-content:center;
+    justify-content: center;
     height: 100%;
     padding-top: 0;
     padding-bottom: 0;
