@@ -11,7 +11,7 @@
           href="{{ url_for('static', filename='index.css') }}">
   </head>
   <body>
-    <div class="container">
+    <div id="form-container">
       <h1>Informações do Veículo</h1>
       <form action="{{ url_for("form.send") }}" method="POST">
         <div class="vehicle">
