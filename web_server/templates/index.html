@@ -39,5 +39,23 @@
         <button type="submit" class="btn">Adicionar</button>
       </form>
     </div>
+    <div id="data-container">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Year</th>
+            <th scope="col">Fuel</th>
+            <th scope="col">Subcategory</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for field in vehicular_data %}
+            <tr>
+              {% for value in field %}<td>{{ value }}</td>{% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </body>
 </html>
