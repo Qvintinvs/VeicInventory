@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>VeicInventory</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet'
-          type='text/css'
-          media='screen'
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+          type="text/css"
+          media="screen"
           href="{{ url_for('static', filename='index.css') }}">
   </head>
   <body>
-    <div class="container">
+    <div id="form-container">
       <h1>Informações do Veículo</h1>
       <form action="{{ url_for("form.send") }}" method="POST">
         <div class="vehicle">
@@ -30,7 +30,9 @@
           <select name="subcategory[]" required>
             <option value="">Selecione a subcategoria de CNH...</option>
             <option value="A">A - Motos, motonetas e triciclos</option>
-            <option value="B">B - Carros de passeio, utilitário/SUV, minivan, picape</option>
+            <option value="B">
+              B - Carros de passeio, utilitário/SUV, minivan, picape
+            </option>
             <option value="C">C - Caminhões, caminhonetes, vans de carga</option>
             <option value="D">D - Ônibus, microônibus, vans de passageiros</option>
             <option value="E">E - Veículos pesados</option>
@@ -38,6 +40,24 @@
         </div>
         <button type="submit" class="btn">Adicionar</button>
       </form>
+    </div>
+    <div id="data-container">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Year</th>
+            <th scope="col">Fuel</th>
+            <th scope="col">Subcategory</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for field in vehicular_data %}
+            <tr>
+              {% for value in field %}<td>{{ value }}</td>{% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </body>
 </html>
