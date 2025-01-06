@@ -13,7 +13,9 @@ class MainFormView:
     def show(self):
         readed_data = self.__inventory.read_vehicles_data()
 
-        return render_template("index.html", params=readed_data)
+        tabular_data = zip(*readed_data)
+
+        return render_template("index.html", vehicular_data=tabular_data)
 
     def send(self):
         data = request.form
