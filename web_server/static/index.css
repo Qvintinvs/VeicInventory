@@ -106,9 +106,12 @@ th {
   text-align: left;
   border: 1px solid #ddd;
 }
+th {
+  color: #333;
+}
 table tr:nth-child(odd) td {
   background-color: #f2f2f2;
-  color: #000;
+  color: #212529;
 }
 @media (max-width: 480px) {
   #form-container {
