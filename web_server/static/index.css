@@ -59,6 +59,17 @@ tr {
 tbody {
   white-space: nowrap;
 }
+/* styling like the bootstrap striped table */
+td,
+th {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+table tr:nth-child(odd) td {
+  background-color: #f2f2f2;
+  color: #000;
+}
 @media (max-width: 480px) {
   #form-container {
     width: 100%;
