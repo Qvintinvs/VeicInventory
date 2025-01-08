@@ -29,6 +29,50 @@ body {
   display: flex;
   flex-direction: column;
 }
+h1 {
+  text-align: center;
+  color: #333;
+}
+.vehicle {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fafafa;
+}
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+input,
+select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+.btn:hover {
+  background-color: #0056b3;
+}
 #data-container {
   display: flex;
   align-items: center;
@@ -76,17 +120,6 @@ table tr:nth-child(odd) td {
     display: none;
   }
 }
-h1 {
-  text-align: center;
-  color: #333;
-}
-.vehicle {
-  margin-bottom: 15px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #fafafa;
-}
 @media (max-height: 280px) {
   #form-container {
     justify-content: center;
@@ -98,37 +131,4 @@ h1 {
   form .btn {
     display: none;
   }
-}
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-input,
-select {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.btn {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  text-align: center;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 10px;
-}
-.btn:hover {
-  background-color: #0056b3;
 }
