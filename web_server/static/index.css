@@ -104,7 +104,7 @@ td,
 th {
   padding: 10px;
   text-align: left;
-  border: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
 }
 th {
   color: #333;
