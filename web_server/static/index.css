@@ -50,7 +50,7 @@ table {
 thead,
 tbody,
 tr {
-    display: contents;
+  display: contents;
 }
 tbody {
   white-space: nowrap;
