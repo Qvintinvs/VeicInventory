@@ -29,46 +29,6 @@ body {
   display: flex;
   flex-direction: column;
 }
-#data-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-td,
-th {
-  text-align: center;
-}
-table {
-  display: grid;
-  grid-template-rows: repeat(6, 1fr);
-  grid-template-columns: repeat(3, 1fr);
-  width: 100%;
-  max-width: 400px;
-  height: 240px;
-  margin: 0 auto;
-  overflow-x: auto;
-  border-spacing: 0;
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-thead,
-tbody,
-tr {
-    display: contents;
-}
-tbody {
-  white-space: nowrap;
-}
-@media (max-width: 480px) {
-  #form-container {
-    width: 100%;
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-  #data-container {
-    display: none;
-  }
-}
 h1 {
   text-align: center;
   color: #333;
@@ -79,18 +39,6 @@ h1 {
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: #fafafa;
-}
-@media (max-height: 280px) {
-  #form-container {
-    justify-content: center;
-    height: 100%;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-  h1,
-  form .btn {
-    display: none;
-  }
 }
 label {
   display: block;
@@ -124,4 +72,66 @@ select {
 }
 .btn:hover {
   background-color: #0056b3;
+}
+#data-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+table {
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  max-width: 400px;
+  height: 240px;
+  margin: 0 auto;
+  overflow-x: auto;
+  border-spacing: 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+thead,
+tbody,
+tr {
+  display: contents;
+}
+tbody {
+  white-space: nowrap;
+}
+/* styling like the bootstrap striped table */
+td,
+th {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+th {
+  color: #333;
+}
+table tr:nth-child(odd) td {
+  background-color: #f2f2f2;
+  color: #212529;
+}
+@media (max-width: 480px) {
+  #form-container {
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  #data-container {
+    display: none;
+  }
+}
+@media (max-height: 280px) {
+  #form-container {
+    justify-content: center;
+    height: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  h1,
+  form .btn {
+    display: none;
+  }
 }
