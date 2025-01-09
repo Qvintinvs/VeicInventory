@@ -29,30 +29,30 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Modelo</th>
-            <th>Tipo</th>
-            <th>Velocidade</th>
-            <th>Status</th>
-            <th>Ações</th>
+            <th scope="col">#</th>
+            <th scope="col">Ano</th>
+            <th scope="col">Combustível</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Status</th>
+            <th scope="col">Ações</th>
           </tr>
         </thead>
         <tbody id="data-table">
           <!-- Dynamic data here -->
-          <tr>
-            <td>1</td>
-            <td>Veículo X</td>
-            <td>Sedan</td>
-            <td>80 km/h</td>
-            <td>
-              <span class="badge bg-success">Processado</span>
-            </td>
-            <td class="table-actions">
-              <button class="btn btn-info btn-sm">Editar</button>
-              <button class="btn btn-danger btn-sm">Excluir</button>
-              <button class="btn btn-secondary btn-sm">Processar</button>
-            </td>
-          </tr>
+          {% for field in vehicular_data %}
+            <tr>
+              <td>1</td>
+              {% for value in field %}<td>{{ value }}</td>{% endfor %}
+              <td>
+                <span class="badge bg-success">Processado</span>
+              </td>
+              <td class="table-actions">
+                <button class="btn btn-info btn-sm">Editar</button>
+                <button class="btn btn-danger btn-sm">Excluir</button>
+                <button class="btn btn-secondary btn-sm">Processar</button>
+              </td>
+            </tr>
+          {% endfor %}
         </tbody>
       </table>
       <div class="d-flex justify-content-end mt-3">
