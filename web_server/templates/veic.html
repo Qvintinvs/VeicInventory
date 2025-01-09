@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VeicInventory</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .table-actions button {
+        margin-right: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <header class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Inventário Veicular</h1>
+        <button class="btn btn-primary"
+                id="add-data"
+                data-bs-toggle="modal"
+                data-bs-target="#dataModal">Adicionar Novo Dado</button>
+      </header>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Modelo</th>
+            <th>Tipo</th>
+            <th>Velocidade</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="data-table">
+          <!-- Dynamic data here -->
+          <tr>
+            <td>1</td>
+            <td>Veículo X</td>
+            <td>Sedan</td>
+            <td>80 km/h</td>
+            <td>
+              <span class="badge bg-success">Processado</span>
+            </td>
+            <td class="table-actions">
+              <button class="btn btn-info btn-sm">Editar</button>
+              <button class="btn btn-danger btn-sm">Excluir</button>
+              <button class="btn btn-secondary btn-sm">Processar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="d-flex justify-content-end mt-3">
+        <button class="btn btn-outline-secondary me-2" id="export-json">
+          Exportar JSON
+        </button>
+        <button class="btn btn-outline-secondary" id="export-csv">Exportar CSV</button>
+      </div>
+    </div>
+    <!-- Modal para adicionar/editar dados -->
+    <div class="modal fade"
+         id="dataModal"
+         tabindex="-1"
+         aria-labelledby="dataModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="dataModalLabel">Adicionar/Editar Dado</h5>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="dataForm">
+              <div class="mb-3">
+                <label for="model" class="form-label">Modelo</label>
+                <input type="text" class="form-control" id="model" required>
+              </div>
+              <div class="mb-3">
+                <label for="type" class="form-label">Tipo</label>
+                <select class="form-select" id="type">
+                  <option value="Sedan">Sedan</option>
+                  <option value="SUV">SUV</option>
+                  <option value="Caminhão">Caminhão</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="speed" class="form-label">Velocidade (km/h)</label>
+                <input type="number" class="form-control" id="speed" required>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-primary" id="saveData">Salvar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
