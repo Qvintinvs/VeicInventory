@@ -8,9 +8,10 @@ notifications:
   email:
     on_success: never
     on_failure: change
+# Installing the project dependencies, both default and develop ones
 install:
   - pip install pipenv
-  - pipenv install --dev
+  - pipenv install -d
 script:
   - pytest
   - ruff check
