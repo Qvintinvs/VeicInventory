@@ -14,6 +14,10 @@
     />
     <link
       rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+    />
+    <link
+      rel="stylesheet"
       type="text/css"
       media="screen"
       href="{{ url_for('static', filename='index.css') }}"
@@ -56,9 +60,18 @@
               <span class="badge bg-success">Processado</span>
             </td>
             <td class="table-actions">
-              <button class="btn btn-info btn-sm">Editar</button>
-              <button class="btn btn-danger btn-sm">Excluir</button>
-              <button class="btn btn-secondary btn-sm">Processar</button>
+              <button class="btn btn-info btn-sm">
+                <i class="bi bi-pencil"></i>
+                <span class="d-none d-sm-inline">Editar</span>
+              </button>
+              <button class="btn btn-danger btn-sm">
+                <i class="bi bi-trash"></i>
+                <span class="d-none d-sm-inline">Excluir</span>
+              </button>
+              <button class="btn btn-secondary btn-sm">
+                <i class="bi bi-gear"></i>
+                <span class="d-none d-sm-inline">Processar</span>
+              </button>
             </td>
           </tr>
           {% endfor %}
