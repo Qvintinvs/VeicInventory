@@ -1,3 +1,5 @@
+from itertools import count
+
 from flask import Blueprint, redirect, render_template, request, url_for
 from services.vehicles_repository import VehiclesRepository
 from services.vehicular_data import VehicularData
@@ -13,13 +15,9 @@ class MainFormView:
     def show(self):
         readed_data = self.__inventory.read_vehicles_data()
 
-        tabular_data = zip(*readed_data)
+        indexed_tabular_data = zip(count(1), *readed_data)
 
-        tabular_data_with_indexes = (
-            (index, *data) for index, data in enumerate(tabular_data, 1)
-        )
-
-        return render_template("index.html", vehicular_data=tabular_data_with_indexes)
+        return render_template("index.html", vehicular_data=indexed_tabular_data)
 
     def send(self):
         data = request.form
