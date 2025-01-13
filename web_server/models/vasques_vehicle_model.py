@@ -10,23 +10,17 @@ class VasquesVehicleModel(Base):
     __tablename__ = "vehicle"
 
     id = Column(Integer, primary_key=True)
-    _year = Column(Integer, nullable=False)
-    _fuel = Column(String(50), nullable=False)
-    _subcategory = Column(CHAR, nullable=False)
+    year = Column(Integer, nullable=False)
+    fuel = Column(String(50), nullable=False)
+    subcategory = Column(CHAR, nullable=False)
 
     def __init__(self, year: int, fuel: str, subcategory: str):
-        self._year = year
-        self._fuel = fuel
-        self._subcategory = subcategory
+        self.year = year
+        self.fuel = fuel
+        self.subcategory = subcategory
 
-    @property
-    def year(self):
-        return cast(int, self._year)
-
-    @property
-    def fuel(self):
-        return cast(str, self._fuel)
-
-    @property
-    def subcategory(self):
-        return cast(str, self._subcategory)
+    def __iter__(self):
+        yield cast(int, self.id)
+        yield cast(int, self.year)
+        yield cast(str, self.fuel)
+        yield cast(str, self.subcategory)
