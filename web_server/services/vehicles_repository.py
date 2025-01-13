@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from models.vasques_vehicle_model import VasquesVehicleModel
-from services.vehicular_data import VehicularData
 
 
 class VehiclesRepository:
@@ -14,25 +13,15 @@ class VehiclesRepository:
         with the_app.app_context():
             self.__db.create_all()
 
-    def insert_vehicles_of(self, vehicular_data: VehicularData):
-        years, fuels, subcategories = vehicular_data
-
-        vehicles = (
-            VasquesVehicleModel(year, fuel, subcategory)
-            for year, fuel, subcategory in zip(years, fuels, subcategories)
-        )
-
-        self.__db.session.add_all(vehicles)
+    def insert_a(self, vehicle: VasquesVehicleModel):
+        self.__db.session.add(vehicle)
 
         self.__db.session.commit()
 
     def read_vehicles_data(self):
-        database_vehicles = self.__db.session.query(VasquesVehicleModel).limit(5).all()
+        return self.__db.session.query(VasquesVehicleModel).limit(5).all()
 
-        vehicles_converted_to_data = VehicularData(
-            years=(vehicle.year for vehicle in database_vehicles),
-            fuels=(vehicle.fuel for vehicle in database_vehicles),
-            subcategories=(vehicle.subcategory for vehicle in database_vehicles),
-        )
+    def delete_vehicle_by(self, its_id: int):
+        self.__db.session.query(VasquesVehicleModel).filter_by(id=its_id).delete()
 
-        return vehicles_converted_to_data
+        self.__db.session.commit()
