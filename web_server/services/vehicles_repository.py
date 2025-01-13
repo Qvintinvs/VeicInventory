@@ -20,3 +20,8 @@ class VehiclesRepository:
 
     def read_vehicles_data(self):
         return self.__db.session.query(VasquesVehicleModel).limit(5).all()
+
+    def delete_vehicle_by(self, its_id: int):
+        self.__db.session.query(VasquesVehicleModel).filter_by(id=its_id).delete()
+
+        self.__db.session.commit()
