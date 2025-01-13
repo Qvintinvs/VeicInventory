@@ -1,6 +1,9 @@
+from os import getenv
+
 from app_container import InventoryAppContainer
 from dotenv import load_dotenv
 from flask import Flask
+from flask_wtf import CSRFProtect
 from views.main_form_view import MainFormView
 
 
@@ -21,6 +24,10 @@ def main():
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    app.secret_key = getenv("FLASK_SECRET_KEY")
+
+    CSRFProtect(app)
 
     inventory = container.vehicular_inventory()
 
