@@ -1,6 +1,7 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from models.vasques_vehicle_model import VasquesVehicleModel
 from services.vehicles_repository import VehiclesRepository
+from views.vasques_vehicle_form import VasquesVehicleForm
 
 
 class MainFormView:
@@ -16,17 +17,14 @@ class MainFormView:
         return render_template("index.html", vehicular_data=readed_data)
 
     def send(self):
-        data = request.form
+        form = VasquesVehicleForm(request.form)
 
-        years = data.get("year[]")
-        fuels = data.get("fuel[]")
-        subcategories = data.get("subcategory[]")
+        if form.validate_on_submit():
+            new_vehicle = VasquesVehicleModel(
+                form.year.data, form.fuel.data, form.subcategory.data
+            )
 
-        years_to_int = int(years)
-
-        vehicular_data = VasquesVehicleModel(years_to_int, fuels, subcategories)
-
-        self.__inventory.insert_a(vehicular_data)
+            self.__inventory.insert_a(new_vehicle)
 
         return redirect(url_for("form.show"))
 

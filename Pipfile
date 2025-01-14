@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 flask = "*"
 flask-sqlalchemy = "*"
+flask-wtf = "*"
 python-dotenv = "*"
 dependency-injector = "*"
 f90nml = "*"
