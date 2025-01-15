@@ -1,9 +1,13 @@
 {% macro render_field(field) %}
 <div class="mb-3">
-  {{ field.label(class="form-label") }} {{ field(class="form-control") }} {% for
-  error in field.errors %}
-  <div class="text-danger">{{ error }}</div>
-  {% endfor %}
+  <dt>
+    {{ field.label(class="form-label") }} {{ field(class="form-control") }}
+  </dt>
+  <dd>
+    {% for error in field.errors %}
+    <div class="text-danger">{{ error }}</div>
+    {% endfor %}
+  </dd>
 </div>
 {% endmacro %}
 
@@ -11,10 +15,10 @@
   {{ form.hidden_tag() }}
 
   <div class="modal-body">
-    <div class="vehicle">
+    <dl>
       {{ render_field(form.year) }} {{ render_field(form.fuel) }} {{
       render_field(form.subcategory) }}
-    </div>
+    </dl>
   </div>
 
   <div class="modal-footer">
