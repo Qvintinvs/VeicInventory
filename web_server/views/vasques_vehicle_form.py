@@ -1,38 +1,52 @@
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, SelectField, StringField, SubmitField
-from wtforms.validators import AnyOf, DataRequired, Length, NumberRange
+from wtforms import IntegerField, SelectField, SubmitField
+from wtforms.validators import AnyOf, DataRequired, NumberRange
 
 
 class VasquesVehicleForm(FlaskForm):
     year = IntegerField(
-        "Year",
+        "Ano:",
+        render_kw={"placeholder": "Ex: 2024"},
         validators=(
-            DataRequired(message="Year is required."),
-            NumberRange(
-                min=1886, max=2100, message="Year must be between 1886 and 2100."
-            ),
+            DataRequired(),
+            NumberRange(min=1886, max=2100),
         ),
     )
 
-    fuel = StringField(
-        "Fuel",
+    fuel = SelectField(
+        "Combustível:",
+        choices=(
+            ("", "Selecione..."),
+            ("Gasolina", "Gasolina"),
+            ("Álcool", "Álcool"),
+            ("Diesel", "Diesel"),
+            ("Elétrico", "Elétrico"),
+            ("Flex", "Flex"),
+        ),
         validators=(
-            DataRequired(message="Fuel type is required."),
-            Length(max=50, message="Fuel type must not exceed 50 characters."),
+            DataRequired(),
             AnyOf(
-                values=("Gasoline", "Diesel", "Electric", "Hybrid"),
-                message="Fuel type must be one of: Gasoline, Diesel, Electric, or Hybrid.",
+                values=("Gasolina", "Álcool", "Diesel", "Elétrico", "Flex"),
             ),
         ),
     )
 
     subcategory = SelectField(
-        "Subcategory",
-        choices=(("A", "Type A"), ("B", "Type B"), ("C", "Type C")),
+        "Subcategoria:",
+        choices=(
+            ("", "Selecione a subcategoria de CNH..."),
+            ("A", "A - Motos, motonetas e triciclos"),
+            ("B", "B - Carros de passeio, utilitário/SUV, minivan, picape"),
+            ("C", "C - Caminhões, caminhonetes, vans de carga"),
+            ("D", "D - Ônibus, microônibus, vans de passageiros"),
+            ("E", "E - Veículos pesados"),
+        ),
         validators=(
-            DataRequired(message="Subcategory is required."),
-            AnyOf(values=("A", "B", "C"), message="Subcategory must be A, B, or C."),
+            DataRequired(),
+            AnyOf(
+                values=("A", "B", "C", "D", "E"),
+            ),
         ),
     )
 
-    submit = SubmitField("Submit")
+    submit = SubmitField("Enviar")
