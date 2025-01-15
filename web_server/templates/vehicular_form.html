@@ -1,0 +1,26 @@
+{% macro render_field(field) %}
+<div class="mb-3">
+  {{ field.label(class="form-label") }} {{ field(class="form-control") }} {% for
+  error in field.errors %}
+  <div class="text-danger">{{ error }}</div>
+  {% endfor %}
+</div>
+{% endmacro %}
+
+<form id="#dataForm" action="{{ url_for('form.send') }}" method="POST">
+  {{ form.hidden_tag() }}
+
+  <div class="modal-body">
+    <div class="vehicle">
+      {{ render_field(form.year) }} {{ render_field(form.fuel) }} {{
+      render_field(form.subcategory) }}
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+      Cancelar
+    </button>
+    <button type="submit" class="btn btn-primary" id="saveData">Salvar</button>
+  </div>
+</form>
