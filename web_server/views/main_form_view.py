@@ -14,10 +14,14 @@ class MainFormView:
     def show(self):
         readed_data = self.__inventory.read_vehicles_data()
 
-        return render_template("index.html", vehicular_data=readed_data)
+        vehicular_form: VasquesVehicleForm = VasquesVehicleForm()
+
+        return render_template(
+            "index.html", vehicular_data=readed_data, form=vehicular_form
+        )
 
     def send(self):
-        form = VasquesVehicleForm(request.form)
+        form: VasquesVehicleForm = VasquesVehicleForm(request.form)
 
         if form.validate_on_submit():
             new_vehicle = VasquesVehicleModel(
