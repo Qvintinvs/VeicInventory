@@ -1,4 +1,7 @@
+from typing import cast
+
 from flask_wtf import FlaskForm
+from models.vasques_vehicle_model import VasquesVehicleModel
 from wtforms import IntegerField, SelectField, SubmitField
 from wtforms.validators import AnyOf, DataRequired, NumberRange
 
@@ -40,3 +43,11 @@ class VasquesVehicleForm(FlaskForm):
     )
 
     submit = SubmitField("Salvar")
+
+    @property
+    def vehicle(self):
+        return VasquesVehicleModel(
+            cast(int, self.year.data),
+            cast(str, self.fuel.data),
+            cast(str, self.subcategory.data),
+        )
