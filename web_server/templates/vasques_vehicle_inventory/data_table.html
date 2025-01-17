@@ -1,0 +1,41 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Ano</th>
+      <th scope="col">Combustível</th>
+      <th scope="col">Categoria</th>
+      <th scope="col">Status</th>
+      <th scope="col">Ações</th>
+    </tr>
+  </thead>
+
+  <tbody id="data-table">
+    <!-- Dynamic data here -->
+    {% for vehicle in vehicular_data %}
+    <tr>
+      <td>{{ vehicle.id }}</td>
+      <td>{{ vehicle.year }}</td>
+      <td>{{ vehicle.fuel }}</td>
+      <td>{{ vehicle.subcategory }}</td>
+      <td>
+        <span class="badge bg-success">Processado</span>
+      </td>
+      <td class="table-actions">
+        <button class="btn btn-info btn-sm">
+          <i class="bi bi-pencil"></i>
+          <span class="d-none d-sm-inline">Editar</span>
+        </button>
+        <button class="btn btn-danger btn-sm">
+          <i class="bi bi-trash"></i>
+          <span class="d-none d-sm-inline">Excluir</span>
+        </button>
+        <button class="btn btn-secondary btn-sm">
+          <i class="bi bi-gear"></i>
+          <span class="d-none d-sm-inline">Processar</span>
+        </button>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

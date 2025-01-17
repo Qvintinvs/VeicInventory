@@ -1,4 +1,7 @@
+from typing import cast
+
 from flask_wtf import FlaskForm
+from models.vasques_vehicle_model import VasquesVehicleModel
 from wtforms import IntegerField, SelectField, SubmitField
 from wtforms.validators import AnyOf, DataRequired, NumberRange
 
@@ -7,10 +10,7 @@ class VasquesVehicleForm(FlaskForm):
     year = IntegerField(
         "Ano:",
         render_kw={"placeholder": "Ex: 2024"},
-        validators=(
-            DataRequired(),
-            NumberRange(min=1886, max=2100),
-        ),
+        validators=(DataRequired(), NumberRange(min=1886, max=2100)),
     )
 
     fuel = SelectField(
@@ -25,9 +25,7 @@ class VasquesVehicleForm(FlaskForm):
         ),
         validators=(
             DataRequired(),
-            AnyOf(
-                values=("Gasolina", "Álcool", "Diesel", "Elétrico", "Flex"),
-            ),
+            AnyOf(values=("Gasolina", "Álcool", "Diesel", "Elétrico", "Flex")),
         ),
     )
 
@@ -41,12 +39,15 @@ class VasquesVehicleForm(FlaskForm):
             ("D", "D - Ônibus, microônibus, vans de passageiros"),
             ("E", "E - Veículos pesados"),
         ),
-        validators=(
-            DataRequired(),
-            AnyOf(
-                values=("A", "B", "C", "D", "E"),
-            ),
-        ),
+        validators=(DataRequired(), AnyOf(values=("A", "B", "C", "D", "E"))),
     )
 
-    submit = SubmitField("Enviar")
+    submit = SubmitField("Salvar")
+
+    @property
+    def vehicle(self):
+        return VasquesVehicleModel(
+            cast(int, self.year.data),
+            cast(str, self.fuel.data),
+            cast(str, self.subcategory.data),
+        )
