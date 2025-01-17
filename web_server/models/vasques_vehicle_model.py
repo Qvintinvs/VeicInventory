@@ -1,3 +1,4 @@
+from types import MappingProxyType
 from typing import cast
 
 from sqlalchemy import CHAR, Column, Integer, String
@@ -19,8 +20,12 @@ class VasquesVehicleModel(Base):
         self.fuel = fuel
         self.subcategory = subcategory
 
-    def __iter__(self):
-        yield cast(int, self.id)
-        yield cast(int, self.year)
-        yield cast(str, self.fuel)
-        yield cast(str, self.subcategory)
+    def to_dict(self):
+        return MappingProxyType(
+            {
+                "id": cast(int, self.id),
+                "year": cast(int, self.year),
+                "fuel": cast(str, self.fuel),
+                "subcategory": cast(str, self.subcategory),
+            }
+        )
