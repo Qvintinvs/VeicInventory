@@ -51,11 +51,12 @@
 
         <tbody id="data-table">
           <!-- Dynamic data here -->
-          {% for field in vehicular_data %}
+          {% for vehicle in vehicular_data %}
           <tr>
-            {% for value in field %}
-            <td>{{ value }}</td>
-            {% endfor %}
+            <td>{{ vehicle.id }}</td>
+            <td>{{ vehicle.year }}</td>
+            <td>{{ vehicle.fuel }}</td>
+            <td>{{ vehicle.subcategory }}</td>
             <td>
               <span class="badge bg-success">Processado</span>
             </td>
