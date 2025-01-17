@@ -1,5 +1,4 @@
 from flask import Blueprint, redirect, render_template, request, url_for
-from models.vasques_vehicle_model import VasquesVehicleModel
 from services.vehicles_repository import VehiclesRepository
 from views.vasques_vehicle_form import VasquesVehicleForm
 
@@ -12,21 +11,21 @@ class MainFormView:
         self.__inventory = vehicular_inventory
 
     def show(self):
-        readed_data = self.__inventory.read_vehicles_data()
-
         vehicular_form: VasquesVehicleForm = VasquesVehicleForm()
 
+        readed_data = self.__inventory.read_vehicles_data()
+
+        data_to_dict = (data.to_dict() for data in readed_data)
+
         return render_template(
-            "index.html", vehicular_data=readed_data, form=vehicular_form
+            "index.html", vehicular_data=data_to_dict, form=vehicular_form
         )
 
     def send(self):
         form: VasquesVehicleForm = VasquesVehicleForm(request.form)
 
         if form.validate_on_submit():
-            new_vehicle = VasquesVehicleModel(
-                form.year.data, form.fuel.data, form.subcategory.data
-            )
+            new_vehicle = form.vehicle
 
             self.__inventory.insert_a(new_vehicle)
 
