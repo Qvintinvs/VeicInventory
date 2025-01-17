@@ -1,6 +1,7 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from services.vehicles_repository import VehiclesRepository
 from views.vasques_vehicle_form import VasquesVehicleForm
+from views.vehicle_interactions_form import VehicleInteractionsForm
 
 
 class MainFormView:
@@ -31,11 +32,32 @@ class MainFormView:
 
         return redirect(url_for("form.show"))
 
+    def delete(self, vehicle_id: int):
+        self.__inventory.delete_vehicle_by(vehicle_id)
+
+        return redirect(url_for("form.show"))
+
+    def send_id_to_delete(self):
+        delete_form: VehicleInteractionsForm = VehicleInteractionsForm(request.form)
+
+        if delete_form.validate_on_submit():
+            return redirect(url_for("form.delete", vehicle_id=delete_form.id))
+
+        return redirect(url_for("form.show"))
+
     def add_to(self):
         index_page = Blueprint("form", __name__)
 
         index_page.add_url_rule("/", view_func=self.show, methods=["GET"])
 
         index_page.add_url_rule("/send", view_func=self.send, methods=["POST"])
+
+        index_page.add_url_rule(
+            "/delete/<int:vehicle_id>", view_func=self.delete, methods=["DELETE"]
+        )
+
+        index_page.add_url_rule(
+            "/send_id_to_delete", view_func=self.send_id_to_delete, methods=["POST"]
+        )
 
         return index_page
