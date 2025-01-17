@@ -1,4 +1,4 @@
-from os import getenv
+from secrets import token_hex
 
 from app_container import InventoryAppContainer
 from dotenv import load_dotenv
@@ -25,7 +25,7 @@ def main():
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    app.secret_key = getenv("FLASK_SECRET_KEY")
+    app.secret_key = token_hex(16)
 
     CSRFProtect(app)
 
