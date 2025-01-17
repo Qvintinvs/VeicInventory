@@ -16,10 +16,10 @@ class MainFormView:
 
         readed_data = self.__inventory.read_vehicles_data()
 
-        data_to_dict = (data.to_dict() for data in readed_data)
+        vehicles_to_dict = (vehicle.to_dict() for vehicle in readed_data)
 
         return render_template(
-            "index.html", vehicular_data=data_to_dict, form=vehicular_form
+            "index.html", vehicular_data=vehicles_to_dict, form=vehicular_form
         )
 
     def send(self):
