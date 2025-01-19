@@ -11,7 +11,6 @@
   </thead>
 
   <tbody id="data-table">
-    <!-- Dynamic data here -->
     {% for vehicle in vehicular_data %}
     <tr>
       <td>{{ vehicle.id }}</td>
@@ -26,10 +25,10 @@
           <i class="bi bi-pencil"></i>
           <span class="d-none d-sm-inline">Editar</span>
         </button>
-        <button class="btn btn-danger btn-sm">
-          <i class="bi bi-trash"></i>
-          <span class="d-none d-sm-inline">Excluir</span>
-        </button>
+
+        {% include "vasques_vehicle_inventory/data_interactions.html" %}
+
+        <input type="hidden" name="id" value="{{ vehicle.id }}" />
         <button class="btn btn-secondary btn-sm">
           <i class="bi bi-gear"></i>
           <span class="d-none d-sm-inline">Processar</span>
