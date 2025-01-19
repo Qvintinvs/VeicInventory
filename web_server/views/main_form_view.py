@@ -23,7 +23,7 @@ class MainFormView:
         )
 
     def send(self):
-        form: VasquesVehicleForm = VasquesVehicleForm(request.form)
+        form: VasquesVehicleForm = VasquesVehicleForm()
 
         if form.validate_on_submit():
             new_vehicle = form.vehicle
@@ -38,7 +38,7 @@ class MainFormView:
         return redirect(url_for("form.show"))
 
     def send_id_to_delete(self):
-        delete_form: VehicleInteractionsForm = VehicleInteractionsForm(request.form)
+        delete_form: VehicleInteractionsForm = VehicleInteractionsForm()
 
         if delete_form.validate_on_submit():
             return redirect(url_for("form.delete", vehicle_id=delete_form.id))
