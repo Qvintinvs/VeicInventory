@@ -32,16 +32,13 @@ class MainFormView:
 
         return redirect(url_for("form.show"))
 
-    def delete(self, vehicle_id: int):
-        self.__inventory.delete_vehicle_by(vehicle_id)
-
-        return redirect(url_for("form.show"))
-
     def send_id_to_delete(self):
         delete_form: VehicleInteractionsForm = VehicleInteractionsForm()
 
         if delete_form.validate_on_submit():
-            return redirect(url_for("form.delete", vehicle_id=delete_form.id))
+            id_to_delete = delete_form.id
+
+            self.__inventory.delete_vehicle_by(id_to_delete)
 
         return redirect(url_for("form.show"))
 
@@ -51,10 +48,6 @@ class MainFormView:
         index_page.add_url_rule("/", view_func=self.show, methods=["GET"])
 
         index_page.add_url_rule("/send", view_func=self.send, methods=["POST"])
-
-        index_page.add_url_rule(
-            "/delete/<int:vehicle_id>", view_func=self.delete, methods=["DELETE"]
-        )
 
         index_page.add_url_rule(
             "/send_id_to_delete", view_func=self.send_id_to_delete, methods=["POST"]
