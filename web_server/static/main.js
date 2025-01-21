@@ -1,3 +1,19 @@
+function toggleStatusToPendingOf(aBadge) {
+    aBadge.classList.remove("bg-danger");
+    aBadge.classList.add("bg-warning");
+    aBadge.dataset.status = "pending";
+}
+
+document.querySelectorAll(".process-button").forEach((button) => {
+    button.addEventListener("click", (event) => {
+        const row = event.target.closest("tr");
+
+        const badge = row.querySelector(".badge-transition[data-status='not-processed']");
+
+        toggleStatusToPendingOf(badge);
+    });
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.delete-form').forEach((form) => {
         form.addEventListener('submit', (event) => {
