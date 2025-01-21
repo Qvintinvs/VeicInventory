@@ -18,7 +18,10 @@
       <td>{{ vehicle.fuel }}</td>
       <td>{{ vehicle.subcategory }}</td>
       <td>
-        <span class="badge bg-success">Processado</span>
+        <span
+          class="d-inline-block badge bg-danger badge-transition"
+          data-status="not-processed"
+        ></span>
       </td>
       <td class="table-actions">
         <button class="btn btn-info btn-sm">
@@ -29,7 +32,7 @@
         {% include "vasques_vehicle_inventory/data_interactions.html" %}
 
         <input type="hidden" name="id" value="{{ vehicle.id }}" />
-        <button class="btn btn-secondary btn-sm">
+        <button class="process-button btn btn-secondary btn-sm">
           <i class="bi bi-gear"></i>
           <span class="d-none d-sm-inline">Processar</span>
         </button>
