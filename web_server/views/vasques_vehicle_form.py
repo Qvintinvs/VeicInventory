@@ -44,15 +44,19 @@ class VasquesVehicleForm(FlaskForm):
 
     exhaust_emission_factor = FloatField(
         "Fator de Emissão por Exaustão:",
+        render_kw={"placeholder": "Ex: 0.25 (g/km)"},
         validators=(DataRequired(), NumberRange(min=0)),
     )
 
     deterioration_factor = FloatField(
-        "Fator de Deterioração:", validators=(DataRequired(), NumberRange(min=0))
+        "Fator de Deterioração:",
+        render_kw={"placeholder": "Ex: 1.1"},
+        validators=(DataRequired(), NumberRange(min=0)),
     )
 
     autonomy = FloatField(
         "Autonomia do Veículo (km/L ou km/kWh):",
+        render_kw={"placeholder": "Ex: 12.5 (km/L)"},
         validators=(DataRequired(), NumberRange(min=0)),
     )
 
