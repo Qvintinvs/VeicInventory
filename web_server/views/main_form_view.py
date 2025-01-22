@@ -1,14 +1,11 @@
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, url_for
 from services.vehicles_repository import VehiclesRepository
 from views.vasques_vehicle_form import VasquesVehicleForm
 from views.vehicle_interactions_form import VehicleInteractionsForm
 
 
 class MainFormView:
-    def __init__(
-        self,
-        vehicular_inventory: VehiclesRepository,
-    ):
+    def __init__(self, vehicular_inventory: VehiclesRepository):
         self.__inventory = vehicular_inventory
 
     def show(self):

@@ -2,7 +2,7 @@ from typing import cast
 
 from flask_wtf import FlaskForm
 from models.vasques_vehicle_model import VasquesVehicleModel
-from wtforms import IntegerField, SelectField, SubmitField
+from wtforms import FloatField, IntegerField, SelectField, SubmitField
 from wtforms.validators import AnyOf, DataRequired, NumberRange
 
 
@@ -42,6 +42,24 @@ class VasquesVehicleForm(FlaskForm):
         validators=(DataRequired(), AnyOf(values=("A", "B", "C", "D", "E"))),
     )
 
+    exhaust_emission_factor = FloatField(
+        "Fator de Emissão por Exaustão:",
+        render_kw={"placeholder": "Ex: 0.25 (g/km)"},
+        validators=(DataRequired(), NumberRange(min=0)),
+    )
+
+    deterioration_factor = FloatField(
+        "Fator de Deterioração:",
+        render_kw={"placeholder": "Ex: 1.1"},
+        validators=(DataRequired(), NumberRange(min=0)),
+    )
+
+    autonomy = FloatField(
+        "Autonomia do Veículo (km/L ou km/kWh):",
+        render_kw={"placeholder": "Ex: 12.5 (km/L)"},
+        validators=(DataRequired(), NumberRange(min=0)),
+    )
+
     submit = SubmitField("Salvar")
 
     @property
@@ -50,4 +68,7 @@ class VasquesVehicleForm(FlaskForm):
             cast(int, self.year.data),
             cast(str, self.fuel.data),
             cast(str, self.subcategory.data),
+            cast(float, self.exhaust_emission_factor.data),
+            cast(float, self.deterioration_factor.data),
+            cast(float, self.autonomy.data),
         )
