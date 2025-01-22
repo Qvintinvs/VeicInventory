@@ -5,6 +5,12 @@ body {
   margin-right: 5px;
 }
 
+/* Ensures consistent background color in all form inputs */
+input:-webkit-autofill {
+  background-color: transparent !important;
+  box-shadow: 0 0 0px 1000px white inset !important;
+}
+
 .badge-transition {
   transition:
     background-color 0.5s ease-in-out,
