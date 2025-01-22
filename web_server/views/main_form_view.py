@@ -5,10 +5,7 @@ from views.vehicle_interactions_form import VehicleInteractionsForm
 
 
 class MainFormView:
-    def __init__(
-        self,
-        vehicular_inventory: VehiclesRepository,
-    ):
+    def __init__(self, vehicular_inventory: VehiclesRepository):
         self.__inventory = vehicular_inventory
 
     def show(self):
