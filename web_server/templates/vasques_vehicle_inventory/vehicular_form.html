@@ -19,7 +19,10 @@
   <div class="modal-body">
     <dl>
       {{ render_field(form.year) }} {{ render_field(form.fuel) }} {{
-      render_field(form.subcategory) }}
+      render_field(form.subcategory) }} {{
+      render_field(form.exhaust_emission_factor) }} {{
+      render_field(form.deterioration_factor) }} {{ render_field(form.autonomy)
+      }}
     </dl>
   </div>
 
