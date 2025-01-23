@@ -20,6 +20,9 @@ class VasquesVehicleModel(Base):
     deterioration_factor = Column(Float, nullable=False)
     autonomy = Column(Float, nullable=False)
 
+    fuel_consumption = Column(Float, nullable=False)
+    category_consumption = Column(Float, nullable=False)
+
     def __init__(
         self,
         year: int,
@@ -28,6 +31,8 @@ class VasquesVehicleModel(Base):
         exhaust_emission_factor: float,
         deterioration_factor: float,
         autonomy: float,
+        fuel_consumption: float,
+        category_consumption: float,
     ):
         self.year = year
         self.fuel = fuel
@@ -35,6 +40,8 @@ class VasquesVehicleModel(Base):
         self.exhaust_emission_factor = exhaust_emission_factor
         self.deterioration_factor = deterioration_factor
         self.autonomy = autonomy
+        self.fuel_consumption = fuel_consumption
+        self.category_consumption = category_consumption
 
     def to_dict(self):
         return MappingProxyType(
@@ -46,5 +53,7 @@ class VasquesVehicleModel(Base):
                 "exhaust_emission_factor": cast(float, self.exhaust_emission_factor),
                 "deterioration_factor": cast(float, self.deterioration_factor),
                 "autonomy": cast(float, self.autonomy),
+                "fuel_consumption": cast(float, self.fuel_consumption),
+                "category_consumption": cast(float, self.category_consumption),
             }
         )
