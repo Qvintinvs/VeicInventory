@@ -3,7 +3,7 @@ from typing import cast
 
 from models.base import Base
 from models.city import City
-from models.cnh_subcategory import CNHSubcategory
+from models.cnh_subcategory import VehicleSubcategory
 from sqlalchemy import CHAR, Column, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import composite, relationship
 
@@ -17,7 +17,7 @@ class VasquesVehicleModel(Base):
     fuel = Column(String(50), nullable=False)
 
     subcategory = composite(
-        CNHSubcategory,
+        VehicleSubcategory,
         Column(CHAR, nullable=False),
         Column(Float, nullable=False),
         Column(Float, nullable=False),
@@ -34,7 +34,7 @@ class VasquesVehicleModel(Base):
         self,
         year: int,
         fuel: str,
-        subcategory: CNHSubcategory,
+        subcategory: VehicleSubcategory,
         exhaust_emission_factor: float,
         autonomy: float,
         vehicle_city: City,
