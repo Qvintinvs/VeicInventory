@@ -2,7 +2,7 @@ from typing import cast
 
 from flask_wtf import FlaskForm
 from models.city import City
-from models.cnh_subcategory import CNHSubcategory
+from models.cnh_subcategory import CNHSubcategory, VehicleSubcategory
 from models.vasques_vehicle_model import VasquesVehicleModel
 from wtforms import FloatField, IntegerField, SelectField, SubmitField
 from wtforms.validators import AnyOf, DataRequired, NumberRange
@@ -71,7 +71,7 @@ class VasquesVehicleForm(FlaskForm):
         return VasquesVehicleModel(
             cast(int, self.year.data),
             cast(str, self.fuel.data),
-            cast(CNHSubcategory, self.subcategory.data),
+            cast(VehicleSubcategory, self.subcategory.data),
             cast(float, self.exhaust_emission_factor.data),
             cast(float, self.autonomy.data),
             example_city,
