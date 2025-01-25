@@ -4,7 +4,7 @@ from typing import cast
 from models.base import Base
 from models.city import City
 from models.cnh_subcategory import CNHSubcategory
-from sqlalchemy import CHAR, Column, Float, Integer, String
+from sqlalchemy import CHAR, Column, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import composite, relationship
 
 
@@ -16,15 +16,17 @@ class VasquesVehicleModel(Base):
     year = Column(Integer, nullable=False)
     fuel = Column(String(50), nullable=False)
 
-    autonomy = Column(Float, nullable=False)
-    exhaust_emission_factor = Column(Float, nullable=False)
-
     subcategory = composite(
         CNHSubcategory,
         Column(CHAR, nullable=False),
         Column(Float, nullable=False),
         Column(Float, nullable=False),
     )
+
+    autonomy = Column(Float, nullable=False)
+    exhaust_emission_factor = Column(Float, nullable=False)
+
+    vehicle_city_id = Column(Integer, ForeignKey(City.id), nullable=False)
 
     vehicle_city = relationship(City)
 
@@ -43,6 +45,7 @@ class VasquesVehicleModel(Base):
         self.exhaust_emission_factor = exhaust_emission_factor
         self.autonomy = autonomy
         self.vehicle_city = vehicle_city
+        self.vehicle_city_id = vehicle_city.id
 
     def to_dict(self):
         return MappingProxyType(
