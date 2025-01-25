@@ -1,9 +1,9 @@
-from types import MappingProxyType
 from typing import cast
 
 from models.base import Base
 from models.city import City
 from models.cnh_subcategory import VehicleSubcategory
+from models.vehicle_dict import VehicleDict
 from sqlalchemy import CHAR, Column, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import composite, relationship
 
@@ -48,13 +48,11 @@ class VasquesVehicleModel(Base):
         self.vehicle_city_id = vehicle_city.id
 
     def to_dict(self):
-        return MappingProxyType(
-            {
-                "id": cast(int, self.id),
-                "year": cast(int, self.year),
-                "fuel": cast(str, self.fuel),
-                "subcategory": self.subcategory.to_dict(),
-                "exhaust_emission_factor": cast(float, self.exhaust_emission_factor),
-                "autonomy": cast(float, self.autonomy),
-            }
+        return VehicleDict(
+            id=cast(int, self.id),
+            year=cast(int, self.year),
+            fuel=cast(str, self.fuel),
+            subcategory=self.subcategory,
+            exhaust_emission_factor=cast(float, self.exhaust_emission_factor),
+            autonomy=cast(float, self.autonomy),
         )
