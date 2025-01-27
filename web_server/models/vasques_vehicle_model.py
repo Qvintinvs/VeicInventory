@@ -26,7 +26,7 @@ class VasquesVehicleModel(Base):
     autonomy = Column(Float, nullable=False)
     exhaust_emission_factor = Column(Float, nullable=False)
 
-    vehicle_city_id = Column(Integer, ForeignKey(City.id), nullable=False)
+    vehicle_city_key = Column(Integer, ForeignKey(City.id), nullable=False)
 
     vehicle_city = relationship(City)
 
@@ -45,7 +45,7 @@ class VasquesVehicleModel(Base):
         self.exhaust_emission_factor = exhaust_emission_factor
         self.autonomy = autonomy
         self.vehicle_city = vehicle_city
-        self.vehicle_city_id = vehicle_city.id
+        self.vehicle_city_key = vehicle_city.id
 
     def to_dict(self):
         return VehicleDict(
