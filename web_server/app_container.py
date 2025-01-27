@@ -1,6 +1,6 @@
 from dependency_injector import containers, providers
 from flask_sqlalchemy import SQLAlchemy
-from models.vasques_vehicle_model import Base
+from models.base import Base
 from services.vehicles_repository import VehiclesRepository
 
 

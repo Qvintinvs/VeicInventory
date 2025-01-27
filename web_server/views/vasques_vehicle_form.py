@@ -1,6 +1,8 @@
 from typing import cast
 
 from flask_wtf import FlaskForm
+from models.city import City
+from models.cnh_subcategory import CNHSubcategory
 from models.vasques_vehicle_model import VasquesVehicleModel
 from wtforms import FloatField, IntegerField, SelectField, SubmitField
 from wtforms.validators import AnyOf, DataRequired, NumberRange
@@ -25,7 +27,7 @@ class VasquesVehicleForm(FlaskForm):
         ),
         validators=(
             DataRequired(),
-            AnyOf(values=("Gasolina", "Álcool", "Diesel", "Elétrico", "Flex")),
+            AnyOf(("Gasolina", "Álcool", "Diesel", "Elétrico", "Flex")),
         ),
     )
 
@@ -39,18 +41,15 @@ class VasquesVehicleForm(FlaskForm):
             ("D", "D - Ônibus, microônibus, vans de passageiros"),
             ("E", "E - Veículos pesados"),
         ),
-        validators=(DataRequired(), AnyOf(values=("A", "B", "C", "D", "E"))),
+        validators=(
+            DataRequired(),
+            AnyOf(("A", "B", "C", "D", "E")),
+        ),
     )
 
     exhaust_emission_factor = FloatField(
         "Fator de Emissão por Exaustão:",
         render_kw={"placeholder": "Ex: 0.25 (g/km)"},
-        validators=(DataRequired(), NumberRange(min=0)),
-    )
-
-    deterioration_factor = FloatField(
-        "Fator de Deterioração:",
-        render_kw={"placeholder": "Ex: 1.1"},
         validators=(DataRequired(), NumberRange(min=0)),
     )
 
@@ -63,12 +62,31 @@ class VasquesVehicleForm(FlaskForm):
     submit = SubmitField("Salvar")
 
     @property
+    def vehicle_subcategory(self):
+        form_value: str | None = self.subcategory.data
+
+        matches_in_the_cnh_subcategories = (
+            subcategory.value
+            for subcategory in CNHSubcategory
+            if subcategory.name == form_value
+        )
+
+        subcategory_of_the_value = next(matches_in_the_cnh_subcategories, None)
+
+        if subcategory_of_the_value is None:
+            raise ValueError(f"Invalid value for CNHSubcategory: {form_value}")
+
+        return subcategory_of_the_value
+
+    @property
     def vehicle(self):
+        example_city = City("Itajaí", 1.1)
+
         return VasquesVehicleModel(
             cast(int, self.year.data),
             cast(str, self.fuel.data),
-            cast(str, self.subcategory.data),
+            self.vehicle_subcategory,
             cast(float, self.exhaust_emission_factor.data),
-            cast(float, self.deterioration_factor.data),
             cast(float, self.autonomy.data),
+            example_city,
         )

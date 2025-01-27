@@ -1,10 +1,11 @@
-from types import MappingProxyType
 from typing import cast
 
-from sqlalchemy import CHAR, Column, Float, Integer, String
-from sqlalchemy.orm import declarative_base
-
-Base = declarative_base()
+from models.base import Base
+from models.city import City
+from models.cnh_subcategory import VehicleSubcategory
+from models.vehicle_dict import VehicleDict
+from sqlalchemy import CHAR, Column, Float, ForeignKey, Integer, String
+from sqlalchemy.orm import composite, relationship
 
 
 class VasquesVehicleModel(Base):
@@ -14,37 +15,44 @@ class VasquesVehicleModel(Base):
 
     year = Column(Integer, nullable=False)
     fuel = Column(String(50), nullable=False)
-    subcategory = Column(CHAR, nullable=False)
 
-    exhaust_emission_factor = Column(Float, nullable=False)
-    deterioration_factor = Column(Float, nullable=False)
+    subcategory = composite(
+        VehicleSubcategory,
+        Column(CHAR, nullable=False),
+        Column(Float, nullable=False),
+        Column(Float, nullable=False),
+    )
+
     autonomy = Column(Float, nullable=False)
+    exhaust_emission_factor = Column(Float, nullable=False)
+
+    vehicle_city_key = Column(Integer, ForeignKey(City.id), nullable=False)
+
+    vehicle_city = relationship(City)
 
     def __init__(
         self,
         year: int,
         fuel: str,
-        subcategory: str,
+        subcategory: VehicleSubcategory,
         exhaust_emission_factor: float,
-        deterioration_factor: float,
         autonomy: float,
+        vehicle_city: City,
     ):
         self.year = year
         self.fuel = fuel
         self.subcategory = subcategory
         self.exhaust_emission_factor = exhaust_emission_factor
-        self.deterioration_factor = deterioration_factor
         self.autonomy = autonomy
+        self.vehicle_city = vehicle_city
+        self.vehicle_city_key = vehicle_city.id
 
     def to_dict(self):
-        return MappingProxyType(
-            {
-                "id": cast(int, self.id),
-                "year": cast(int, self.year),
-                "fuel": cast(str, self.fuel),
-                "subcategory": cast(str, self.subcategory),
-                "exhaust_emission_factor": cast(float, self.exhaust_emission_factor),
-                "deterioration_factor": cast(float, self.deterioration_factor),
-                "autonomy": cast(float, self.autonomy),
-            }
+        return VehicleDict(
+            id=cast(int, self.id),
+            year=cast(int, self.year),
+            fuel=cast(str, self.fuel),
+            subcategory=self.subcategory,
+            exhaust_emission_factor=cast(float, self.exhaust_emission_factor),
+            autonomy=cast(float, self.autonomy),
         )
