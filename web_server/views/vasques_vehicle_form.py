@@ -27,7 +27,7 @@ class VasquesVehicleForm(FlaskForm):
         ),
         validators=(
             DataRequired(),
-            AnyOf(values=("Gasolina", "Álcool", "Diesel", "Elétrico", "Flex")),
+            AnyOf(("Gasolina", "Álcool", "Diesel", "Elétrico", "Flex")),
         ),
     )
 
