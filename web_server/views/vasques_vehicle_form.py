@@ -34,19 +34,16 @@ class VasquesVehicleForm(FlaskForm):
     subcategory = SelectField(
         "Subcategoria:",
         choices=(
-            (None, "Selecione a subcategoria de CNH..."),
-            (CNHSubcategory.A, "A - Motos, motonetas e triciclos"),
-            (
-                CNHSubcategory.B,
-                "B - Carros de passeio, utilitário/SUV, minivan, picape",
-            ),
-            (CNHSubcategory.C, "C - Caminhões, caminhonetes, vans de carga"),
-            (CNHSubcategory.D, "D - Ônibus, microônibus, vans de passageiros"),
-            (CNHSubcategory.E, "E - Veículos pesados"),
+            ("", "Selecione a subcategoria de CNH..."),
+            ("A", "A - Motos, motonetas e triciclos"),
+            ("B", "B - Carros de passeio, utilitário/SUV, minivan, picape"),
+            ("C", "C - Caminhões, caminhonetes, vans de carga"),
+            ("D", "D - Ônibus, microônibus, vans de passageiros"),
+            ("E", "E - Veículos pesados"),
         ),
         validators=(
             DataRequired(),
-            AnyOf(values=tuple(subcategory.value for subcategory in CNHSubcategory)),
+            AnyOf(("A", "B", "C", "D", "E")),
         ),
     )
 
