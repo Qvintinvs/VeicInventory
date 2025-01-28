@@ -6,8 +6,8 @@ from wtforms.validators import DataRequired, NumberRange
 
 
 class VehicleInteractionsForm(FlaskForm):
-    vehicle_id = IntegerField(validators=(DataRequired(), NumberRange(min=1)))
+    interaction_id = IntegerField(validators=(DataRequired(), NumberRange(min=1)))
 
     @property
-    def id(self):
-        return cast(int, self.vehicle_id.data)
+    def action_id(self):
+        return cast(int, self.interaction_id.data)

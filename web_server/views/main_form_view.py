@@ -33,7 +33,7 @@ class MainFormView:
         delete_form: VehicleInteractionsForm = VehicleInteractionsForm()
 
         if delete_form.validate_on_submit():
-            id_to_delete = delete_form.id
+            id_to_delete = delete_form.action_id
 
             self.__inventory.delete_vehicle_by(id_to_delete)
 
