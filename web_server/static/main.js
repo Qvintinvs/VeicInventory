@@ -8,11 +8,11 @@ document.querySelectorAll('.process-button').forEach((button) => {
   button.addEventListener('click', (event) => {
     const row = event.target.closest('tr');
 
-    const badge = row.querySelector(
+    const notProcessedBadge = row.querySelector(
       ".badge-transition[data-status='not-processed']"
     );
 
-    toggleStatusToPendingOf(badge);
+    toggleStatusToPendingOf(notProcessedBadge);
   });
 });
 
