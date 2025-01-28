@@ -54,7 +54,7 @@ class VasquesVehicleForm(FlaskForm):
         return VasquesVehicleModel(
             cast(int, self.year.data),
             cast(str, self.fuel.data),
-            self.subcategory.vehicle_subcategory,
+            self.subcategory.cnh_subcategory,
             cast(float, self.exhaust_emission_factor.data),
             cast(float, self.autonomy.data),
             example_city,

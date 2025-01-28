@@ -24,7 +24,7 @@ class SubcategoryField(SelectField):
         super().__init__(label=label, choices=choices, validators=validators, **kwargs)
 
     @property
-    def vehicle_subcategory(self):
+    def cnh_subcategory(self):
         form_value: str | None = self.data
 
         matches_in_the_cnh_subcategories = (
