@@ -2,8 +2,8 @@ from typing import cast
 
 from models.base import Base
 from models.city import City
-from models.cnh_subcategory import VehicleSubcategory
 from models.vehicle_dict import VehicleDict
+from models.vehicle_subcategory import VehicleSubcategory
 from sqlalchemy import CHAR, Column, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import composite, relationship
 
