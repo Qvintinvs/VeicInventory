@@ -18,7 +18,7 @@ class SubcategoryField(SelectField):
 
         validators = (
             DataRequired(),
-            AnyOf(("A", "B", "C", "D", "E")),
+            AnyOf(tuple(subcategory.name for subcategory in CNHSubcategory)),
         )
 
         super().__init__(label=label, choices=choices, validators=validators, **kwargs)
