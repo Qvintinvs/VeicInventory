@@ -1,28 +1,30 @@
 function toggleStatusToPendingOf(aBadge) {
-    aBadge.classList.remove("bg-danger");
-    aBadge.classList.add("bg-warning");
-    aBadge.dataset.status = "pending";
+  aBadge.classList.remove('bg-danger');
+  aBadge.classList.add('bg-warning');
+  aBadge.dataset.status = 'pending';
 }
 
-document.querySelectorAll(".process-button").forEach((button) => {
-    button.addEventListener("click", (event) => {
-        const row = event.target.closest("tr");
+document.querySelectorAll('.process-button').forEach((button) => {
+  button.addEventListener('click', (event) => {
+    const row = event.target.closest('tr');
 
-        const badge = row.querySelector(".badge-transition[data-status='not-processed']");
+    const badge = row.querySelector(
+      ".badge-transition[data-status='not-processed']"
+    );
 
-        toggleStatusToPendingOf(badge);
-    });
+    toggleStatusToPendingOf(badge);
+  });
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.delete-form').forEach((form) => {
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
+  document.querySelectorAll('.delete-form').forEach((form) => {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
 
-            const row = form.closest('tr');
-            row.classList.add('fade-out');
+      const row = form.closest('tr');
+      row.classList.add('fade-out');
 
-            setTimeout(() => form.submit(), 500);
-        });
+      setTimeout(() => form.submit(), 500);
     });
+  });
 });
