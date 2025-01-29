@@ -9,15 +9,11 @@ class MainFormView:
         self.__inventory = vehicular_inventory
 
     def show(self):
-        vehicular_form: VasquesVehicleForm = VasquesVehicleForm()
+        form: VasquesVehicleForm = VasquesVehicleForm()
 
-        readed_data = self.__inventory.read_vehicles_data()
+        vehicles_dict = self.__inventory.read_vehicles_data()
 
-        vehicles_to_dict = (vehicle.to_dict() for vehicle in readed_data)
-
-        return render_template(
-            "index.html", vehicular_data=vehicles_to_dict, form=vehicular_form
-        )
+        return render_template("index.html", vehicular_data=vehicles_dict, form=form)
 
     def send(self):
         form: VasquesVehicleForm = VasquesVehicleForm()
