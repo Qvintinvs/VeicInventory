@@ -4,6 +4,11 @@ from wtforms.validators import AnyOf, DataRequired
 
 
 class SubcategoryField(SelectField):
+    __validators = (
+        DataRequired(),
+        AnyOf(tuple(subcategory.name for subcategory in CNHSubcategory)),
+    )
+
     def __init__(self, **kwargs):
         label = "Subcategoria:"
 
@@ -16,12 +21,9 @@ class SubcategoryField(SelectField):
             ("E", "E - Veículos pesados"),
         )
 
-        validators = (
-            DataRequired(),
-            AnyOf(tuple(subcategory.name for subcategory in CNHSubcategory)),
+        super().__init__(
+            label=label, choices=choices, validators=self.__validators, **kwargs
         )
-
-        super().__init__(label=label, choices=choices, validators=validators, **kwargs)
 
     @property
     def cnh_subcategory(self):
