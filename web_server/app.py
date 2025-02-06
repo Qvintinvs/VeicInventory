@@ -41,7 +41,7 @@ def main():
 
     app.register_error_handler(405, request_method_error)
 
-    app.run()
+    app.run(debug=True)
 
 
 if __name__ == "__main__":

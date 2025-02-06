@@ -17,6 +17,16 @@ document.querySelectorAll('.process-button').forEach((button) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.process-form').forEach((form) => {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      setTimeout(() => form.submit(), 500);
+    });
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.delete-form').forEach((form) => {
     form.addEventListener('submit', (event) => {
       event.preventDefault();

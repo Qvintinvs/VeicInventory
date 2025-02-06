@@ -33,6 +33,18 @@ class MainFormView:
 
             self.__inventory.delete_vehicle_by(id_to_delete)
 
+
+        return redirect(url_for("form.show"))
+
+    def process(self):
+        process_form: VehicleInteractionsForm = VehicleInteractionsForm()
+        print('aaaaa') #test
+        if process_form.validate_on_submit():
+            id_to_process = process_form.action_id
+        
+            #test
+            print(id_to_process)
+
         return redirect(url_for("form.show"))
 
     def add_to(self):
@@ -45,5 +57,7 @@ class MainFormView:
         index_page.add_url_rule(
             "/send_id_to_delete", view_func=self.send_id_to_delete, methods=["POST"]
         )
+
+        index_page.add_url_rule("/process", view_func=self.process, methods=["POST"])
 
         return index_page
