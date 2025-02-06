@@ -1,0 +1,43 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Ano</th>
+      <th scope="col">Combustível</th>
+      <th scope="col">Categoria</th>
+      <th scope="col">Status</th>
+      <th scope="col">Ações</th>
+    </tr>
+  </thead>
+
+  <tbody id="data-table">
+    {% for vehicle in vehicular_data %}
+    <tr>
+      <td>{{ vehicle.id }}</td>
+      <td>{{ vehicle.year }}</td>
+      <td>{{ vehicle.fuel }}</td>
+      <td>{{ vehicle.subcategory.name }}</td>
+      <td>
+        <span
+          class="d-inline-block badge bg-danger badge-transition"
+          data-status="not-processed"
+        ></span>
+      </td>
+      <td class="table-actions">
+        <button class="btn btn-info btn-sm">
+          <i class="bi bi-pencil"></i>
+          <span class="d-none d-sm-inline">Editar</span>
+        </button>
+
+        {% include "vasques_vehicle_inventory/data_interactions.html" %}
+
+        <input type="hidden" name="id" value="{{ vehicle.id }}" />
+        <button class="process-button btn btn-secondary btn-sm">
+          <i class="bi bi-gear"></i>
+          <span class="d-none d-sm-inline">Processar</span>
+        </button>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

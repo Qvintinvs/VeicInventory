@@ -1,0 +1,39 @@
+{% macro render_field(field) %}
+<div class="flex-fill mb-3">
+  <dt>
+    {{ field.label(class="form-label") }} {{ field(class="form-control") }}
+  </dt>
+  {% if field.errors %}
+  <dd>
+    {% for error in field.errors %}
+    <div class="text-danger">{{ error }}</div>
+    {% endfor %}
+  </dd>
+  {% endif %}
+</div>
+{% endmacro %}
+
+<form id="#dataForm" action="{{ url_for('form.send') }}" method="POST">
+  {{ form.hidden_tag() }}
+
+  <div class="modal-body">
+    <dl class="row">
+      <div class="col-md-6 d-flex flex-column">
+        {{ render_field(form.year) }} {{ render_field(form.fuel) }} {{
+        render_field(form.subcategory) }}
+      </div>
+
+      <div class="col-md-6 d-flex flex-column">
+        {{ render_field(form.exhaust_emission_factor) }} {{
+        render_field(form.autonomy) }}
+      </div>
+    </dl>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+      Cancelar
+    </button>
+    {{ form.submit(class="btn btn-primary", id="saveData") }}
+  </div>
+</form>

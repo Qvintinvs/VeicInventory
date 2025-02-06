@@ -1,0 +1,18 @@
+<form
+  method="POST"
+  action="{{ url_for('form.send_id_to_delete') }}"
+  class="d-inline delete-form"
+>
+  {{ form.hidden_tag() }}
+
+  <input
+    type="hidden"
+    name="interaction_id"
+    value="{{ vehicle.id }}"
+    required
+  />
+  <button type="submit" class="btn btn-danger btn-sm">
+    <i class="bi bi-trash"></i>
+    <span class="d-none d-sm-inline">Excluir</span>
+  </button>
+</form>
