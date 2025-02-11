@@ -27,7 +27,7 @@ def main():
 
     app.secret_key = token_hex(16)
 
-    CSRFProtect(app)
+    _ = CSRFProtect(app)
 
     inventory = container.vehicular_inventory()
 
