@@ -3,9 +3,10 @@ from typing import cast
 from flask_wtf import FlaskForm
 from models.city import City
 from models.vasques_vehicle_model import VasquesVehicleModel
-from views.subcategory_field import SubcategoryField
 from wtforms import FloatField, IntegerField, SelectField, SubmitField
 from wtforms.validators import AnyOf, DataRequired, NumberRange
+
+from .subcategory_field import SubcategoryField
 
 
 class VasquesVehicleForm(FlaskForm):

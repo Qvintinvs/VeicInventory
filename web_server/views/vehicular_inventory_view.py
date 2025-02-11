@@ -1,7 +1,9 @@
 from flask import Blueprint, redirect, render_template, url_for
 from services.vehicles_repository import VehiclesRepository
-from views.vasques_vehicle_form import VasquesVehicleForm
-from views.vehicle_interactions_form import VehicleInteractionsForm
+
+from .vehicular_inventory_forms.vasques_vehicle_form import VasquesVehicleForm
+from .vehicular_inventory_forms.vehicle_interactions_form import \
+    VehicleInteractionsForm
 
 
 class VehicularInventoryView:
