@@ -13,7 +13,11 @@
 </div>
 {% endmacro %}
 
-<form id="#dataForm" action="{{ url_for('form.send') }}" method="POST">
+<form
+  id="#dataForm"
+  action="{{ url_for('vehicular_inventory.send_new_vehicle') }}"
+  method="POST"
+>
   {{ form.hidden_tag() }}
 
   <div class="modal-body">

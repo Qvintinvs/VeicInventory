@@ -13,15 +13,15 @@ class VehiclesRepository:
         with the_app.app_context():
             self.__db.create_all()
 
-    def insert_a(self, vehicle: VasquesVehicleModel):
-        self.__db.session.add(vehicle)
+    def insert_a(self, new_vehicle: VasquesVehicleModel):
+        self.__db.session.add(new_vehicle)
 
         self.__db.session.commit()
 
     def read_vehicles_data(self):
-        readed_vehicles = self.__db.session.query(VasquesVehicleModel).limit(5).all()
+        vehicles_read = self.__db.session.query(VasquesVehicleModel).limit(5).all()
 
-        return (vehicle.to_dict() for vehicle in readed_vehicles)
+        return (vehicle.to_dict() for vehicle in vehicles_read)
 
     def delete_vehicle_by(self, its_id: int):
         self.__db.session.query(VasquesVehicleModel).filter_by(id=its_id).delete()
