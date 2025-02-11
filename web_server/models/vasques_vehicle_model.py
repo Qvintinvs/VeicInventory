@@ -52,7 +52,7 @@ class VasquesVehicleModel(Base):
             id=cast(int, self.id),
             year=cast(int, self.year),
             fuel=cast(str, self.fuel),
-            subcategory=self.subcategory,
+            subcategory=self.subcategory.__dict__,
             exhaust_emission_factor=cast(float, self.exhaust_emission_factor),
             autonomy=cast(float, self.autonomy),
         )

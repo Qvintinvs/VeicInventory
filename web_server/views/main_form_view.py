@@ -41,9 +41,8 @@ class MainFormView:
         print('aaaaa') #test
         if process_form.validate_on_submit():
             id_to_process = process_form.action_id
-        
-            #test
-            print(id_to_process)
+
+            self.__inventory.send_vehicle_namelist_by(id_to_process)
 
         return redirect(url_for("form.show"))
 
