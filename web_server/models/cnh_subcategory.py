@@ -1,6 +1,6 @@
 from enum import Enum
 
-from models.vehicle_subcategory import VehicleSubcategory
+from .vehicle_subcategory import VehicleSubcategory
 
 
 class CNHSubcategory(Enum):
