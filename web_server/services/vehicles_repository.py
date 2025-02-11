@@ -30,12 +30,10 @@ class VehiclesRepository:
         
         process_dict = [vehicle.to_dict() for vehicle in read_vehicle][0]
     
-        print(f"process_dict: \n{process_dict}")
 
         vehicle_namelist = NamelistContentCreator(f"process_{its_id}")
         namelist = vehicle_namelist.create_namelist(process_dict)
         send_file(namelist)
-        print(f"test: \n{namelist}")
 
     def delete_vehicle_by(self, its_id: int):
         self.__db.session.query(VasquesVehicleModel).filter_by(id=its_id).delete()

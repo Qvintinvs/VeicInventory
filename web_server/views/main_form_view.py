@@ -38,7 +38,7 @@ class MainFormView:
 
     def process(self):
         process_form: VehicleInteractionsForm = VehicleInteractionsForm()
-        print('aaaaa') #test
+
         if process_form.validate_on_submit():
             id_to_process = process_form.action_id
 
