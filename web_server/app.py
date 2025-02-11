@@ -4,7 +4,7 @@ from app_container import InventoryAppContainer
 from dotenv import load_dotenv
 from flask import Flask
 from flask_wtf import CSRFProtect
-from views.main_form_view import VehicularInventoryView
+from views.vehicular_inventory_view import VehicularInventoryView
 
 
 def request_method_error(error: Exception):
