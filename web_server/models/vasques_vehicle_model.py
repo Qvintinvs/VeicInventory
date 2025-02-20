@@ -1,9 +1,9 @@
 from typing import cast
 
-from models.base import Base
-from models.city import City
-from models.vehicle_dict import VehicleDict
-from models.vehicle_subcategory import VehicleSubcategory
+from .base import Base
+from .city import City
+from .vehicle_dict import VehicleDict
+from .vehicle_subcategory import VehicleSubcategory
 from sqlalchemy import CHAR, Column, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import composite, relationship
 

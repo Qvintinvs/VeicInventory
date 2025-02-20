@@ -13,23 +13,24 @@
   <tbody id="data-table">
     {% for vehicle in vehicular_data %}
     <tr>
-      <td>{{ vehicle.id }}</td>
-      <td>{{ vehicle.year }}</td>
-      <td>{{ vehicle.fuel }}</td>
-      <td>{{ vehicle.subcategory.name }}</td>
-      <td>
+      <td class="align-middle">{{ vehicle.id }}</td>
+      <td class="align-middle">{{ vehicle.year }}</td>
+      <td class="align-middle">{{ vehicle.fuel }}</td>
+      <td class="align-middle">{{ vehicle.subcategory.name }}</td>
+      <td class="align-middle">
         <span
           class="d-inline-block badge bg-danger badge-transition"
           data-status="not-processed"
         ></span>
       </td>
-      <td class="table-actions">
+      <td class="table-actions align-middle">
         <button class="btn btn-info btn-sm">
           <i class="bi bi-pencil"></i>
           <span class="d-none d-sm-inline">Editar</span>
         </button>
 
-        {% include "vasques_vehicle_inventory/data_interactions.html" %}
+        {% include "vehicular_inventory/button_interactions.html" %}
+
       </td>
     </tr>
     {% endfor %}

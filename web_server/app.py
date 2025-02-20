@@ -4,7 +4,7 @@ from app_container import InventoryAppContainer
 from dotenv import load_dotenv
 from flask import Flask
 from flask_wtf import CSRFProtect
-from views.main_form_view import MainFormView
+from views.vehicular_inventory_view import VehicularInventoryView
 
 
 def request_method_error(error: Exception):
@@ -27,15 +27,15 @@ def main():
 
     app.secret_key = token_hex(16)
 
-    CSRFProtect(app)
+    _ = CSRFProtect(app)
 
     inventory = container.vehicular_inventory()
 
     inventory.initialize_database_in(app)
 
-    main_page = MainFormView(inventory)
+    main_page = VehicularInventoryView(inventory)
 
-    main_blueprint = main_page.add_to()
+    main_blueprint = main_page.setup_routes()
 
     app.register_blueprint(main_blueprint)
 
