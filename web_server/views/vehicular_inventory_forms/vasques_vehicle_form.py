@@ -16,6 +16,12 @@ class VasquesVehicleForm(FlaskForm):
         validators=(DataRequired(), NumberRange(min=1886, max=2100)),
     )
 
+    fraction = FloatField(
+        "Fração do Veículo na frota:",
+        render_kw={"placeholder": "Ex: 15 (%)"},
+        validators=(DataRequired(), NumberRange(min=0)),
+    )
+
     fuel = SelectField(
         "Combustível:",
         choices=(
@@ -58,5 +64,6 @@ class VasquesVehicleForm(FlaskForm):
             self.subcategory.cnh_subcategory,
             cast(float, self.exhaust_emission_factor.data),
             cast(float, self.autonomy.data),
+            cast(float, self.fraction.data/100),
             example_city,
         )

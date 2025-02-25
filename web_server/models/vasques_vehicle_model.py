@@ -25,6 +25,7 @@ class VasquesVehicleModel(Base):
 
     autonomy = Column(Float, nullable=False)
     exhaust_emission_factor = Column(Float, nullable=False)
+    fraction = Column(Float, nullable=False)
 
     vehicle_city_key = Column(Integer, ForeignKey(City.id), nullable=False)
 
@@ -37,6 +38,7 @@ class VasquesVehicleModel(Base):
         subcategory: VehicleSubcategory,
         exhaust_emission_factor: float,
         autonomy: float,
+        fraction: float,
         vehicle_city: City,
     ):
         self.year = year
@@ -44,6 +46,7 @@ class VasquesVehicleModel(Base):
         self.subcategory = subcategory
         self.exhaust_emission_factor = exhaust_emission_factor
         self.autonomy = autonomy
+        self.fraction = fraction
         self.vehicle_city = vehicle_city
         self.vehicle_city_key = vehicle_city.id
 
@@ -52,7 +55,8 @@ class VasquesVehicleModel(Base):
             id=cast(int, self.id),
             year=cast(int, self.year),
             fuel=cast(str, self.fuel),
-            subcategory=self.subcategory.__dict__,
+            subcategory=self.subcategory.name,
             exhaust_emission_factor=cast(float, self.exhaust_emission_factor),
             autonomy=cast(float, self.autonomy),
+            fraction=cast(float, self.fraction),
         )
