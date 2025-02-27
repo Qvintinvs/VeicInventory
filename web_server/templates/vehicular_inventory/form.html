@@ -11,33 +11,34 @@
   </dd>
   {% endif %}
 </div>
-{% endmacro %}
+{% endmacro %} {% macro render_form_body(form) %} {{ form.hidden_tag() }}
 
+<div class="modal-body">
+  <dl class="row">
+    <div class="col-md-6 d-flex flex-column">
+      {{ render_field(form.year) }} {{ render_field(form.fuel) }} {{
+      render_field(form.subcategory) }}
+    </div>
+
+    <div class="col-md-6 d-flex flex-column">
+      {{ render_field(form.exhaust_emission_factor) }} {{
+      render_field(form.autonomy) }}
+    </div>
+  </dl>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+    Cancelar
+  </button>
+  {{ form.submit(class="btn btn-primary", id="saveData") }}
+</div>
+{% endmacro %} {% macro render_insert_form() %}
 <form
   id="#dataForm"
   action="{{ url_for('vehicular_inventory.send_new_vehicle') }}"
   method="POST"
 >
-  {{ form.hidden_tag() }}
-
-  <div class="modal-body">
-    <dl class="row">
-      <div class="col-md-6 d-flex flex-column">
-        {{ render_field(form.year) }} {{ render_field(form.fuel) }} {{
-        render_field(form.subcategory) }}
-      </div>
-
-      <div class="col-md-6 d-flex flex-column">
-        {{ render_field(form.exhaust_emission_factor) }} {{
-        render_field(form.autonomy) }}
-      </div>
-    </dl>
-  </div>
-
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-      Cancelar
-    </button>
-    {{ form.submit(class="btn btn-primary", id="saveData") }}
-  </div>
+  {{ render_form_body(form) }}
 </form>
+{% endmacro %}
