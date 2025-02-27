@@ -1,8 +1,31 @@
 {% from "vehicular_inventory/form_body_macro.html" import render_form_body %}
-<form
-  id="#dataForm"
-  action="{{ url_for('vehicular_inventory.send_new_vehicle') }}"
-  method="POST"
+
+<!-- Modal to add data -->
+<div
+  class="modal fade"
+  id="dataModal"
+  tabindex="-1"
+  aria-labelledby="dataModalLabel"
+  aria-hidden="true"
 >
-  {{ render_form_body(form) }}
-</form>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="dataModalLabel">Adicionar Dado</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form
+        id="#dataForm"
+        action="{{ url_for('vehicular_inventory.send_new_vehicle') }}"
+        method="POST"
+      >
+        {{ render_form_body(form) }}
+      </form>
+    </div>
+  </div>
+</div>
