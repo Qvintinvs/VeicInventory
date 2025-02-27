@@ -3,18 +3,18 @@ from typing import cast
 from flask_wtf import FlaskForm
 from models.city import City
 from models.vasques_vehicle_model import VasquesVehicleModel
-from wtforms import FloatField, IntegerField, SelectField, SubmitField
-from wtforms.validators import AnyOf, DataRequired, NumberRange
+from wtforms import FloatField, IntegerField, SelectField, SubmitField, StringField
+from wtforms.validators import AnyOf, DataRequired, NumberRange, Length, Optional
 
 from .subcategory_field import SubcategoryField
 
 
 class VasquesVehicleForm(FlaskForm):
-    year = IntegerField(
-        "Ano:",
-        render_kw={"placeholder": "Ex: 2024"},
-        validators=(DataRequired(), NumberRange(min=1886, max=2100)),
-    )
+    # year = IntegerField(
+    #     "Ano:",
+    #     render_kw={"placeholder": "Ex: 2024"},
+    #     validators=(DataRequired(), NumberRange(min=1886, max=2100)),
+    # )
 
     fraction = FloatField(
         "Fração do Veículo na frota:",
@@ -28,13 +28,13 @@ class VasquesVehicleForm(FlaskForm):
             ("", "Selecione..."),
             ("Gasolina", "Gasolina"),
             ("Álcool", "Álcool"),
+            ("Flex", "Flex"),
             ("Diesel", "Diesel"),
             ("Elétrico", "Elétrico"),
-            ("Flex", "Flex"),
         ),
         validators=(
             DataRequired(),
-            AnyOf(("Gasolina", "Álcool", "Diesel", "Elétrico", "Flex")),
+            AnyOf(("Gasolina", "Álcool",  "Flex", "Diesel", "Elétrico")),
         ),
     )
 
@@ -52,6 +52,12 @@ class VasquesVehicleForm(FlaskForm):
         validators=(DataRequired(), NumberRange(min=0)),
     )
 
+    note = StringField(
+        "Nota do veículo:",
+        render_kw={"placeholder": "Ex: Taxi"},
+        validators=(Optional(), Length(max=256)),
+    )
+
     submit = SubmitField("Salvar")
 
     @property
@@ -59,11 +65,12 @@ class VasquesVehicleForm(FlaskForm):
         example_city = City("Itajaí", 1.1)
 
         return VasquesVehicleModel(
-            cast(int, self.year.data),
+            # cast(int, self.year.data),
             cast(str, self.fuel.data),
             self.subcategory.cnh_subcategory,
             cast(float, self.exhaust_emission_factor.data),
             cast(float, self.autonomy.data),
             cast(float, self.fraction.data/100),
+            cast(str, self.note.data),
             example_city,
         )

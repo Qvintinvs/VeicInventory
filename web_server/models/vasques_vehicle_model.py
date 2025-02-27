@@ -13,7 +13,7 @@ class VasquesVehicleModel(Base):
 
     id = Column(Integer, primary_key=True)
 
-    year = Column(Integer, nullable=False)
+    # year = Column(Integer, nullable=False)
     fuel = Column(String(50), nullable=False)
 
     subcategory = composite(
@@ -26,6 +26,7 @@ class VasquesVehicleModel(Base):
     autonomy = Column(Float, nullable=False)
     exhaust_emission_factor = Column(Float, nullable=False)
     fraction = Column(Float, nullable=False)
+    note = Column(String, nullable=True)
 
     vehicle_city_key = Column(Integer, ForeignKey(City.id), nullable=False)
 
@@ -33,30 +34,33 @@ class VasquesVehicleModel(Base):
 
     def __init__(
         self,
-        year: int,
+        # year: int,
         fuel: str,
         subcategory: VehicleSubcategory,
         exhaust_emission_factor: float,
         autonomy: float,
         fraction: float,
+        note: str,
         vehicle_city: City,
     ):
-        self.year = year
+        # self.year = year
         self.fuel = fuel
         self.subcategory = subcategory
         self.exhaust_emission_factor = exhaust_emission_factor
         self.autonomy = autonomy
         self.fraction = fraction
+        self.note = note
         self.vehicle_city = vehicle_city
         self.vehicle_city_key = vehicle_city.id
 
     def to_dict(self):
         return VehicleDict(
             id=cast(int, self.id),
-            year=cast(int, self.year),
+            # year=cast(int, self.year),
             fuel=cast(str, self.fuel),
             subcategory=self.subcategory.name,
             exhaust_emission_factor=cast(float, self.exhaust_emission_factor),
             autonomy=cast(float, self.autonomy),
             fraction=cast(float, self.fraction),
+            note=cast(str, self.note),
         )

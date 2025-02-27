@@ -23,7 +23,9 @@
   <div class="modal-body">
     <dl class="row">
       <div class="col-md-6 d-flex flex-column">
-        {{ render_field(form.year) }} {{ render_field(form.fuel) }} {{
+        {# { render_field(form.year) } #}
+        {{ render_field(form.note) }}
+         {{ render_field(form.fuel) }} {{
         render_field(form.subcategory) }}
       </div>
 
