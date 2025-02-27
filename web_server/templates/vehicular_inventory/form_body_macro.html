@@ -33,12 +33,4 @@
   </button>
   {{ form.submit(class="btn btn-primary", id="saveData") }}
 </div>
-{% endmacro %} {% macro render_insert_form() %}
-<form
-  id="#dataForm"
-  action="{{ url_for('vehicular_inventory.send_new_vehicle') }}"
-  method="POST"
->
-  {{ render_form_body(form) }}
-</form>
 {% endmacro %}
