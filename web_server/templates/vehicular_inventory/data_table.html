@@ -1,3 +1,39 @@
+{% from "vehicular_inventory/form_body_macro.html" import render_form_body %} {%
+for vehicle in vehicular_data %}
+<!-- Modal to edit data -->
+<div
+  class="modal fade"
+  id="editModal{{ vehicle.id }}"
+  tabindex="-1"
+  aria-labelledby="editModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel{{ vehicle.id }}">
+          Editar Veículo
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <form
+        id="#editForm{{ vehicle.id }}"
+        action="{{ url_for('vehicular_inventory.show_the_page') }}"
+        method="GET"
+      >
+        {{ render_form_body(form) }}
+      </form>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -24,7 +60,12 @@
         ></span>
       </td>
       <td class="table-actions align-middle">
-        <button class="btn btn-info btn-sm">
+        <button
+          class="btn btn-info btn-sm"
+          id="edit-data"
+          data-bs-toggle="modal"
+          data-bs-target="#editModal{{ vehicle.id }}"
+        >
           <i class="bi bi-pencil"></i>
           <span class="d-none d-sm-inline">Editar</span>
         </button>
