@@ -1,10 +1,11 @@
 from io import StringIO
 from types import MappingProxyType
 from typing import LiteralString
+from .namelist_parser import parse_namelist
 
 import f90nml
 
-ignored_params = ["note"]
+ignored_params = ["id"]
 
 class NamelistContentCreator:
     def __init__(self, namelist_title: LiteralString):
@@ -15,7 +16,9 @@ class NamelistContentCreator:
         print(f"namelist_items: {namelist_items}")
 
         data = {key: value if str(value).strip() else "0" for key, value in namelist_items if key not in ignored_params}
-
+        
+        data = parse_namelist(data)
+        
         namelist_group = {self.__title: data}
         print(f"namelist_group: {namelist_group}")
         
