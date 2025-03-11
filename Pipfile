@@ -9,6 +9,7 @@ flask-sqlalchemy = "*"
 flask-wtf = "*"
 python-dotenv = "*"
 dependency-injector = "*"
+paramiko = "*"
 f90nml = "*"
 
 [dev-packages]
