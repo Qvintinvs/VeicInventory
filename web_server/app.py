@@ -19,6 +19,14 @@ def main():
 
     container = InventoryAppContainer()
 
+    config = container.config
+
+    config.namelist_remote_path.from_env("NAMELIST_REMOTE_PATH", required=True)
+
+    config.hostname.from_env("SSH_HOST", required=True)
+    config.username.from_env("SSH_USER", required=True)
+    config.password.from_env("SSH_PASS")
+
     app = Flask(__name__)
 
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
