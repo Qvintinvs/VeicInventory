@@ -12,8 +12,9 @@ for vehicle in vehicular_data %}
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <form id="#editForm{{ vehicle.id }}" action="{{ url_for('vehicular_inventory.show_the_page') }}" method="GET">
+      <form id="#editForm{{ vehicle.id }}" action="{{ url_for('vehicular_inventory.edit') }}" method="POST">
         {{ render_form_body(form) }}
+        <input type="hidden" name="interaction_id" value="{{ vehicle.id }}" required />
       </form>
     </div>
   </div>

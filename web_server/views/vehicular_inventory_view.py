@@ -45,6 +45,23 @@ class VehicularInventoryView:
             self.__inventory.send_vehicle_namelist_by(id_to_process)
 
         return redirect(url_for("vehicular_inventory.show_the_page"))
+    
+    def edit(self):
+        form: VasquesVehicleForm = VasquesVehicleForm()
+        form_withid: VehicleInteractionsForm = VehicleInteractionsForm()
+
+        print(form.validate_on_submit())
+        print(form_withid.validate_on_submit())
+
+        if form.validate_on_submit() and form_withid.validate_on_submit():
+            vehicle_from_the_form = form.vehicle
+            action_id = form_withid.action_id
+        
+            print(f"vehicle_from_the_form: {vehicle_from_the_form}")
+            self.__inventory.edit(vehicle_from_the_form.to_dict(), its_id=action_id)
+            print(f"form_withid: {form_withid.action_id}")
+
+        return redirect(url_for("vehicular_inventory.show_the_page"))
 
     def setup_routes(self):
         index_page = Blueprint("vehicular_inventory", __name__)
@@ -60,5 +77,8 @@ class VehicularInventoryView:
         )
 
         index_page.add_url_rule("/process", view_func=self.process, methods=["POST"])
+
+        index_page.add_url_rule("/edit", view_func=self.edit, methods=["POST"]
+        )
         
         return index_page
