@@ -14,7 +14,7 @@ for vehicle in vehicular_data %}
 
       <form id="#editForm{{ vehicle.id }}" action="{{ url_for('vehicular_inventory.edit') }}" method="POST">
         {{ render_form_body(form) }}
-        <input type="hidden" name="interaction_id" value="{{ vehicle.id }}" required />
+        <input type="hidden" name="interaction_id" value="{{ vehicle.id }}"/>
       </form>
     </div>
   </div>
@@ -54,7 +54,7 @@ for vehicle in vehicular_data %}
           class="d-inline delete-form">
           {{ form.hidden_tag() }}
 
-          <input type="hidden" name="interaction_id" value="{{ vehicle.id }}" required />
+          <input type="hidden" name="interaction_id" value="{{ vehicle.id }}"/>
           <button type="submit" class="btn btn-danger btn-sm">
             <i class="bi bi-trash"></i>
             <span class="d-none d-sm-inline">Excluir</span>
@@ -64,7 +64,7 @@ for vehicle in vehicular_data %}
         <form method="POST" action="{{ url_for('vehicular_inventory.process') }}" class="d-inline process-form">
           {{ form.hidden_tag() }}
 
-          <input type="hidden" name="interaction_id" value="{{ vehicle.id }}" />
+          <input type="hidden" name="interaction_id" value="{{ vehicle.id }}"/>
           <button class="process-button btn btn-secondary btn-sm">
             <i class="bi bi-gear"></i>
             <span class="d-none d-sm-inline">Processar</span>
