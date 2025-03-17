@@ -1,7 +1,7 @@
 from dependency_injector import containers, providers
 from flask_sqlalchemy import SQLAlchemy
 from models.base import Base
-from services.namelist_server_sending import connection_settings
+from services.namelist_server_sending import connection_settings, wrf_service
 from services.vehicles_repository import VehiclesRepository
 
 
@@ -17,4 +17,10 @@ class InventoryAppContainer(containers.DeclarativeContainer):
         hostname=config.hostname,
         username=config.username,
         password=config.password,
+    )
+
+    wrf_service = providers.Singleton(
+        wrf_service.SSHWRFService,
+        settings=connection_settings,
+        namelist_remote_path=config.namelist_remote_path,
     )
