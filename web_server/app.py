@@ -24,7 +24,7 @@ def main():
     config.namelist_remote_path.from_env("NAMELIST_REMOTE_PATH", required=True)
 
     config.hostname.from_env("SSH_HOST", required=True)
-    config.username.from_env("SSH_USER", required=True)
+    config.username.from_env("SSH_NAME", required=True)
     config.password.from_env("SSH_PASS")
 
     app = Flask(__name__)
