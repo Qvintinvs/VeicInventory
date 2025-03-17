@@ -1,20 +1,17 @@
 from io import StringIO
-from types import MappingProxyType
 from typing import LiteralString
 
 import f90nml
+from models.vehicle_dict import VehicleDict
 
 
 class NamelistContentCreator:
-    def __init__(self, namelist_title: LiteralString):
+    def __init__(self, namelist_title: LiteralString, variables: VehicleDict):
         self.__title = namelist_title
+        self.__variables = variables
 
-    def create_namelist(self, namelist_data: MappingProxyType[str, str]):
-        namelist_items = namelist_data.items()
-
-        data = {key: value if value.strip() else "0" for key, value in namelist_items}
-
-        namelist_group = {self.__title: data}
+    def create_namelist(self):
+        namelist_group = {self.__title: self.__variables}
 
         with StringIO() as nml_file:
             f90nml.write(namelist_group, nml_file)
