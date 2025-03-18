@@ -1,8 +1,8 @@
 from paramiko import Transport
 
 from .connection_settings import ConnectionSettings
-from .namelist_creator import NamelistContentCreator
 from .sftp_namelist_sender import SFTPNamelistSender
+from .vasques_namelist_creator import VasquesNamelistCreator
 
 
 class SSHWRFService:
@@ -10,7 +10,7 @@ class SSHWRFService:
         self.__settings = settings
         self.__remote_path = namelist_remote_path
 
-    def process_in_the_server(self, a_namelist: NamelistContentCreator):
+    def process_in_the_server(self, a_namelist: VasquesNamelistCreator):
         hostname, username, password = self.__settings
 
         if not hostname:
