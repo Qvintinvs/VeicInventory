@@ -1,11 +1,13 @@
 from paramiko import SFTPClient, Transport
 
-from .vasques_namelist_creator import VasquesNamelistCreator
+from .vasques_emission_namelist_creator import VasquesEmissionNamelistCreator
 
 
 class SFTPNamelistSender:
     def __init__(
-        self, stablished_protocol: Transport, namelist_content: VasquesNamelistCreator
+        self,
+        stablished_protocol: Transport,
+        namelist_content: VasquesEmissionNamelistCreator,
     ):
         self.__protocol = stablished_protocol
         self.__namelist = namelist_content
