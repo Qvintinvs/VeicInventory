@@ -21,7 +21,7 @@ class VehiclesRepository:
     def read_vehicles_data(self):
         vehicles_read = self.__db.session.query(VasquesVehicleModel).limit(5).all()
 
-        return tuple(vehicle.to_dict() for vehicle in vehicles_read)
+        return vehicles_read
 
     def delete_vehicle_by(self, its_id: int):
         self.__db.session.query(VasquesVehicleModel).filter_by(id=its_id).delete()
