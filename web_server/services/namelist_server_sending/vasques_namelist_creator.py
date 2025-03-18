@@ -1,17 +1,27 @@
 from types import MappingProxyType
+from typing import cast
 
-from models.vehicle_dict import VehicleDict
+from models.vasques_vehicle_model import VasquesVehicleModel
 
 from .namelist_creator import NamelistContentCreator
 
 
-class VasquesNamelistCreator:
+class VasquesEmissionNamelistCreator:
     __namelist = NamelistContentCreator("vasques_namelist")
 
-    def __init__(self, variables: VehicleDict):
+    def __init__(self, variables: VasquesVehicleModel):
         self.__variables = variables
 
     def create_namelist(self):
-        acid = MappingProxyType({"factor": self.__variables["year"]})
+        emission_namelist = {
+            "id": cast(int, self.__variables.id),
+            "year": cast(int, self.__variables.year),
+            "exhaust_emission_factor": cast(
+                float, self.__variables.exhaust_emission_factor
+            ),
+            "autonomy": cast(float, self.__variables.autonomy),
+        }
 
-        return self.__namelist.create_namelist_through(acid)
+        return self.__namelist.create_namelist_through(
+            MappingProxyType(emission_namelist)
+        )

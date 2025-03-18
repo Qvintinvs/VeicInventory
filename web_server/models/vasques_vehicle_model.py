@@ -1,11 +1,9 @@
-from typing import cast
+from sqlalchemy import CHAR, Column, Float, ForeignKey, Integer, String
+from sqlalchemy.orm import composite, relationship
 
 from .base import Base
 from .city import City
-from .vehicle_dict import VehicleDict
 from .vehicle_subcategory import VehicleSubcategory
-from sqlalchemy import CHAR, Column, Float, ForeignKey, Integer, String
-from sqlalchemy.orm import composite, relationship
 
 
 class VasquesVehicleModel(Base):
@@ -46,13 +44,3 @@ class VasquesVehicleModel(Base):
         self.autonomy = autonomy
         self.vehicle_city = vehicle_city
         self.vehicle_city_key = vehicle_city.id
-
-    def to_dict(self):
-        return VehicleDict(
-            id=cast(int, self.id),
-            year=cast(int, self.year),
-            fuel=cast(str, self.fuel),
-            subcategory=self.subcategory,
-            exhaust_emission_factor=cast(float, self.exhaust_emission_factor),
-            autonomy=cast(float, self.autonomy),
-        )
