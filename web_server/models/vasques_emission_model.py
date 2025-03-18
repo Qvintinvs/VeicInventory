@@ -6,7 +6,7 @@ from .city import City
 from .vehicle_subcategory import VehicleSubcategory
 
 
-class VasquesVehicleModel(Base):
+class VasquesEmissionModel(Base):
     __tablename__ = "vehicle"
 
     id = Column(Integer, primary_key=True)

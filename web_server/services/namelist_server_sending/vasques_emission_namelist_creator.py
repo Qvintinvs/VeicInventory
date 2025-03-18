@@ -1,7 +1,7 @@
 from types import MappingProxyType
 from typing import cast
 
-from models.vasques_vehicle_model import VasquesVehicleModel
+from models.vasques_emission_model import VasquesEmissionModel
 
 from .namelist_creator import NamelistContentCreator
 
@@ -9,7 +9,7 @@ from .namelist_creator import NamelistContentCreator
 class VasquesEmissionNamelistCreator:
     __namelist = NamelistContentCreator("vasques_namelist")
 
-    def __init__(self, variables: VasquesVehicleModel):
+    def __init__(self, variables: VasquesEmissionModel):
         self.__variables = variables
 
     def create_namelist(self):
