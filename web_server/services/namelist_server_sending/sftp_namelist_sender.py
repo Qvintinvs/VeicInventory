@@ -1,13 +1,11 @@
 from paramiko import SFTPClient, Transport
 
-from .vasques_emission_namelist_creator import VasquesEmissionNamelistCreator
-
 
 class SFTPNamelistSender:
     def __init__(
         self,
         stablished_protocol: Transport,
-        namelist_content: VasquesEmissionNamelistCreator,
+        namelist_content: str,
     ):
         self.__protocol = stablished_protocol
         self.__namelist = namelist_content
@@ -19,6 +17,4 @@ class SFTPNamelistSender:
             raise Exception("Could not create the sftp channel")
 
         with sftp_channel, sftp_channel.open(a_remote_path, "w") as remote_file:
-            namelist_text = self.__namelist.create_namelist()
-
-            remote_file.write(namelist_text)
+            remote_file.write(self.__namelist)

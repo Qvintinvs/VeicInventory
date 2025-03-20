@@ -1,8 +1,8 @@
+from models.wrf_round import WRFRound
 from paramiko import Transport
 
 from .connection_settings import ConnectionSettings
 from .sftp_namelist_sender import SFTPNamelistSender
-from .vasques_emission_namelist_creator import VasquesEmissionNamelistCreator
 
 
 class SSHWRFService:
@@ -10,7 +10,7 @@ class SSHWRFService:
         self.__settings = settings
         self.__remote_path = namelist_remote_path
 
-    def process_in_the_server(self, a_namelist: VasquesEmissionNamelistCreator):
+    def process_in_the_server(self, a_scheduled_round: WRFRound):
         hostname, username, password = self.__settings
 
         if not hostname:
@@ -22,6 +22,8 @@ class SSHWRFService:
         with Transport(hostname) as protocol:
             protocol.connect(username=username, password=password)
 
-            sender = SFTPNamelistSender(protocol, a_namelist)
+            namelist_text = str(a_scheduled_round.namelist)
+
+            sender = SFTPNamelistSender(protocol, namelist_text)
 
             sender.send_namelist_to(self.__remote_path)
