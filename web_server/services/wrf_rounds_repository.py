@@ -4,7 +4,7 @@ from models.wrf_round import WRFRound
 from .namelist_server_sending.vasques_emission_namelist_creator import (
     VasquesEmissionNamelistCreator,
 )
-from .namelist_server_sending.wrf_service import SSHWRFService
+from .wrf_service import SSHWRFService
 
 
 class WRFRoundsRepository:

@@ -1,15 +1,14 @@
 from dependency_injector import containers, providers
 from flask_sqlalchemy import SQLAlchemy
 from models.base import Base
-from services.namelist_server_sending import connection_settings, wrf_service
-from services.vehicles_repository import VehiclesRepository
+from services import connection_settings, vehicles_repository, wrf_service
 
 
 class InventoryAppContainer(containers.DeclarativeContainer):
     config = providers.Configuration()
 
     vehicular_inventory = providers.Singleton(
-        VehiclesRepository, sql_db=SQLAlchemy(model_class=Base)
+        vehicles_repository.VehiclesRepository, sql_db=SQLAlchemy(model_class=Base)
     )
 
     connection_settings = providers.Singleton(
