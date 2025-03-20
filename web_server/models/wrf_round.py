@@ -16,11 +16,7 @@ class WRFRound(Base):
     def __init__(
         self,
         namelist: str,
-        status: WRFRoundStatus,
         output_file_path: str,
-        timestamp: datetime,
     ):
         self.namelist = namelist
-        self.status = status
         self.output_file_path = output_file_path
-        self.timestamp = timestamp
