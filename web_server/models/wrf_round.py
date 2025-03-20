@@ -7,6 +7,8 @@ from .wrf_round_status import WRFRoundStatus
 
 
 class WRFRound(Base):
+    __tablename__ = "wrf_round"
+
     id = Column(Integer, primary_key=True)
     namelist = Column(Text, nullable=False)
     status = Column(Enum(WRFRoundStatus), default=WRFRoundStatus.PENDING)
