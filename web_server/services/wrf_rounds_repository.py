@@ -23,4 +23,7 @@ class WRFRoundsRepository:
 
         self.__db.session.commit()
 
-        return new_round
+    def read_lastest_rounds_data(self):
+        rounds_read = self.__db.session.query(WRFRound).limit(5).all()
+
+        return rounds_read
