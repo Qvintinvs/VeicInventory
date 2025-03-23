@@ -16,7 +16,7 @@ class RoundsQueueWorker(Process):
     def add_to_the_queue(self, a_wrf_round: WRFRound):
         self.__round_queue.put(a_wrf_round)
 
-    def consume_a_round(self):
+    def consume_latest_round(self):
         try:
             latest_round = self.__round_queue.get(timeout=10)
         except Exception:
@@ -27,4 +27,4 @@ class RoundsQueueWorker(Process):
 
     def run(self):
         while True:
-            self.consume_a_round()
+            self.consume_latest_round()
