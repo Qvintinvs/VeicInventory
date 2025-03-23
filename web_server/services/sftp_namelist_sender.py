@@ -2,11 +2,7 @@ from paramiko import SFTPClient, Transport
 
 
 class SFTPNamelistSender:
-    def __init__(
-        self,
-        stablished_protocol: Transport,
-        namelist_content: str,
-    ):
+    def __init__(self, stablished_protocol: Transport, namelist_content: str):
         self.__protocol = stablished_protocol
         self.__namelist = namelist_content
 
