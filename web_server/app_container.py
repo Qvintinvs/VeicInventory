@@ -3,8 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from models.base import Base
 from services import (
     connection_settings,
+    ssh_wrf_service,
     vehicles_repository,
-    wrf_service,
     wrf_rounds_repository,
 )
 
@@ -30,7 +30,7 @@ class InventoryAppContainer(containers.DeclarativeContainer):
     )
 
     wrf_service = providers.Singleton(
-        wrf_service.SSHWRFService,
+        ssh_wrf_service.SSHWRFService,
         settings=connection_settings,
         namelist_remote_path=config.namelist_remote_path,
     )
