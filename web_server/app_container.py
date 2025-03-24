@@ -1,3 +1,5 @@
+from multiprocessing import Queue
+
 from dependency_injector import containers, providers
 from flask_sqlalchemy import SQLAlchemy
 from models.base import Base
@@ -5,6 +7,7 @@ from services import (
     connection_settings,
     ssh_wrf_service,
     vehicles_repository,
+    wrf_rounds_queue_worker,
     wrf_rounds_repository,
 )
 
@@ -33,4 +36,10 @@ class InventoryAppContainer(containers.DeclarativeContainer):
         ssh_wrf_service.SSHWRFService,
         settings=connection_settings,
         namelist_remote_path=config.namelist_remote_path,
+    )
+
+    rounds_queue = providers.Singleton(Queue)
+
+    wrf_rounds_queue_worker = providers.Singleton(
+        wrf_rounds_queue_worker.WRFRoundsQueueWorker, rounds_queue, wrf_service
     )
