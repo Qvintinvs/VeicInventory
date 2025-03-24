@@ -6,12 +6,10 @@ from .ssh_wrf_service import SSHWRFService
 
 
 class WRFRoundsQueueWorker(Process):
-    __rounds_queue = Queue()
-
-    def __init__(self, sending_service: SSHWRFService):
-        self.__sending_service = sending_service
-
+    def __init__(self, rounds_queue: Queue, sending_service: SSHWRFService):
         super().__init__()
+        self.__rounds_queue: Queue = rounds_queue
+        self.__sending_service = sending_service
 
     def add_to_the_queue(self, a_wrf_round: WRFRound):
         self.__rounds_queue.put(a_wrf_round)
