@@ -6,7 +6,7 @@ from .ssh_wrf_service import SSHWRFService
 
 
 class RoundsQueueWorker(Process):
-    __round_queue: Queue[WRFRound | None] = Queue()
+    __rounds_queue = Queue()
 
     def __init__(self, sending_service: SSHWRFService):
         self.__sending_service = sending_service
@@ -14,11 +14,11 @@ class RoundsQueueWorker(Process):
         super().__init__()
 
     def add_to_the_queue(self, a_wrf_round: WRFRound):
-        self.__round_queue.put(a_wrf_round)
+        self.__rounds_queue.put(a_wrf_round)
 
     def consume_latest_round(self):
         try:
-            latest_round = self.__round_queue.get(timeout=10)
+            latest_round: WRFRound | None = self.__rounds_queue.get(timeout=10)
         except Exception:
             return
 
