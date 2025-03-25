@@ -11,11 +11,27 @@ def request_method_error(error: Exception):
     return str(error), 405
 
 
-def main():
+def load_configuration():
     could_load_dotenv = load_dotenv()
 
     if not could_load_dotenv:
-        raise Exception("Missing Dotenv")
+        raise Exception("Missing dotenv file")
+
+
+def initialize_flask_app():
+    app = Flask(__name__)
+
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.secret_key = token_hex(16)
+
+    _ = CSRFProtect(app)
+
+    return app
+
+
+def main():
+    load_configuration()
 
     container = InventoryAppContainer()
 
@@ -27,15 +43,7 @@ def main():
     config.username.from_env("SSH_NAME", required=True)
     config.password.from_env("SSH_PASS")
 
-    app = Flask(__name__)
-
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
-
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-    app.secret_key = token_hex(16)
-
-    _ = CSRFProtect(app)
+    app = initialize_flask_app()
 
     inventory = container.vehicular_inventory()
 
