@@ -4,9 +4,11 @@ function toggleStatusToPendingOf(aBadge) {
   aBadge.dataset.status = 'pending';
 }
 
-document.querySelectorAll('.process-button').forEach((button) => {
-  button.addEventListener('click', (event) => {
-    const row = event.target.closest('tr');
+const process_button = document.querySelector('.process-button')
+
+process_button.addEventListener('click', (e) => {
+    // const row = event.target.closest('tr');
+    const row = document.querySelector('#data-table tr')
 
     const notProcessedBadge = row.querySelector(
       ".badge-transition[data-status='not-processed']"
@@ -14,7 +16,6 @@ document.querySelectorAll('.process-button').forEach((button) => {
 
     toggleStatusToPendingOf(notProcessedBadge);
   });
-});
 
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.process-form').forEach((form) => {

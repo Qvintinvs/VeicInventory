@@ -11,6 +11,9 @@
     <div id="heatmap" style="width: 100%; height: 600px;"></div>
 
     <script>
+        let currentFrame = 0;
+        let isPaused = false;
+        let lastFrame;
         async function fetchAndPlotHeatmap() {
             try {
                 // Fetch the data from the Flask backend
@@ -21,6 +24,7 @@
                 const lats = data.lats;
                 const lons = data.lons;
                 const frames = data.frames;
+                lastFrame = frames.length
 
                 // Initialize the heatmap with the first frame
                 const initialFrame = frames[0];
@@ -54,23 +58,60 @@
                 Plotly.newPlot('heatmap', plotData, layout);
 
                 // Animate through frames
-                let currentFrame = 0;
                 setInterval(() => {
-                    currentFrame = (currentFrame + 1) % frames.length; // Loop through frames
-                    const frameData = frames[currentFrame];
+                    const frameData = frames[currentFrame+1];
 
                     // Update the heatmap with new frame data
                     Plotly.update('heatmap', {
                         z: [frameData] // Update heatmap data
                     });
-                }, 0); // Update every 1 second
+                    if (currentFrame + 1 === frames.length) {
+                        console.log("got here lol")
+                        // document.body.dispatchEvent(new KeyboardEvent(("keydown", { code: "Space" })))
+                        isPaused = !isPaused
+                    }   
+                    if (isPaused) {
+                        return
+                    }
+
+                    currentFrame = (currentFrame + 1) % frames.length; // Loop through frames
+                    console.log(`currentFrame: ${currentFrame}`)
+
+                }, 1000/24); // Update every 1 second
             } catch (error) {
                 console.error('Error fetching or plotting NetCDF data:', error);
             }
         }
 
+        // let iframe = document.getElementById("body")
+        document.body.addEventListener("keydown", (e) => {
+            e.preventDefault()
+            // handleKeyDown(e)
+            console.log(e.code)
+            if (e.code === "Space") {
+                isPaused = !isPaused
+                console.log("isPaused:", isPaused);
+                
+                if (isPaused && currentFrame === lastFrame) {
+
+                }
+
+            }
+
+            if (e.code === "ArrowLeft") {
+                (currentFrame <= 0 ) ?  currentFrame = 0 : currentFrame-- 
+                console.log("currentFrame:", currentFrame);
+            }
+
+            if (e.code === "ArrowRight") {
+                currentFrame++
+                console.log("currentFrame:", currentFrame);
+            }
+        })
+
         // Call the function to fetch and plot heatmap data
         fetchAndPlotHeatmap();
+
     </script>
 </body>
 </html>

@@ -61,7 +61,7 @@ for vehicle in vehicular_data %}
           </button>
         </form>
 
-        <form method="POST" action="{{ url_for('vehicular_inventory.process') }}" class="d-inline process-form">
+        <!-- <form method="POST" action="{{ url_for('vehicular_inventory.process') }}" class="d-inline process-form">
           {{ form.hidden_tag() }}
 
           <input type="hidden" name="interaction_id" value="{{ vehicle.id }}"/>
@@ -69,7 +69,7 @@ for vehicle in vehicular_data %}
             <i class="bi bi-gear"></i>
             <span class="d-none d-sm-inline">Processar</span>
           </button>
-        </form>
+        </form> -->
 
       </td>
     </tr>
