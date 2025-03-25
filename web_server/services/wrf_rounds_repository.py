@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from models.wrf_round import WRFRound
+from models.wrf_round_status import WRFRoundStatus
 
 from .namelist_server_sending.vasques_emission_namelist_creator import (
     VasquesEmissionNamelistCreator,
@@ -23,7 +24,13 @@ class WRFRoundsRepository:
 
         self.__db.session.commit()
 
-    def read_not_processed_rounds(self):
-        rounds_read = self.__db.session.query(WRFRound).limit(5).all()
+    def read_earliest_not_processed_rounds(self):
+        rounds_read = (
+            self.__db.session.query(WRFRound)
+            .filter_by(status=WRFRoundStatus.PENDING)
+            .order_by(WRFRound.timestamp.asc())
+            .limit(5)
+            .all()
+        )
 
-        return rounds_read
+        return rounds_read if rounds_read else None
