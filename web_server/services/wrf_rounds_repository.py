@@ -34,3 +34,18 @@ class WRFRoundsRepository:
         )
 
         return rounds_read if rounds_read else None
+
+    def try_to_complete(self, a_running_round_id: int):
+        wrf_round = (
+            self.__db.session.query(WRFRound).filter_by(id=a_running_round_id).first()
+        )
+
+        if not wrf_round:
+            return
+
+        try:
+            wrf_round.complete_if_running()
+
+            self.__db.session.commit()
+        except Exception:
+            self.__db.session.rollback()

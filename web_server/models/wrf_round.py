@@ -18,3 +18,8 @@ class WRFRound(Base):
     def __init__(self, namelist: str, output_file_path: str):
         self.namelist = namelist
         self.output_file_path = output_file_path
+
+    def complete_if_running(self):
+        if self.status is WRFRoundStatus.RUNNING:
+            self.status = WRFRoundStatus.COMPLETED
+            self.timestamp = datetime.now(UTC)
