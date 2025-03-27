@@ -37,5 +37,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
       setTimeout(() => form.submit(), 500);
     });
-  });
+  })
+
+  const modal = document.getElementById("visualizeModal");
+  const iframe = document.getElementById("iframe");
+  const iframeSrc = "/visualize"
+  iframe.src = ""
+
+  modal.addEventListener("shown.bs.modal", function () {
+    iframe.src = iframeSrc
+    console.log("iframe is shown")
+  })
+
+  modal.addEventListener("hidden.bs.modal", function () {
+    iframe.src = ""
+    console.log("iframe is hidden")
+  })
+
 });

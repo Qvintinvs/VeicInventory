@@ -13,6 +13,7 @@
     <script>
         let currentFrame = 0;
         let isPaused = false;
+        let isCycle = true;
         let lastFrame;
         async function fetchAndPlotHeatmap() {
             try {
@@ -65,7 +66,7 @@
                     Plotly.update('heatmap', {
                         z: [frameData] // Update heatmap data
                     });
-                    if (currentFrame + 1 === frames.length) {
+                    if (currentFrame + 1 === frames.length && (!isPaused || isCycle)) {
                         console.log("got here lol")
                         // document.body.dispatchEvent(new KeyboardEvent(("keydown", { code: "Space" })))
                         isPaused = !isPaused
@@ -91,26 +92,43 @@
             if (e.code === "Space") {
                 isPaused = !isPaused
                 console.log("isPaused:", isPaused);
+                console.log("currentFrame:", currentFrame)
                 
-                if (isPaused && currentFrame === lastFrame) {
-
+                if (!isPaused && currentFrame+1 === lastFrame) {
+                    currentFrame = 0
+                    isPaused = false
                 }
 
             }
 
             if (e.code === "ArrowLeft") {
-                (currentFrame <= 0 ) ?  currentFrame = 0 : currentFrame-- 
+                (currentFrame > 0 ) ?  currentFrame-- : currentFrame = 0 
                 console.log("currentFrame:", currentFrame);
             }
 
             if (e.code === "ArrowRight") {
-                currentFrame++
+                (currentFrame < lastFrame ) ?  currentFrame++ : currentFrame = lastFrame 
                 console.log("currentFrame:", currentFrame);
+            }
+
+            if (e.code === "KeyC") {
+                isCycle = !isCycle
             }
         })
 
         // Call the function to fetch and plot heatmap data
         fetchAndPlotHeatmap();
+
+        $(document).ready(function () {
+        $('#visualizeModal').on('hidden.bs.modal', function () {
+            $('#iframeId').attr('src', $('#iframeId').attr('src')); // Reloads the iframe
+            isPaused = true; // Stops animation
+        });
+
+        $('#visualizeModal').on('shown.bs.modal', function () {
+            isPaused = false; // Resumes animation when modal opens
+        });
+    });
 
     </script>
 </body>

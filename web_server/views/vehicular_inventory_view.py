@@ -71,7 +71,7 @@ class VehicularInventoryView:
 
         # if process_form.validate_on_submit():
             # self.__inventory.visualize(id)
-        return "0"
+        # return "0"
         return send_file("templates/render_plot.html")
     
     # test
