@@ -72,7 +72,7 @@
         <form method="POST" action="{{ url_for('vehicular_inventory.process') }}" class="d-inline process-form">
           {{ form.hidden_tag() }}
           
-          <input type="hidden" name="interaction_id" value="{{ vehicular_data[0].id }}"/>
+          <input type="hidden" name="interaction_id" value="{{ 0 }}"/>
           <button class="process-button btn btn-outline-secondary btn-lg">
             <i class="bi bi-gear"></i>
             <span class="d-none d-sm-inline">Processar</span>
