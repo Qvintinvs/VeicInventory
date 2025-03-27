@@ -5,6 +5,7 @@ from models.wrf_round_status import WRFRoundStatus
 from .namelist_server_sending.vasques_emission_namelist_creator import (
     VasquesEmissionNamelistCreator,
 )
+from .round_completion_try_status import RoundCompletionTryStatus
 
 
 class WRFRoundsRepository:
@@ -35,17 +36,22 @@ class WRFRoundsRepository:
 
         return rounds_read if rounds_read else None
 
-    def try_to_complete(self, a_running_round_id: int):
-        wrf_round = (
-            self.__db.session.query(WRFRound).filter_by(id=a_running_round_id).first()
-        )
+    def get_wrf_round_by(self, its_id: int):
+        return self.__db.session.query(WRFRound).filter_by(id=its_id).first()
+
+    def try_to_complete(self, a_running_round_by_id: int):
+        wrf_round = self.get_wrf_round_by(a_running_round_by_id)
 
         if not wrf_round:
-            return
+            return RoundCompletionTryStatus.NOT_FOUND
 
         try:
             wrf_round.complete_if_running()
 
             self.__db.session.commit()
+
+            return RoundCompletionTryStatus.SUCCESS
         except Exception:
             self.__db.session.rollback()
+
+            return RoundCompletionTryStatus.ERROR
