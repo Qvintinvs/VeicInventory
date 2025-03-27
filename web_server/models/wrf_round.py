@@ -13,7 +13,7 @@ class WRFRound(Base):
     namelist = Column(Text, nullable=False)
     status = Column(Enum(WRFRoundStatus), default=WRFRoundStatus.PENDING)
     output_file_path = Column(String(255))
-    timestamp = Column(DateTime, default=datetime.now(UTC))
+    timestamp = Column(DateTime, default=lambda: datetime.now(UTC))
 
     def __init__(self, namelist: str, output_file_path: str):
         self.namelist = namelist
