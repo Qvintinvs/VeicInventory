@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from models.wrf_round import WRFRound
 from models.wrf_round_status import WRFRoundStatus
+from sqlalchemy import DateTime, asc, cast
 
 from .namelist_server_sending.vasques_emission_namelist_creator import (
     VasquesEmissionNamelistCreator,
@@ -29,7 +30,7 @@ class WRFRoundsRepository:
         rounds_read = (
             self.__db.session.query(WRFRound)
             .filter_by(status=WRFRoundStatus.PENDING)
-            .order_by(WRFRound.timestamp.asc())
+            .order_by(asc(cast(WRFRound.timestamp, DateTime)))
             .limit(5)
             .all()
         )
