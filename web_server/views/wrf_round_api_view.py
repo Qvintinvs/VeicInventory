@@ -36,7 +36,7 @@ class WRFRoundAPIView:
     def setup_routes(self):
         wrf_round_api = Blueprint("wrf_round_api", __name__)
 
-        wrf_round_api.route(
+        wrf_round_api.add_url_rule(
             "/complete_the_round", view_func=self.complete_the_round, methods=["POST"]
         )
 
