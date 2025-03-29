@@ -1,10 +1,10 @@
-from secrets import token_hex
-
+from app_config import AppConfig
 from app_container import InventoryAppContainer
 from dotenv import load_dotenv
 from flask import Flask
 from flask_wtf import CSRFProtect
 from views.vehicular_inventory_view import VehicularInventoryView
+from views.wrf_round_api_view import WRFRoundAPIView
 
 
 def request_method_error(error: Exception):
@@ -21,18 +21,12 @@ def load_configuration():
 def initialize_flask_app():
     app = Flask(__name__)
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.secret_key = token_hex(16)
-
-    _ = CSRFProtect(app)
+    app.config.from_object(AppConfig)
 
     return app
 
 
-def main():
-    load_configuration()
-
+def initialize_container_within(app_instance: Flask):
     container = InventoryAppContainer()
 
     config = container.config
@@ -43,17 +37,48 @@ def main():
     config.username.from_env("SSH_NAME", required=True)
     config.password.from_env("SSH_PASS")
 
-    app = initialize_flask_app()
+    config.from_dict(app_instance.config)
+
+    main_db = container.sql_db()
+
+    main_db.init_app(app_instance)
+
+    with app_instance.app_context():
+        main_db.create_all()
+
+    return container
+
+
+app = initialize_flask_app()
+
+csrf = CSRFProtect(app)
+
+
+def main():
+    load_configuration()
+
+    container = initialize_container_within(app)
 
     inventory = container.vehicular_inventory()
 
-    inventory.initialize_database_in(app)
+    worker = container.wrf_rounds_queue_worker()
+    worker.start()
 
-    main_page = VehicularInventoryView(inventory)
+    main_page = VehicularInventoryView(
+        inventory,
+        container.wrf_rounds_db(),
+        worker,
+    )
 
-    main_blueprint = main_page.setup_routes()
+    wrf_round_api = WRFRoundAPIView(container.wrf_rounds_db())
 
-    app.register_blueprint(main_blueprint)
+    api_routes = wrf_round_api.setup_routes()
+    csrf.exempt(api_routes)
+
+    main_routes = main_page.setup_routes()
+
+    app.register_blueprint(main_routes)
+    app.register_blueprint(api_routes, url_prefix="/wrf_rounds_api")
 
     app.register_error_handler(405, request_method_error)
 
