@@ -1,4 +1,3 @@
-from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from models.vasques_emission_model import VasquesEmissionModel
 
@@ -6,12 +5,6 @@ from models.vasques_emission_model import VasquesEmissionModel
 class VehiclesRepository:
     def __init__(self, sql_db: SQLAlchemy):
         self.__db = sql_db
-
-    def initialize_database_in(self, the_app: Flask):
-        self.__db.init_app(the_app)
-
-        with the_app.app_context():
-            self.__db.create_all()
 
     def insert_a(self, new_vehicle: VasquesEmissionModel):
         self.__db.session.add(new_vehicle)
