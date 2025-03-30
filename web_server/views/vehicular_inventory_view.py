@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, url_for
+from flask import redirect, render_template, url_for
 from services.vehicles_repository import VehiclesRepository
 
 from .vehicular_inventory_forms.vasques_vehicle_form import VasquesVehicleForm
@@ -35,18 +35,3 @@ class VehicularInventoryView:
             self.__inventory.delete_vehicle_by(id_to_delete)
 
         return redirect(url_for("vehicular_inventory.show_the_page"))
-
-    def setup_routes(self):
-        index_page = Blueprint("vehicular_inventory", __name__)
-
-        index_page.add_url_rule("/", view_func=self.show_the_page, methods=["GET"])
-
-        index_page.add_url_rule(
-            "/send_new_vehicle", view_func=self.send_new_vehicle, methods=["POST"]
-        )
-
-        index_page.add_url_rule(
-            "/send_id_to_delete", view_func=self.send_id_to_delete, methods=["POST"]
-        )
-
-        return index_page

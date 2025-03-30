@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import jsonify, request
 from services.round_completion_try_status import RoundCompletionTryStatus
 from services.wrf_rounds_repository import WRFRoundsRepository
 
@@ -32,12 +32,3 @@ class WRFRoundAPIView:
             return jsonify(
                 {"error": "Failed to update round status in the database"}
             ), 500
-
-    def setup_routes(self):
-        wrf_round_api = Blueprint("wrf_round_api", __name__)
-
-        wrf_round_api.add_url_rule(
-            "/complete_the_round", view_func=self.complete_the_round, methods=["POST"]
-        )
-
-        return wrf_round_api

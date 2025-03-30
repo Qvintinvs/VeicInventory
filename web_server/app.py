@@ -3,8 +3,7 @@ from app_container import InventoryAppContainer
 from dotenv import load_dotenv
 from flask import Flask
 from flask_wtf import CSRFProtect
-from views.vehicular_inventory_view import VehicularInventoryView
-from views.wrf_round_api_view import WRFRoundAPIView
+from routes import vehicular_inventory_routes, wrf_rounds_api_routes
 
 
 def request_method_error(error: Exception):
@@ -59,25 +58,18 @@ def main():
 
     container = initialize_container_within(app)
 
-    inventory = container.vehicular_inventory()
+    container.wire(modules=(vehicular_inventory_routes, wrf_rounds_api_routes))
 
     worker = container.wrf_rounds_queue_worker()
     worker.start()
 
-    main_page = VehicularInventoryView(
-        inventory,
-        container.wrf_rounds_db(),
-        worker,
-    )
+    inventory_routes = vehicular_inventory_routes.register_vehicular_inventory_routes()
 
-    wrf_round_api = WRFRoundAPIView(container.wrf_rounds_db())
+    api_routes = wrf_rounds_api_routes.register_wrf_rounds_api_routes()
 
-    api_routes = wrf_round_api.setup_routes()
     csrf.exempt(api_routes)
 
-    main_routes = main_page.setup_routes()
-
-    app.register_blueprint(main_routes)
+    app.register_blueprint(inventory_routes)
     app.register_blueprint(api_routes, url_prefix="/wrf_rounds_api")
 
     app.register_error_handler(405, request_method_error)
