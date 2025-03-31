@@ -26,7 +26,7 @@ class VasquesEmissionModel(Base):
 
     vehicle_city_key = Column(Integer, ForeignKey(City.id), nullable=False)
 
-    vehicle_city = relationship(City)
+    vehicle_city = relationship(City, uselist=False)
 
     def __init__(
         self,
