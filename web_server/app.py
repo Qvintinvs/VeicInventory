@@ -1,3 +1,4 @@
+import database_setup
 from app_config import AppConfig
 from app_container import InventoryAppContainer
 from dotenv import load_dotenv
@@ -17,14 +18,6 @@ def load_configuration():
         raise Exception("Missing dotenv file")
 
 
-def initialize_flask_app():
-    app = Flask(__name__)
-
-    app.config.from_object(AppConfig)
-
-    return app
-
-
 def initialize_container_within(app_instance: Flask):
     container = InventoryAppContainer()
 
@@ -38,30 +31,11 @@ def initialize_container_within(app_instance: Flask):
 
     config.from_dict(app_instance.config)
 
-    main_db = container.sql_db()
-
-    main_db.init_app(app_instance)
-
-    with app_instance.app_context():
-        main_db.create_all()
-
     return container
 
 
-app = initialize_flask_app()
-
-csrf = CSRFProtect(app)
-
-
-def main():
-    load_configuration()
-
-    container = initialize_container_within(app)
-
-    container.wire(modules=(vehicular_inventory_routes, wrf_rounds_api_routes))
-
-    worker = container.wrf_rounds_queue_worker()
-    worker.start()
+def register_routes_of(app: Flask):
+    csrf = CSRFProtect(app)
 
     inventory_routes = vehicular_inventory_routes.register_vehicular_inventory_routes()
 
@@ -73,6 +47,33 @@ def main():
     app.register_blueprint(api_routes, url_prefix="/wrf_rounds_api")
 
     app.register_error_handler(405, request_method_error)
+
+
+def create_app():
+    load_configuration()
+
+    app = Flask(__name__)
+
+    app.config.from_object(AppConfig)
+
+    container = initialize_container_within(app)
+
+    container.wire(
+        modules=(vehicular_inventory_routes, wrf_rounds_api_routes, database_setup)
+    )
+
+    worker = container.wrf_rounds_queue_worker()
+    worker.start()
+
+    return app
+
+
+def main():
+    app = create_app()
+
+    register_routes_of(app)
+
+    database_setup.setup_database_within(app)
 
     app.run()
 
