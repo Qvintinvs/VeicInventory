@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from models.netcdf_blob import NETCDFBlob
 from models.wrf_round import WRFRound
 from models.wrf_round_status import WRFRoundStatus
 from sqlalchemy import DateTime, asc, cast
@@ -40,14 +41,14 @@ class WRFRoundsRepository:
     def get_wrf_round_by(self, its_id: int):
         return self.__db.session.query(WRFRound).filter_by(id=its_id).first()
 
-    def try_to_complete(self, a_running_round_by_id: int):
-        wrf_round = self.get_wrf_round_by(a_running_round_by_id)
+    def try_to_complete_round_of(self, a_processed_netcdf: NETCDFBlob):
+        netcdf_scheduler_round: WRFRound | None = a_processed_netcdf.round
 
-        if not wrf_round:
+        if not netcdf_scheduler_round:
             return RoundCompletionTryStatus.NOT_FOUND
 
         try:
-            wrf_round.complete_if_running()
+            netcdf_scheduler_round.complete_if_running()
 
             self.__db.session.commit()
 
