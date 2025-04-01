@@ -1,14 +1,15 @@
 from typing import cast
 
-from .base import Base
-from .city import City
-from .vehicle_dict import VehicleDict
-from .vehicle_subcategory import VehicleSubcategory
 from sqlalchemy import CHAR, Column, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import composite, relationship
 
+from .base import Base
+from .city import City
+from .vehicle_subcategory import VehicleSubcategory
+from .vehicle_dict import VehicleDict
 
-class VasquesVehicleModel(Base):
+
+class VasquesEmissionModel(Base):
     __tablename__ = "vehicle"
 
     id = Column(Integer, primary_key=True)
@@ -30,7 +31,7 @@ class VasquesVehicleModel(Base):
 
     vehicle_city_key = Column(Integer, ForeignKey(City.id), nullable=False)
 
-    vehicle_city = relationship(City)
+    vehicle_city = relationship(City, uselist=False)
 
     def __init__(
         self,

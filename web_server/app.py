@@ -1,45 +1,79 @@
-from secrets import token_hex
-
+import database_setup
+from app_config import AppConfig
 from app_container import InventoryAppContainer
 from dotenv import load_dotenv
 from flask import Flask
 from flask_wtf import CSRFProtect
-from views.vehicular_inventory_view import VehicularInventoryView
+from routes import vehicular_inventory_routes, wrf_rounds_api_routes
 
 
 def request_method_error(error: Exception):
     return str(error), 405
 
 
-def main():
+def load_configuration():
     could_load_dotenv = load_dotenv()
 
     if not could_load_dotenv:
-        raise Exception("Missing Dotenv")
+        raise Exception("Missing dotenv file")
 
+
+def initialize_container_within(app_instance: Flask):
     container = InventoryAppContainer()
+
+    config = container.config
+
+    config.namelist_remote_path.from_env("NAMELIST_REMOTE_PATH", required=True)
+
+    config.hostname.from_env("SSH_HOST", required=True)
+    config.username.from_env("SSH_NAME", required=True)
+    config.password.from_env("SSH_PASS")
+
+    config.from_dict(app_instance.config)
+
+    return container
+
+
+def register_routes_of(app: Flask):
+    csrf = CSRFProtect(app)
+
+    inventory_routes = vehicular_inventory_routes.register_vehicular_inventory_routes()
+
+    api_routes = wrf_rounds_api_routes.register_wrf_rounds_api_routes()
+
+    csrf.exempt(api_routes)
+
+    app.register_blueprint(inventory_routes)
+    app.register_blueprint(api_routes, url_prefix="/wrf_rounds_api")
+
+    app.register_error_handler(405, request_method_error)
+
+
+def create_app():
+    load_configuration()
 
     app = Flask(__name__)
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
+    app.config.from_object(AppConfig)
 
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    container = initialize_container_within(app)
 
-    app.secret_key = token_hex(16)
+    container.wire(
+        modules=(vehicular_inventory_routes, wrf_rounds_api_routes, database_setup)
+    )
 
-    _ = CSRFProtect(app)
+    worker = container.wrf_rounds_queue_worker()
+    worker.start()
 
-    inventory = container.vehicular_inventory()
+    return app
 
-    inventory.initialize_database_in(app)
 
-    main_page = VehicularInventoryView(inventory)
+def main():
+    app = create_app()
 
-    main_blueprint = main_page.setup_routes()
+    register_routes_of(app)
 
-    app.register_blueprint(main_blueprint)
-
-    app.register_error_handler(405, request_method_error)
+    database_setup.setup_database_within(app)
 
     app.run(debug=True)
 

@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, url_for, send_file
+from flask import redirect, render_template, url_for, send_file
 from services.vehicles_repository import VehiclesRepository
 
 from .vehicular_inventory_forms.vasques_vehicle_form import VasquesVehicleForm
@@ -117,28 +117,3 @@ class VehicularInventoryView:
             "frames": co2_ant_frames
         })
 
-    def setup_routes(self):
-        index_page = Blueprint("vehicular_inventory", __name__)
-
-        index_page.add_url_rule("/", view_func=self.show_the_page, methods=["GET"])
-
-        index_page.add_url_rule(
-            "/send_new_vehicle", view_func=self.send_new_vehicle, methods=["POST"]
-        )
-
-        index_page.add_url_rule(
-            "/send_id_to_delete", view_func=self.send_id_to_delete, methods=["POST"]
-        )
-
-        index_page.add_url_rule("/process", view_func=self.process, methods=["POST"])
-
-        index_page.add_url_rule("/edit", view_func=self.edit, methods=["POST"]
-        )
-
-        index_page.add_url_rule("/visualize", view_func=self.visualize, methods=["GET"]
-        )
-
-        index_page.add_url_rule("/get_netcdf_data", view_func=self.get_netcdf_data, methods=["GET"]
-        )
-        
-        return index_page
