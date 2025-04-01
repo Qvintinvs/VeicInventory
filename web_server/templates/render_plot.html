@@ -78,7 +78,7 @@
                     currentFrame = (currentFrame + 1) % frames.length; // Loop through frames
                     console.log(`currentFrame: ${currentFrame}`)
 
-                }, 1000/24); // Update every 1 second
+                }, 1000/24)
             } catch (error) {
                 console.error('Error fetching or plotting NetCDF data:', error);
             }
@@ -116,19 +116,18 @@
             }
         })
 
-        // Call the function to fetch and plot heatmap data
         fetchAndPlotHeatmap();
 
         $(document).ready(function () {
         $('#visualizeModal').on('hidden.bs.modal', function () {
-            $('#iframeId').attr('src', $('#iframeId').attr('src')); // Reloads the iframe
-            isPaused = true; // Stops animation
-        });
+            $('#iframeId').attr('src', $('#iframeId').attr('src'))
+            isPaused = true
+        })
 
         $('#visualizeModal').on('shown.bs.modal', function () {
-            isPaused = false; // Resumes animation when modal opens
-        });
-    });
+            isPaused = false
+        })
+    })
 
     </script>
 </body>
