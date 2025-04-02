@@ -6,21 +6,21 @@ from .vehicular_inventory_forms.vehicle_interactions_form import VehicleInteract
 
 
 class VehicularInventoryView:
-    def __init__(self, vehicular_inventory: VehiclesRepository):
-        self.__inventory = vehicular_inventory
+    def __init__(self, vehicle_emissions_inventory: VehiclesRepository):
+        self.__inventory = vehicle_emissions_inventory
 
     def show_the_page(self):
-        form: VasquesVehicleForm = VasquesVehicleForm()
+        vasques_form: VasquesVehicleForm = VasquesVehicleForm()
 
-        vehicle_dicts = self.__inventory.read_vehicles_data()
+        vehicles = self.__inventory.read_vehicles_data()
 
-        return render_template("index.html", vehicular_data=vehicle_dicts, form=form)
+        return render_template("index.html", vehicular_data=vehicles, form=vasques_form)
 
     def send_new_vehicle(self):
-        form: VasquesVehicleForm = VasquesVehicleForm()
+        vasques_form: VasquesVehicleForm = VasquesVehicleForm()
 
-        if form.validate_on_submit():
-            vehicle_from_the_form = form.vehicle
+        if vasques_form.validate_on_submit():
+            vehicle_from_the_form = vasques_form.vehicle
 
             self.__inventory.insert_a(vehicle_from_the_form)
 
