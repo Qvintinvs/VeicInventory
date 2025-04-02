@@ -89,11 +89,24 @@ for vehicle in vehicular_data %}
           </button>
         </form>
 
-        <input type="hidden" name="id" value="{{ vehicle.id }}" />
-        <button class="process-button btn btn-secondary btn-sm">
-          <i class="bi bi-gear"></i>
-          <span class="d-none d-sm-inline">Processar</span>
-        </button>
+        <form
+          method="POST"
+          action="{{ url_for('rounds_processing.process') }}"
+          class="d-inline"
+        >
+          {{ form.hidden_tag() }}
+
+          <input
+            type="hidden"
+            name="interaction_id"
+            value="{{ vehicle.id }}"
+            required
+          />
+          <button class="process-button btn btn-secondary btn-sm">
+            <i class="bi bi-gear"></i>
+            <span class="d-none d-sm-inline">Processar</span>
+          </button>
+        </form>
       </td>
     </tr>
     {% endfor %}

@@ -14,7 +14,6 @@ class NETCDFBlob(Base):
 
     round = relationship(WRFRound, back_populates="blobs")
 
-    def __init__(self, scheduler_round: WRFRound, netcdf_file: bytes):
-        self.round = scheduler_round
+    def __init__(self, netcdf_file: bytes, scheduler_round: WRFRound):
         self.netcdf_data = netcdf_file
-        self.wrf_round_id = scheduler_round.id
+        self.round = scheduler_round
