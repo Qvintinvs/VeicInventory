@@ -6,9 +6,6 @@ __pycache__/
 # C extensions
 *.so
 
-# Output files
-namelist.emis
-
 # Distribution / packaging
 .Python
 build/
