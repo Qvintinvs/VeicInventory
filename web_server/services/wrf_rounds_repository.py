@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from models.netcdf_blob import NETCDFBlob
+from models.vasques_emission_model import VasquesEmissionModel
 from models.wrf_round import WRFRound
 from models.wrf_round_status import WRFRoundStatus
 from sqlalchemy import DateTime, asc, cast
@@ -16,10 +17,19 @@ class WRFRoundsRepository:
     def __init__(self, sql_db: SQLAlchemy):
         self.__db = sql_db
 
-    def schedule_a_round_by_sending(
-        self, the_vehicle_namelist: VasquesEmissionNamelistCreator
-    ):
-        namelist_content = the_vehicle_namelist.create_namelist()
+    def schedule_a_round_by_sending(self, the_vehicle_id: int):
+        vehicle_by_id = (
+            self.__db.session.query(VasquesEmissionModel)
+            .filter_by(id=the_vehicle_id)
+            .first()
+        )
+
+        if not vehicle_by_id:
+            return
+
+        vehicle_namelist = VasquesEmissionNamelistCreator(vehicle_by_id)
+
+        namelist_content = vehicle_namelist.create_namelist()
 
         new_round = WRFRound(namelist_content, "output_test")
 
@@ -48,6 +58,8 @@ class WRFRoundsRepository:
             return RoundCompletionTryStatus.NOT_FOUND
 
         try:
+            self.__db.session.add(a_processed_netcdf)
+
             netcdf_scheduler_round.complete_if_running()
 
             self.__db.session.commit()

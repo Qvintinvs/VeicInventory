@@ -10,8 +10,10 @@ def register_vehicular_inventory_routes(
     inventory_repo: VehiclesRepository = Provide[
         InventoryAppContainer.vehicular_inventory
     ],
+    rounds_repo=Provide[InventoryAppContainer.wrf_rounds_db],
+    worker=Provide[InventoryAppContainer.wrf_rounds_queue_worker],
 ):
-    inventory = VehicularInventoryView(inventory_repo)
+    inventory = VehicularInventoryView(inventory_repo, rounds_repo, worker)
 
     inventory_blueprint = Blueprint("vehicular_inventory", __name__)
 
