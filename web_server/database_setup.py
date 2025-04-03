@@ -1,7 +1,7 @@
-from app_container import InventoryAppContainer
 from dependency_injector.wiring import Provide, inject
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from inventory_app_container import InventoryAppContainer
 
 
 @inject

@@ -1,9 +1,9 @@
 import database_setup
 from app_config import AppConfig
-from app_container import InventoryAppContainer
 from dotenv import load_dotenv
 from flask import Flask
 from flask_wtf import CSRFProtect
+from inventory_app_container import InventoryAppContainer
 from routes import (
     round_processing_routes,
     vehicular_inventory_routes,

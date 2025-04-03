@@ -1,6 +1,6 @@
-from app_container import InventoryAppContainer
 from dependency_injector.wiring import Provide, inject
 from flask import Blueprint
+from inventory_app_container import InventoryAppContainer
 from services.vasques_emission_repository import VasquesEmissionRepository
 from views.vasques_emission_inventory import VasquesEmissionInventory
 
