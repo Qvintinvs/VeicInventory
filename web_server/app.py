@@ -7,7 +7,7 @@ from flask_wtf import CSRFProtect
 from routes import (
     round_processing_routes,
     vehicular_inventory_routes,
-    wrf_rounds_api_routes,
+    wrf_round_api_routes,
 )
 
 
@@ -43,14 +43,14 @@ def register_routes_of(app: Flask):
 
     inventory_routes = vehicular_inventory_routes.register_vehicular_inventory_routes()
 
-    api_routes = wrf_rounds_api_routes.register_wrf_rounds_api_routes()
+    api_routes = wrf_round_api_routes.register_wrf_round_api_routes()
 
     processing_routes = round_processing_routes.register_round_processing_routes()
 
     csrf.exempt(api_routes)
 
     app.register_blueprint(inventory_routes)
-    app.register_blueprint(api_routes, url_prefix="/wrf_rounds_api")
+    app.register_blueprint(api_routes)
     app.register_blueprint(processing_routes)
 
     app.register_error_handler(405, request_method_error)
@@ -68,7 +68,7 @@ def create_app():
     container.wire(
         modules=(
             vehicular_inventory_routes,
-            wrf_rounds_api_routes,
+            wrf_round_api_routes,
             database_setup,
             round_processing_routes,
         )

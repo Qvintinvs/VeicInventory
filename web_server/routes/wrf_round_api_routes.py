@@ -6,14 +6,14 @@ from views.wrf_round_api import WRFRoundAPI
 
 
 @inject
-def register_wrf_rounds_api_routes(
+def register_wrf_round_api_routes(
     rounds_repository: WRFRoundsRepository = Provide[
         InventoryAppContainer.wrf_rounds_repository
     ],
 ):
     wrf_round_api = WRFRoundAPI(rounds_repository)
 
-    api_blueprint = Blueprint("wrf_round_api", __name__)
+    api_blueprint = Blueprint("wrf_round_api", __name__, url_prefix="/wrf_rounds_api")
 
     api_blueprint.add_url_rule(
         "/complete_the_round",
