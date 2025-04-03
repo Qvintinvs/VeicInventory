@@ -6,7 +6,7 @@ from models.base import Base
 from services import (
     connection_settings,
     ssh_wrf_service,
-    vehicles_repository,
+    vasques_emission_repository,
     wrf_rounds_queue_worker,
     wrf_rounds_repository,
 )
@@ -18,7 +18,7 @@ class InventoryAppContainer(containers.DeclarativeContainer):
     sql_db = providers.Singleton(SQLAlchemy, model_class=Base)
 
     vasques_emission_repository = providers.Singleton(
-        vehicles_repository.VasquesEmissionRepository, sql_db=sql_db
+        vasques_emission_repository.VasquesEmissionRepository, sql_db=sql_db
     )
 
     wrf_rounds_repository = providers.Singleton(

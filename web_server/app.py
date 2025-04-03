@@ -69,8 +69,8 @@ def create_app():
         modules=(
             vehicular_inventory_routes,
             wrf_round_api_routes,
-            database_setup,
             round_processing_routes,
+            database_setup,
         )
     )
 

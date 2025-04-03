@@ -1,5 +1,5 @@
 from flask import redirect, render_template, url_for
-from services.vehicles_repository import VasquesEmissionRepository
+from services.vasques_emission_repository import VasquesEmissionRepository
 
 from .inventory_forms.vasques_emission_form import VasquesEmissionForm
 from .inventory_forms.vehicle_interactions_form import VehicleInteractionsForm
