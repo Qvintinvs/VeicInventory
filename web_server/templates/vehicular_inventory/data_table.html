@@ -23,7 +23,7 @@ for vehicle in emission_data %}
       </div>
 
       <form
-        id="#editForm{{ vehicle.id }}"
+        id="editForm{{ vehicle.id }}"
         action="{{ url_for('vehicular_inventory.render_inventory_page') }}"
         method="GET"
       >
