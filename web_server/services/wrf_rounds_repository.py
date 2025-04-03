@@ -11,16 +11,16 @@ from .namelist_server_sending.vasques_emission_namelist_creator import (
 from .round_completion_try_status import RoundCompletionTryStatus
 
 
-class WRFRoundsRepository:
+class WRFRoundRepository:
     """Will deal with the database rounds"""
 
     def __init__(self, sql_db: SQLAlchemy):
         self.__db = sql_db
 
-    def schedule_a_round_by_sending(self, the_vehicle_id: int):
+    def schedule_emission_round(self, vehicle_emission_id: int):
         vehicle_by_id = (
             self.__db.session.query(VasquesEmissionModel)
-            .filter_by(id=the_vehicle_id)
+            .filter_by(id=vehicle_emission_id)
             .first()
         )
 
@@ -37,7 +37,7 @@ class WRFRoundsRepository:
 
         self.__db.session.commit()
 
-    def read_earliest_not_processed_rounds(self):
+    def read_oldest_pending_rounds(self):
         rounds_read = (
             self.__db.session.query(WRFRound)
             .filter_by(status=WRFRoundStatus.PENDING)
@@ -48,17 +48,17 @@ class WRFRoundsRepository:
 
         return rounds_read if rounds_read else None
 
-    def get_wrf_round_by(self, its_id: int):
-        return self.__db.session.query(WRFRound).filter_by(id=its_id).first()
+    def get_wrf_round_by_id(self, round_id: int):
+        return self.__db.session.query(WRFRound).filter_by(id=round_id).first()
 
-    def try_to_complete_round_of(self, a_processed_netcdf: NETCDFBlob):
-        netcdf_scheduler_round: WRFRound | None = a_processed_netcdf.round
+    def try_to_complete_round_with_output(self, processed_netcdf: NETCDFBlob):
+        netcdf_scheduler_round: WRFRound | None = processed_netcdf.round
 
         if not netcdf_scheduler_round:
             return RoundCompletionTryStatus.NOT_FOUND
 
         try:
-            self.__db.session.add(a_processed_netcdf)
+            self.__db.session.add(processed_netcdf)
 
             netcdf_scheduler_round.complete_if_running()
 

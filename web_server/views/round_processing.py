@@ -1,6 +1,6 @@
 from flask import redirect, url_for
-from services.wrf_rounds_queue_worker import WRFRoundsQueueWorker
-from services.wrf_rounds_repository import WRFRoundsRepository
+from services.wrf_rounds_queue_worker import WRFRoundProcessor
+from services.wrf_rounds_repository import WRFRoundRepository
 
 from .inventory_forms.vehicle_interactions_form import VehicleInteractionsForm
 
@@ -8,11 +8,11 @@ from .inventory_forms.vehicle_interactions_form import VehicleInteractionsForm
 class RoundProcessing:
     def __init__(
         self,
-        rounds_repository: WRFRoundsRepository,
-        server_sending_queue: WRFRoundsQueueWorker,
+        wrf_round_repository: WRFRoundRepository,
+        wrf_round_processor: WRFRoundProcessor,
     ):
-        self.__repository = rounds_repository
-        self.__queue = server_sending_queue
+        self.__repository = wrf_round_repository
+        self.__queue = wrf_round_processor
 
     def process(self):
         process_form: VehicleInteractionsForm = VehicleInteractionsForm()
@@ -20,10 +20,12 @@ class RoundProcessing:
         if process_form.validate():
             selected_emission_id = process_form.action_id
 
-            self.__repository.schedule_a_round_by_sending(selected_emission_id)
+            self.__repository.schedule_emission_round(selected_emission_id)
 
-            scheduled_round = self.__repository.get_wrf_round_by(selected_emission_id)
+            scheduled_round = self.__repository.get_wrf_round_by_id(
+                selected_emission_id
+            )
 
-            self.__queue.add_to_the_queue(scheduled_round)
+            self.__queue.enqueue_round(scheduled_round)
 
         return redirect(url_for("vehicular_inventory.render_inventory_page"))

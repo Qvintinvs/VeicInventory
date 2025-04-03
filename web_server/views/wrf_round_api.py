@@ -3,12 +3,12 @@ from io import BytesIO
 from flask import jsonify, request
 from models.netcdf_blob import NETCDFBlob
 from services.round_completion_try_status import RoundCompletionTryStatus
-from services.wrf_rounds_repository import WRFRoundsRepository
+from services.wrf_rounds_repository import WRFRoundRepository
 
 
 class WRFRoundAPI:
-    def __init__(self, rounds_repository: WRFRoundsRepository):
-        self.__rounds_db = rounds_repository
+    def __init__(self, wrf_round_repository: WRFRoundRepository):
+        self.__rounds_db = wrf_round_repository
 
     def complete_the_round(self):
         round_id = request.form.get("id")
@@ -21,7 +21,7 @@ class WRFRoundAPI:
         except ValueError:
             return jsonify({"error": "Invalid ID format. Expected an integer."}), 400
 
-        requested_round = self.__rounds_db.get_wrf_round_by(round_id)
+        requested_round = self.__rounds_db.get_wrf_round_by_id(round_id)
 
         if not requested_round:
             return jsonify({"error": "Round ID not found"}), 404
@@ -33,7 +33,7 @@ class WRFRoundAPI:
         blob = NETCDFBlob(file_bytes.getvalue(), requested_round)
 
         completion_status: RoundCompletionTryStatus = (
-            self.__rounds_db.try_to_complete_round_of(blob)
+            self.__rounds_db.try_to_complete_round_with_output(blob)
         )
 
         if completion_status == RoundCompletionTryStatus.SUCCESS:

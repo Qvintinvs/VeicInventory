@@ -6,10 +6,10 @@ from views.round_processing import RoundProcessing
 
 @inject
 def register_round_processing_routes(
-    rounds_repository=Provide[InventoryAppContainer.wrf_rounds_repository],
-    rounds_worker=Provide[InventoryAppContainer.wrf_rounds_queue_worker],
+    wrf_round_repository=Provide[InventoryAppContainer.wrf_round_repository],
+    wrf_rounds_queue_worker=Provide[InventoryAppContainer.wrf_rounds_queue_worker],
 ):
-    rounds_view = RoundProcessing(rounds_repository, rounds_worker)
+    rounds_view = RoundProcessing(wrf_round_repository, wrf_rounds_queue_worker)
 
     rounds_blueprint = Blueprint("round_processing", __name__, url_prefix="/round")
 

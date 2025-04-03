@@ -1,16 +1,20 @@
 from models.wrf_round import WRFRound
 from paramiko import Transport
 
-from .connection_settings import ConnectionSettings
+from .connection_settings import WRFRemoteConnectionSettings
 from .sftp_namelist_sender import SFTPNamelistSender
 
 
-class SSHWRFService:
-    def __init__(self, settings: ConnectionSettings, namelist_remote_path: str):
-        self.__settings = settings
+class SSHRoundNamelistSender:
+    def __init__(
+        self,
+        connection_settings: WRFRemoteConnectionSettings,
+        namelist_remote_path: str,
+    ):
+        self.__settings = connection_settings
         self.__remote_path = namelist_remote_path
 
-    def process_in_the_server(self, a_scheduled_round: WRFRound):
+    def send_to_remote_server(self, scheduled_round: WRFRound):
         hostname, username, password = self.__settings
 
         if not hostname:
@@ -22,7 +26,7 @@ class SSHWRFService:
         with Transport(hostname) as protocol:
             protocol.connect(username=username, password=password)
 
-            namelist_text = str(a_scheduled_round.namelist)
+            namelist_text = str(scheduled_round.namelist)
 
             sender = SFTPNamelistSender(protocol, namelist_text)
 

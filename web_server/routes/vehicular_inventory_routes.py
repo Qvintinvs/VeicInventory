@@ -7,11 +7,11 @@ from views.vasques_emission_inventory import VasquesEmissionInventory
 
 @inject
 def register_vehicular_inventory_routes(
-    emission_repository: VasquesEmissionRepository = Provide[
+    vasques_emission_repository: VasquesEmissionRepository = Provide[
         InventoryAppContainer.vasques_emission_repository
     ],
 ):
-    inventory = VasquesEmissionInventory(emission_repository)
+    inventory = VasquesEmissionInventory(vasques_emission_repository)
 
     inventory_blueprint = Blueprint("vehicular_inventory", __name__)
 

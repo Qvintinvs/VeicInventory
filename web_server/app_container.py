@@ -18,28 +18,30 @@ class InventoryAppContainer(containers.DeclarativeContainer):
     sql_db = providers.Singleton(SQLAlchemy, model_class=Base)
 
     vasques_emission_repository = providers.Singleton(
-        vasques_emission_repository.VasquesEmissionRepository, sql_db=sql_db
+        vasques_emission_repository.VasquesEmissionRepository, sql_db
     )
 
-    wrf_rounds_repository = providers.Singleton(
-        wrf_rounds_repository.WRFRoundsRepository, sql_db=sql_db
+    wrf_round_repository = providers.Singleton(
+        wrf_rounds_repository.WRFRoundRepository, sql_db
     )
 
-    connection_settings = providers.Singleton(
-        connection_settings.ConnectionSettings,
-        hostname=config.hostname,
-        username=config.username,
-        password=config.password,
+    remote_wrf_server_connection_settings = providers.Singleton(
+        connection_settings.WRFRemoteConnectionSettings,
+        config.hostname,
+        config.username,
+        config.password,
     )
 
-    wrf_service = providers.Singleton(
-        ssh_wrf_service.SSHWRFService,
-        settings=connection_settings,
-        namelist_remote_path=config.namelist_remote_path,
+    ssh_round_namelist_sender = providers.Singleton(
+        ssh_wrf_service.SSHRoundNamelistSender,
+        remote_wrf_server_connection_settings,
+        config.namelist_remote_path,
     )
 
     rounds_queue = providers.Singleton(Queue)
 
     wrf_rounds_queue_worker = providers.Singleton(
-        wrf_rounds_queue_worker.WRFRoundsQueueWorker, rounds_queue, wrf_service
+        wrf_rounds_queue_worker.WRFRoundProcessor,
+        rounds_queue,
+        ssh_round_namelist_sender,
     )
