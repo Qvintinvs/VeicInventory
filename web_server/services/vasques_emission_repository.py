@@ -12,9 +12,7 @@ class VasquesEmissionRepository:
         self.__db.session.commit()
 
     def read_emission_data(self):
-        vehicles_read = self.__db.session.query(VasquesEmissionModel).limit(5).all()
-
-        return vehicles_read
+        return self.__db.session.query(VasquesEmissionModel).limit(5).all()
 
     def delete_data_by_id(self, emission_id: int):
         self.__db.session.query(VasquesEmissionModel).filter_by(id=emission_id).delete()
