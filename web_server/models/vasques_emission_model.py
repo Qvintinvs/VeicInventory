@@ -43,4 +43,3 @@ class VasquesEmissionModel(Base):
         self.exhaust_emission_factor = exhaust_emission_factor
         self.autonomy = autonomy
         self.vehicle_city = vehicle_city
-        self.vehicle_city_key = vehicle_city.id
