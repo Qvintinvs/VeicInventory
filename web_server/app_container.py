@@ -21,7 +21,7 @@ class InventoryAppContainer(containers.DeclarativeContainer):
         vehicles_repository.VasquesEmissionRepository, sql_db=sql_db
     )
 
-    wrf_rounds_db = providers.Singleton(
+    wrf_rounds_repository = providers.Singleton(
         wrf_rounds_repository.WRFRoundsRepository, sql_db=sql_db
     )
 

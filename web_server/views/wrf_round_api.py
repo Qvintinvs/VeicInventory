@@ -6,9 +6,9 @@ from services.round_completion_try_status import RoundCompletionTryStatus
 from services.wrf_rounds_repository import WRFRoundsRepository
 
 
-class WRFRoundAPIView:
-    def __init__(self, rounds_db: WRFRoundsRepository):
-        self.__rounds_db = rounds_db
+class WRFRoundAPI:
+    def __init__(self, rounds_repository: WRFRoundsRepository):
+        self.__rounds_db = rounds_repository
 
     def complete_the_round(self):
         round_id = request.form.get("id")
