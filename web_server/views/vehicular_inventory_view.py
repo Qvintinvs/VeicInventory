@@ -1,37 +1,39 @@
 from flask import redirect, render_template, url_for
-from services.vehicles_repository import VehiclesRepository
+from services.vehicles_repository import VasquesEmissionRepository
 
-from .vehicular_inventory_forms.vasques_vehicle_form import VasquesVehicleForm
+from .vehicular_inventory_forms.vasques_vehicle_form import VasquesEmissionForm
 from .vehicular_inventory_forms.vehicle_interactions_form import VehicleInteractionsForm
 
 
-class VehicularInventoryView:
-    def __init__(self, vehicle_emissions_inventory: VehiclesRepository):
-        self.__inventory = vehicle_emissions_inventory
+class VasquesEmissionInventory:
+    def __init__(self, vehicle_emissions_repository: VasquesEmissionRepository):
+        self.__inventory = vehicle_emissions_repository
 
-    def show_the_page(self):
-        vasques_form: VasquesVehicleForm = VasquesVehicleForm()
+    def render_inventory_page(self):
+        vasques_form: VasquesEmissionForm = VasquesEmissionForm()
 
-        vehicles = self.__inventory.read_vehicles_data()
+        vehicle_emissions = self.__inventory.read_emission_data()
 
-        return render_template("index.html", vehicular_data=vehicles, form=vasques_form)
+        return render_template(
+            "index.html", emission_data=vehicle_emissions, form=vasques_form
+        )
 
-    def send_new_vehicle(self):
-        vasques_form: VasquesVehicleForm = VasquesVehicleForm()
+    def add_vehicle_emission(self):
+        vasques_form: VasquesEmissionForm = VasquesEmissionForm()
 
         if vasques_form.validate_on_submit():
-            vehicle_from_the_form = vasques_form.vehicle
+            vehicle_form_data = vasques_form.vehicle_emission
 
-            self.__inventory.insert_a(vehicle_from_the_form)
+            self.__inventory.insert_vehicle_emission(vehicle_form_data)
 
-        return redirect(url_for("vehicular_inventory.show_the_page"))
+        return redirect(url_for("vehicular_inventory.render_inventory_page"))
 
-    def send_id_to_delete(self):
+    def delete_vehicle_emission(self):
         delete_form: VehicleInteractionsForm = VehicleInteractionsForm()
 
         if delete_form.validate_on_submit():
             id_to_delete = delete_form.action_id
 
-            self.__inventory.delete_vehicle_by(id_to_delete)
+            self.__inventory.delete_data_by_id(id_to_delete)
 
-        return redirect(url_for("vehicular_inventory.show_the_page"))
+        return redirect(url_for("vehicular_inventory.render_inventory_page"))

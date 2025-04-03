@@ -17,8 +17,8 @@ class InventoryAppContainer(containers.DeclarativeContainer):
 
     sql_db = providers.Singleton(SQLAlchemy, model_class=Base)
 
-    vehicular_inventory = providers.Singleton(
-        vehicles_repository.VehiclesRepository, sql_db=sql_db
+    vasques_emission_repository = providers.Singleton(
+        vehicles_repository.VasquesEmissionRepository, sql_db=sql_db
     )
 
     wrf_rounds_db = providers.Singleton(

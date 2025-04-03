@@ -26,4 +26,4 @@ class RoundProcessingView:
 
             self.__queue.add_to_the_queue(vehicle_id)
 
-        return redirect(url_for("vehicular_inventory.show_the_page"))
+        return redirect(url_for("vehicular_inventory.render_inventory_page"))

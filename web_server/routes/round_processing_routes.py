@@ -11,7 +11,7 @@ def register_round_processing_routes(
 ):
     rounds_view = RoundProcessingView(rounds_repo, worker)
 
-    inventory_blueprint = Blueprint("rounds_processing", __name__)
+    inventory_blueprint = Blueprint("round_processing", __name__)
 
     inventory_blueprint.add_url_rule(
         "/process", view_func=rounds_view.process, methods=["POST"]

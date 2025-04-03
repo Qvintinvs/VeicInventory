@@ -1,30 +1,34 @@
 from app_container import InventoryAppContainer
 from dependency_injector.wiring import Provide, inject
 from flask import Blueprint
-from services.vehicles_repository import VehiclesRepository
-from views.vehicular_inventory_view import VehicularInventoryView
+from services.vehicles_repository import VasquesEmissionRepository
+from views.vehicular_inventory_view import VasquesEmissionInventory
 
 
 @inject
 def register_vehicular_inventory_routes(
-    inventory_repo: VehiclesRepository = Provide[
-        InventoryAppContainer.vehicular_inventory
+    emission_repository: VasquesEmissionRepository = Provide[
+        InventoryAppContainer.vasques_emission_repository
     ],
 ):
-    inventory = VehicularInventoryView(inventory_repo)
+    inventory = VasquesEmissionInventory(emission_repository)
 
     inventory_blueprint = Blueprint("vehicular_inventory", __name__)
 
     inventory_blueprint.add_url_rule(
-        "/", view_func=inventory.show_the_page, methods=["GET"]
+        "/", view_func=inventory.render_inventory_page, methods=["GET"]
     )
 
     inventory_blueprint.add_url_rule(
-        "/send_new_vehicle", view_func=inventory.send_new_vehicle, methods=["POST"]
+        "/add_vehicle_emission",
+        view_func=inventory.add_vehicle_emission,
+        methods=["POST"],
     )
 
     inventory_blueprint.add_url_rule(
-        "/send_id_to_delete", view_func=inventory.send_id_to_delete, methods=["POST"]
+        "/delete_vehicle_emission",
+        view_func=inventory.delete_vehicle_emission,
+        methods=["POST"],
     )
 
     return inventory_blueprint

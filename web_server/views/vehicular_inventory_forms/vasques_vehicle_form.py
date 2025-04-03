@@ -9,7 +9,7 @@ from wtforms.validators import AnyOf, DataRequired, NumberRange
 from .subcategory_field import SubcategoryField
 
 
-class VasquesVehicleForm(FlaskForm):
+class VasquesEmissionForm(FlaskForm):
     year = IntegerField(
         "Ano:",
         render_kw={"placeholder": "Ex: 2024"},
@@ -49,7 +49,7 @@ class VasquesVehicleForm(FlaskForm):
     submit = SubmitField("Salvar")
 
     @property
-    def vehicle(self):
+    def vehicle_emission(self):
         example_city = City("Itajaí", 1.1)
 
         return VasquesEmissionModel(
