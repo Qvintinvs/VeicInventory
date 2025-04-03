@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for, send_file
+from flask import redirect, render_template, url_for, send_file, request
 from services.vehicles_repository import VehiclesRepository
 
 from .vehicular_inventory_forms.vasques_vehicle_form import VasquesVehicleForm
@@ -75,7 +75,11 @@ class VehicularInventoryView:
         return send_file("templates/render_plot.html")
     
     # test
-    def get_netcdf_data(self): 
+    def get_netcdf_data(self, data_variable: str = None):
+        data_variable = request.args.get('data_variable')
+        if not data_variable:
+            data_variable = "CO2_BIO"
+
         from flask import jsonify
         import numpy as np
         from netCDF4 import Dataset
@@ -95,7 +99,15 @@ class VehicularInventoryView:
 
         # Extract time and CO2_ANT data
         times = dataset.variables["XTIME"][:]  # Assuming time is not masked
-        co2_ant = np.array(dataset.variables["CO2_ANT"][:])  # Convert to NumPy array
+
+        # Get all variable names
+        variable_names = dataset.variables.keys()
+
+        # Filter the ones containing XTIME, XLAT, and XLONG
+        target_vars = [var for var in variable_names if len(dataset.variables[var].dimensions) == 4]
+        
+        co2_ant = np.array(dataset.variables.get(data_variable)[:])  # Convert to NumPy array
+        # print(f"target_vars: {target_vars}")
 
         # Handle MaskedArrays for CO2_ANT
         if isinstance(co2_ant, np.ma.MaskedArray):
@@ -114,6 +126,7 @@ class VehicularInventoryView:
             "lats": lats.tolist(),
             "lons": lons.tolist(),
             "time": times.tolist(),  # Match variable name to the JS code
-            "frames": co2_ant_frames
+            "frames": co2_ant_frames,
+            "target_vars": target_vars
         })
 

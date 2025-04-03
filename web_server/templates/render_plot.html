@@ -11,20 +11,30 @@
     <div id="heatmap" style="width: 100%; height: 600px;"></div>
 
     <script>
-        let currentFrame = 0;
-        let isPaused = false;
-        let isCycle = true;
-        let lastFrame;
+        let currentFrame = 0
+        let isPaused = false
+        let isCycle = true
+        let lastFrame
+        let targetVars
+        let selectedVar
+        let intervalId = null
         async function fetchAndPlotHeatmap() {
             try {
                 // Fetch the data from the Flask backend
-                const response = await fetch('/get_netcdf_data');
+                
+                if (intervalId) {
+                    clearInterval(intervalId)
+                }
+                intervalId = null
+
+                const response = await fetch(`/get_netcdf_data${selectedVar ? `?data_variable=${selectedVar}` : ''}`);
                 const data = await response.json();
 
                 // Extract data from the JSON response
-                const lats = data.lats;
-                const lons = data.lons;
-                const frames = data.frames;
+                const lats = data.lats
+                const lons = data.lons
+                const frames = data.frames
+                targetVars = data.target_vars
                 lastFrame = frames.length
 
                 // Initialize the heatmap with the first frame
@@ -59,7 +69,7 @@
                 Plotly.newPlot('heatmap', plotData, layout);
 
                 // Animate through frames
-                setInterval(() => {
+                intervalId = setInterval(() => {
                     const frameData = frames[currentFrame+1];
 
                     // Update the heatmap with new frame data
@@ -128,6 +138,12 @@
             isPaused = false
         })
     })
+
+    function updateSelectedVar(newVar) {
+        selectedVar = newVar
+        console.log(`selectedVar changed to: ${selectedVar}`)
+        fetchAndPlotHeatmap() // Fetch new data and update the plot
+    }
 
     </script>
 </body>
