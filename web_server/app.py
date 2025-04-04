@@ -74,9 +74,6 @@ def create_app():
         )
     )
 
-    worker = container.wrf_rounds_queue_worker()
-    worker.start()
-
     return app
 
 

@@ -25,7 +25,7 @@ class InventoryAppContainer(containers.DeclarativeContainer):
         wrf_round_repository.WRFRoundRepository, sql_db
     )
 
-    remote_wrf_server_connection_settings = providers.Singleton(
+    wrf_remote_connection_settings = providers.Singleton(
         wrf_remote_connection_settings.WRFRemoteConnectionSettings,
         config.hostname,
         config.username,
@@ -34,13 +34,13 @@ class InventoryAppContainer(containers.DeclarativeContainer):
 
     ssh_round_namelist_sender = providers.Singleton(
         ssh_round_namelist_sender.SSHRoundNamelistSender,
-        remote_wrf_server_connection_settings,
+        wrf_remote_connection_settings,
         config.namelist_remote_path,
     )
 
     rounds_queue = providers.Singleton(Queue)
 
-    wrf_rounds_queue_worker = providers.Singleton(
+    wrf_round_processor = providers.Singleton(
         wrf_round_processor.WRFRoundProcessor,
         rounds_queue,
         ssh_round_namelist_sender,
