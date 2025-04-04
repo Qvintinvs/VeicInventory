@@ -2,7 +2,7 @@ from multiprocessing import Process, Queue
 
 from models.wrf_round import WRFRound
 
-from .ssh_wrf_service import SSHRoundNamelistSender
+from .ssh_round_namelist_sender import SSHRoundNamelistSender
 
 
 class WRFRoundProcessor(Process):

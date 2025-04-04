@@ -5,10 +5,8 @@ from models.wrf_round import WRFRound
 from models.wrf_round_status import WRFRoundStatus
 from sqlalchemy import DateTime, asc, cast
 
-from .namelist_server_sending.vasques_emission_namelist_creator import (
-    VasquesEmissionNamelistCreator,
-)
 from .round_completion_try_status import RoundCompletionTryStatus
+from .server_namelists.vasques_emission_namelist import VasquesEmissionNamelist
 
 
 class WRFRoundRepository:
@@ -27,9 +25,9 @@ class WRFRoundRepository:
         if not vehicle_by_id:
             return
 
-        vehicle_namelist = VasquesEmissionNamelistCreator(vehicle_by_id)
+        vehicle_namelist = VasquesEmissionNamelist(vehicle_by_id)
 
-        namelist_content = vehicle_namelist.create_namelist()
+        namelist_content = vehicle_namelist.create_content()
 
         new_round = WRFRound(namelist_content, "output_test")
 

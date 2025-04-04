@@ -1,8 +1,8 @@
 from models.wrf_round import WRFRound
 from paramiko import Transport
 
-from .connection_settings import WRFRemoteConnectionSettings
 from .sftp_namelist_sender import SFTPNamelistSender
+from .wrf_remote_connection_settings import WRFRemoteConnectionSettings
 
 
 class SSHRoundNamelistSender:

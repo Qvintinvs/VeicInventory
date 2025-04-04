@@ -1,6 +1,6 @@
 from flask import redirect, url_for
-from services.wrf_rounds_queue_worker import WRFRoundProcessor
-from services.wrf_rounds_repository import WRFRoundRepository
+from services.wrf_round_processor import WRFRoundProcessor
+from services.wrf_round_repository import WRFRoundRepository
 
 from .inventory_forms.vehicle_interactions_form import VehicleInteractionsForm
 

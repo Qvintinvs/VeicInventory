@@ -1,7 +1,7 @@
 from dependency_injector.wiring import Provide, inject
 from flask import Blueprint
 from inventory_app_container import InventoryAppContainer
-from services.wrf_rounds_repository import WRFRoundRepository
+from services.wrf_round_repository import WRFRoundRepository
 from views.wrf_round_api import WRFRoundAPI
 
 

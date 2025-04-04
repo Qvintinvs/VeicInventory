@@ -3,18 +3,17 @@ from typing import cast
 
 from models.vasques_emission_model import VasquesEmissionModel
 
-from .namelist_creator import NamelistContentCreator
-
 from .match_to_a_namelist_group import match_to_a_namelist_group
+from .namelist_content_creator import NamelistContentCreator
 
 
-class VasquesEmissionNamelistCreator:
+class VasquesEmissionNamelist:
     __namelist = NamelistContentCreator("vasques_namelist")
 
     def __init__(self, variables: VasquesEmissionModel):
         self.__variables = variables
 
-    def create_namelist(self):
+    def create_content(self):
         emission_namelist = {
             "id": cast(int, self.__variables.id),
             "year": cast(int, self.__variables.year),

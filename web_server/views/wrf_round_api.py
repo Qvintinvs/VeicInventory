@@ -3,7 +3,7 @@ from io import BytesIO
 from flask import jsonify, request
 from models.netcdf_blob import NETCDFBlob
 from services.round_completion_try_status import RoundCompletionTryStatus
-from services.wrf_rounds_repository import WRFRoundRepository
+from services.wrf_round_repository import WRFRoundRepository
 
 
 class WRFRoundAPI:
