@@ -2,13 +2,13 @@ from io import BytesIO
 
 from flask import jsonify, request
 from models.netcdf_blob import NETCDFBlob
+from services.netcdf_blob_repository import NETCDFBlobRepository
 from services.round_completion_try_status import RoundCompletionTryStatus
-from services.wrf_round_repository import WRFRoundRepository
 
 
 class WRFRoundAPI:
-    def __init__(self, wrf_round_repository: WRFRoundRepository):
-        self.__rounds_db = wrf_round_repository
+    def __init__(self, netcdf_blob_repository: NETCDFBlobRepository):
+        self.__blob_storage = netcdf_blob_repository
 
     def complete_the_round(self):
         round_id = request.form.get("id")
@@ -21,25 +21,24 @@ class WRFRoundAPI:
         except ValueError:
             return jsonify({"error": "Invalid ID format. Expected an integer."}), 400
 
-        requested_round = self.__rounds_db.get_wrf_round_by_id(round_id)
-
-        if not requested_round:
-            return jsonify({"error": "Round ID not found"}), 404
+        if round_id < 0:
+            return jsonify(
+                {"error": "Invalid ID format. Expected a positive integer."}
+            ), 400
 
         file = request.files["file"]
 
         file_bytes = BytesIO(file.read())
 
-        blob = NETCDFBlob(file_bytes.getvalue(), requested_round)
+        blob = NETCDFBlob(file_bytes.getvalue(), round_id)
 
         completion_status: RoundCompletionTryStatus = (
-            self.__rounds_db.try_to_complete_round_with_output(blob)
+            self.__blob_storage.try_insert_output_for_round(blob)
         )
 
         if completion_status == RoundCompletionTryStatus.SUCCESS:
             return jsonify({"message": "Successfully updated round status"}), 200
 
-        # Get rid of this if statement
         if completion_status == RoundCompletionTryStatus.NOT_FOUND:
             return jsonify({"error": "Round ID not found"}), 404
 

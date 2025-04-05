@@ -1,17 +1,17 @@
 from dependency_injector.wiring import Provide, inject
 from flask import Blueprint
 from inventory_app_container import InventoryAppContainer
-from services.wrf_round_repository import WRFRoundRepository
+from services.netcdf_blob_repository import NETCDFBlobRepository
 from views.wrf_round_api import WRFRoundAPI
 
 
 @inject
 def register_wrf_round_api_routes(
-    wrf_round_repository: WRFRoundRepository = Provide[
-        InventoryAppContainer.wrf_round_repository
+    netcdf_blob_repository: NETCDFBlobRepository = Provide[
+        InventoryAppContainer.netcdf_blob_repository
     ],
 ):
-    wrf_round_api = WRFRoundAPI(wrf_round_repository)
+    wrf_round_api = WRFRoundAPI(netcdf_blob_repository)
 
     api_blueprint = Blueprint("wrf_round_api", __name__, url_prefix="/wrf_rounds_api")
 
