@@ -4,6 +4,7 @@ from dependency_injector import containers, providers
 from flask_sqlalchemy import SQLAlchemy
 from models.base import Base
 from services import (
+    netcdf_blob_repository,
     ssh_round_namelist_sender,
     vasques_emission_repository,
     wrf_remote_connection_settings,
@@ -44,4 +45,8 @@ class InventoryAppContainer(containers.DeclarativeContainer):
         wrf_round_processor.WRFRoundProcessor,
         rounds_queue,
         ssh_round_namelist_sender,
+    )
+
+    netcdf_blob_repository = providers.Singleton(
+        netcdf_blob_repository.NETCDFBlobRepository, sql_db
     )

@@ -1,11 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
-from models.netcdf_blob import NETCDFBlob
 from models.vasques_emission_model import VasquesEmissionModel
 from models.wrf_round import WRFRound
 from models.wrf_round_status import WRFRoundStatus
 from sqlalchemy import DateTime, asc, cast
 
-from .round_completion_try_status import RoundCompletionTryStatus
 from .server_namelists.vasques_emission_namelist import VasquesEmissionNamelist
 
 
@@ -48,22 +46,3 @@ class WRFRoundRepository:
 
     def get_wrf_round_by_id(self, round_id: int):
         return self.__db.session.query(WRFRound).filter_by(id=round_id).first()
-
-    def try_to_complete_round_with_output(self, processed_netcdf: NETCDFBlob):
-        netcdf_scheduler_round: WRFRound | None = processed_netcdf.round
-
-        if not netcdf_scheduler_round:
-            return RoundCompletionTryStatus.NOT_FOUND
-
-        try:
-            self.__db.session.add(processed_netcdf)
-
-            netcdf_scheduler_round.complete_if_running()
-
-            self.__db.session.commit()
-
-            return RoundCompletionTryStatus.SUCCESS
-        except Exception:
-            self.__db.session.rollback()
-
-            return RoundCompletionTryStatus.ERROR
