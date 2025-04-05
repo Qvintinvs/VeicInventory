@@ -9,11 +9,11 @@ class NETCDFBlob(Base):
     __tablename__ = "netcdf_blob"
 
     id = Column(Integer, primary_key=True)
-    wrf_round_id = Column(Integer, ForeignKey(WRFRound.id), unique=True)
+    wrf_round_id = Column(Integer, ForeignKey(WRFRound.id), unique=True, nullable=False)
     netcdf_data = Column(LargeBinary)
 
     round = relationship(WRFRound, back_populates="blobs")
 
-    def __init__(self, netcdf_file: bytes, scheduler_round: WRFRound):
+    def __init__(self, netcdf_file: bytes, scheduler_round_id: int):
         self.netcdf_data = netcdf_file
-        self.round = scheduler_round
+        self.wrf_round_id = scheduler_round_id
