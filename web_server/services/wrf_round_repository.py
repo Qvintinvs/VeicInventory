@@ -45,4 +45,4 @@ class WRFRoundRepository:
         return rounds_read if rounds_read else None
 
     def get_wrf_round_by_id(self, round_id: int):
-        return self.__db.session.query(WRFRound).filter_by(id=round_id).first()
+        return self.__db.session.get(WRFRound, round_id)
