@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from models.netcdf_blob import NETCDFBlob
 from models.wrf_round import WRFRound
 
-from .round_completion_try_status import RoundCompletionTryStatus
+from .insert_round_output_status import InsertRoundOutputStatus
 
 
 class NETCDFBlobRepository:
@@ -13,7 +13,7 @@ class NETCDFBlobRepository:
         wrf_round = self.__db.session.get(WRFRound, netcdf_output.wrf_round_id)
 
         if not wrf_round:
-            return RoundCompletionTryStatus.NOT_FOUND
+            return InsertRoundOutputStatus.ROUND_NOT_FOUND
 
         try:
             self.__db.session.add(netcdf_output)
@@ -22,8 +22,8 @@ class NETCDFBlobRepository:
 
             self.__db.session.commit()
 
-            return RoundCompletionTryStatus.SUCCESS
+            return InsertRoundOutputStatus.SUCCESS
         except Exception:
             self.__db.session.rollback()
 
-            return RoundCompletionTryStatus.ERROR
+            return InsertRoundOutputStatus.ERROR

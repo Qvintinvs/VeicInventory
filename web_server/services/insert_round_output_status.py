@@ -1,7 +1,7 @@
 from enum import Enum, auto
 
 
-class RoundCompletionTryStatus(Enum):
+class InsertRoundOutputStatus(Enum):
     SUCCESS = auto()
-    NOT_FOUND = auto()
+    ROUND_NOT_FOUND = auto()
     ERROR = auto()

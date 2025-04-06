@@ -2,8 +2,8 @@ from io import BytesIO
 
 from flask import jsonify, request
 from models.netcdf_blob import NETCDFBlob
+from services.insert_round_output_status import InsertRoundOutputStatus
 from services.netcdf_blob_repository import NETCDFBlobRepository
-from services.round_completion_try_status import RoundCompletionTryStatus
 
 
 class WRFRoundAPI:
@@ -32,17 +32,17 @@ class WRFRoundAPI:
 
         blob = NETCDFBlob(file_bytes.getvalue(), round_id)
 
-        completion_status: RoundCompletionTryStatus = (
+        completion_status: InsertRoundOutputStatus = (
             self.__blob_storage.try_insert_output_for_round(blob)
         )
 
-        if completion_status == RoundCompletionTryStatus.SUCCESS:
+        if completion_status == InsertRoundOutputStatus.SUCCESS:
             return jsonify({"message": "Successfully updated round status"}), 200
 
-        if completion_status == RoundCompletionTryStatus.NOT_FOUND:
+        if completion_status == InsertRoundOutputStatus.ROUND_NOT_FOUND:
             return jsonify({"error": "Round ID not found"}), 404
 
-        if completion_status == RoundCompletionTryStatus.ERROR:
+        if completion_status == InsertRoundOutputStatus.ERROR:
             return jsonify(
                 {"error": "Failed to update round status in the database"}
             ), 500
