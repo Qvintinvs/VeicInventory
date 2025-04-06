@@ -22,7 +22,7 @@ def load_configuration():
         raise Exception("Missing dotenv file")
 
 
-def initialize_container_within(app_instance: Flask):
+def initialize_app_container(app: Flask):
     container = InventoryAppContainer()
 
     config = container.config
@@ -33,12 +33,12 @@ def initialize_container_within(app_instance: Flask):
     config.username.from_env("SSH_NAME", required=True)
     config.password.from_env("SSH_PASS")
 
-    config.from_dict(app_instance.config)
+    config.from_dict(app.config)
 
     return container
 
 
-def register_routes_of(app: Flask):
+def register_app_routes(app: Flask):
     csrf = CSRFProtect(app)
 
     inventory_routes = vehicular_inventory_routes.register_vehicular_inventory_routes()
@@ -63,7 +63,7 @@ def create_app():
 
     app.config.from_object(AppConfig)
 
-    container = initialize_container_within(app)
+    container = initialize_app_container(app)
 
     container.wire(
         modules=(
@@ -80,7 +80,7 @@ def create_app():
 def main():
     app = create_app()
 
-    register_routes_of(app)
+    register_app_routes(app)
 
     database_setup.setup_database_within(app)
 
