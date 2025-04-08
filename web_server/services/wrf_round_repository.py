@@ -14,11 +14,7 @@ class WRFRoundRepository:
         self.__db = sql_db
 
     def schedule_emission_round(self, vehicle_emission_id: int):
-        vehicle_by_id = (
-            self.__db.session.query(VasquesEmissionModel)
-            .filter_by(id=vehicle_emission_id)
-            .first()
-        )
+        vehicle_by_id = self.__db.session.get(VasquesEmissionModel, vehicle_emission_id)
 
         if not vehicle_by_id:
             return
