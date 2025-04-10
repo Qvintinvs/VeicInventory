@@ -11,8 +11,8 @@
 
 <body>
     <h1 id="title">NetCDF Heatmap Visualization</h1>
-    <div class="container mt-5">
-        <div class="dropdown">
+    <div class="container mt-5 d-flex flex-row">
+        <div class="dropdown me-3">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Select a Key
@@ -20,17 +20,25 @@
             <ul class="dropdown-menu overflow-auto" id="dropdownMenu" style="max-height: 200px">
             </ul>
         </div>
+        <label for="delayRange">Delay (ms):</label>
+        <input type="range" id="delayRange" min="0" max="1000" step="10" value="0">
+        <span id="delayValue">0 ms</span>
+
     </div>
     <div id="heatmap" style="width: 100%; height: 600px;"></div>
 
     <script>
+        const delayRange = document.getElementById("delayRange")
         let currentFrame = 0
         let isPaused = false
         let isCycle = true
         let lastFrame
+        let frames = []
         let targetVars
         let selectedVar = "CO2_BIO"
         let intervalId = null
+        let delay = parseInt(delayRange.value)
+        
         async function fetchAndPlotHeatmap() {
             try {
                 // Fetch the data from the Flask backend
@@ -46,7 +54,7 @@
                 // Extract data from the JSON response
                 const lats = data.lats
                 const lons = data.lons
-                const frames = data.frames
+                frames = data.frames
                 targetVars = data.target_vars
                 lastFrame = frames.length
 
@@ -83,7 +91,7 @@
 
                 // Animate through frames
                 intervalId = setInterval(() => {
-                    const frameData = frames[currentFrame + 1];
+                    const frameData = frames[currentFrame + 1]
 
                     // Update the heatmap with new frame data
                     Plotly.update('heatmap', {
@@ -101,7 +109,7 @@
                     currentFrame = (currentFrame + 1) % frames.length; // Loop through frames
                     console.log(`currentFrame: ${currentFrame}`)
 
-                }, 1000 / 24)
+                }, delay)
             } catch (error) {
                 console.error('Error fetching or plotting NetCDF data:', error);
             }
@@ -127,8 +135,9 @@
             // handleKeyDown(e)
             console.log(e.code)
             if (e.code === "Space") {
+                e.preventDefault()
                 isPaused = !isPaused
-                console.log("isPaused:", isPaused);
+                console.log("isPaused:", isPaused)
                 console.log("currentFrame:", currentFrame)
 
                 if (!isPaused && currentFrame + 1 === lastFrame) {
@@ -140,17 +149,49 @@
 
             if (e.code === "ArrowLeft") {
                 (currentFrame > 0) ? currentFrame-- : currentFrame = 0
-                console.log("currentFrame:", currentFrame);
+                console.log("currentFrame:", currentFrame)
             }
 
             if (e.code === "ArrowRight") {
                 (currentFrame < lastFrame) ? currentFrame++ : currentFrame = lastFrame
-                console.log("currentFrame:", currentFrame);
+                console.log("currentFrame:", currentFrame)
             }
 
             if (e.code === "KeyC") {
                 isCycle = !isCycle
+                console.log(`isCycle: ${isCycle}`)
             }
+        })
+
+        delayRange.addEventListener("input", function () {
+        delay = parseInt(this.value);
+        document.getElementById("delayValue").textContent = `${delay} ms`;
+
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+
+            intervalId = setInterval(() => {
+                const frameData = frames[currentFrame + 1]
+
+                // Update the heatmap with new frame data
+                Plotly.update('heatmap', {
+                    z: [frameData] // Update heatmap data
+                });
+                if (currentFrame + 1 === frames.length && (!isPaused || isCycle)) {
+                    console.log("got here lol")
+                    // document.body.dispatchEvent(new KeyboardEvent(("keydown", { code: "Space" })))
+                    isPaused = !isPaused
+                }
+                if (isPaused) {
+                    return
+                }
+
+                currentFrame = (currentFrame + 1) % frames.length; // Loop through frames
+                console.log(`currentFrame: ${currentFrame}`)
+
+            }, delay)
+
         })
 
         fetchAndPlotHeatmap()
