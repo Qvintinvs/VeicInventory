@@ -87,6 +87,7 @@ class VehicularInventoryView:
         nc_file_path = "D:/Users/Public/Documents/arquivos/Trabalhos/College/IFSC/Projeto de Pesquisa WRF/wrf stuff/web-ui wrf/VeicInventory/test/wrfout"
         dataset = Dataset(nc_file_path, mode="r")
 
+
         # Extract latitudes and longitudes
         lats = dataset.variables["XLAT"][0, :, :]  # Assuming 3D and selecting the first time slice
         lons = dataset.variables["XLONG"][0, :, :]  # Assuming 3D and selecting the first time slice
@@ -105,18 +106,29 @@ class VehicularInventoryView:
 
         # Filter the ones containing XTIME, XLAT, and XLONG
         target_vars = [var for var in variable_names if len(dataset.variables[var].dimensions) == 4]
+        variable = dataset.variables[data_variable] 
+
+        # Print attributes (before slicing!)
+        # print(f"Attributes for variable '{data_variable}':")
+        # for attr in variable.ncattrs():
+        #     print(f"{attr}: {getattr(variable, attr)}")
+
+        description = getattr(variable, 'description', 'N/A')
+        units = getattr(variable, 'units', 'N/A')
         
-        co2_ant = np.array(dataset.variables.get(data_variable)[:])  # Convert to NumPy array
+        variable_values = variable[:]  # Convert to NumPy array
         # print(f"target_vars: {target_vars}")
 
         # Handle MaskedArrays for CO2_ANT
-        if isinstance(co2_ant, np.ma.MaskedArray):
-            co2_ant = co2_ant.filled(np.nan)  # Replace masked values with NaN
+        if isinstance(variable_values, np.ma.MaskedArray):
+            variable_values = variable_values.filled(np.nan)  # Replace masked values with NaN
 
         # Create frames for CO2_ANT
-        co2_ant_frames = []
-        for t in range(co2_ant.shape[0]):  # Iterate over the time dimension
-            co2_ant_frames.append(co2_ant[t, 0, :, :].tolist())  # Assuming bottom_top=0 for simplicity
+        variable_frames = []
+        for t in range(variable_values.shape[0]):  # Iterate over the time dimension
+            variable_frames.append(variable_values[t, 0, :, :].tolist())  # Assuming bottom_top=0 for simplicity
+
+
 
         # Close the dataset
         dataset.close()
@@ -126,7 +138,9 @@ class VehicularInventoryView:
             "lats": lats.tolist(),
             "lons": lons.tolist(),
             "time": times.tolist(),  # Match variable name to the JS code
-            "frames": co2_ant_frames,
-            "target_vars": target_vars
+            "frames": variable_frames,
+            "target_vars": target_vars,
+            "description": description,
+            "units": units,
         })
 
