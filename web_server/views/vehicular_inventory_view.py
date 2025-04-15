@@ -75,10 +75,14 @@ class VehicularInventoryView:
         return render_template("render_plot.html")
     
     # test
-    def get_netcdf_data(self, data_variable: str = None):
+    def get_netcdf_data(self, data_variable: str = None, altitude:int = None):
         data_variable = request.args.get('data_variable')
         if not data_variable:
             data_variable = "CO2_BIO"
+
+        altitude = request.args.get('altitude', type=int)
+        if not altitude:
+            altitude = 0
 
         from flask import jsonify
         import numpy as np
@@ -89,8 +93,11 @@ class VehicularInventoryView:
 
 
         # Extract latitudes and longitudes
-        lats = dataset.variables["XLAT"][0, :, :]  # Assuming 3D and selecting the first time slice
-        lons = dataset.variables["XLONG"][0, :, :]  # Assuming 3D and selecting the first time slice
+        # lats = dataset.variables["XLAT"][0, :, :]  # Assuming 3D and selecting the first time slice
+        # lons = dataset.variables["XLONG"][0, :, :]  # Assuming 3D and selecting the first time slice
+
+        lats = dataset.variables["XLAT"][altitude, :, :]
+        lons = dataset.variables["XLONG"][altitude, :, :]
 
         # Handle MaskedArrays
         if isinstance(lats, np.ma.MaskedArray):
@@ -126,7 +133,7 @@ class VehicularInventoryView:
         # Create frames for CO2_ANT
         variable_frames = []
         for t in range(variable_values.shape[0]):  # Iterate over the time dimension
-            variable_frames.append(variable_values[t, 0, :, :].tolist())  # Assuming bottom_top=0 for simplicity
+            variable_frames.append(variable_values[t, altitude, :, :].tolist())  # Assuming bottom_top=0 for simplicity
 
 
 

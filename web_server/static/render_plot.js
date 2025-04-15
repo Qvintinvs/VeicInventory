@@ -6,6 +6,7 @@ let lastFrame
 let frames = []
 let targetVars
 let selectedVar = "CO2_BIO"
+let altitude = 0
 let intervalId = null
 let delay = parseInt(delayRange.value)
 
@@ -18,7 +19,7 @@ async function fetchAndPlotHeatmap() {
         }
         intervalId = null
 
-        const response = await fetch(`/get_netcdf_data${selectedVar ? `?data_variable=${selectedVar}` : ''}`);
+        const response = await fetch(`/get_netcdf_data${selectedVar ? `?data_variable=${selectedVar}` : ''}&altitude=${altitude}`);
         const data = await response.json();
 
         // Extract data from the JSON response
@@ -184,6 +185,12 @@ $(document).ready(function () {
 function updateSelectedVar(newVar) {
     selectedVar = newVar
     console.log(`selectedVar changed to: ${selectedVar}`)
+    fetchAndPlotHeatmap() // Fetch new data and update the plot
+}
+
+function updateAltitude(newAltitude) {
+    altitude = newAltitude
+    console.log(`altitude changed to: ${altitude}`)
     fetchAndPlotHeatmap() // Fetch new data and update the plot
 }
 
