@@ -72,7 +72,7 @@ class VehicularInventoryView:
         # if process_form.validate_on_submit():
             # self.__inventory.visualize(id)
         # return "0"
-        return send_file("templates/render_plot.html")
+        return render_template("render_plot.html")
     
     # test
     def get_netcdf_data(self, data_variable: str = None):
