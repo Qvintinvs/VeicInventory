@@ -1,5 +1,4 @@
 from types import MappingProxyType
-from typing import cast
 
 from models.vasques_emission_model import VasquesEmissionModel
 
@@ -15,14 +14,12 @@ class VasquesEmissionNamelist:
 
     def create_content(self):
         emission_namelist = {
-            "id": cast(int, self.__variables.id),
-            "year": cast(int, self.__variables.year),
-            "fuel": cast(str, self.__variables.fuel),
-            "subcategory": cast(str, self.__variables.subcategory),
-            "exhaust_emission_factor": cast(
-                float, self.__variables.exhaust_emission_factor
-            ),
-            "autonomy": cast(float, self.__variables.autonomy),
+            "id": self.__variables.id,
+            "year": self.__variables.year,
+            "fuel": self.__variables.fuel,
+            "subcategory": self.__variables.subcategory,
+            "exhaust_emission_factor": self.__variables.exhaust_emission_factor,
+            "autonomy": self.__variables.autonomy,
         }
 
         ndict = match_to_a_namelist_group(MappingProxyType(emission_namelist))
