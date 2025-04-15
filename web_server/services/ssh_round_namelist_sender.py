@@ -14,7 +14,7 @@ class SSHRoundNamelistSender:
         self.__settings = connection_settings
         self.__remote_path = namelist_remote_path
 
-    def send_to_remote_server(self, scheduled_round: WRFRound):
+    def upload_namelist_for_round(self, scheduled_round: WRFRound):
         hostname, username, password = self.__settings
 
         if not hostname:
@@ -30,4 +30,4 @@ class SSHRoundNamelistSender:
 
             sender = SFTPNamelistSender(protocol, namelist_text)
 
-            sender.send_namelist_to(self.__remote_path)
+            sender.upload_namelist_via_sftp(self.__remote_path)

@@ -21,7 +21,7 @@ class WRFRoundProcessor(Process):
             return
 
         if earliest_round:
-            self.__sender.send_to_remote_server(earliest_round)
+            self.__sender.upload_namelist_for_round(earliest_round)
 
     def run(self):
         while True:

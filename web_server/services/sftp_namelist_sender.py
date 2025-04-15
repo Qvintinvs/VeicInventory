@@ -6,7 +6,7 @@ class SFTPNamelistSender:
         self.__protocol = stablished_protocol
         self.__namelist = namelist_content
 
-    def send_namelist_to(self, a_remote_path: str):
+    def upload_namelist_via_sftp(self, a_remote_path: str):
         sftp_channel = SFTPClient.from_transport(self.__protocol)
 
         if sftp_channel is None:
