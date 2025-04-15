@@ -1,10 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 from models.vasques_emission_model import VasquesEmissionModel
+from models.vasques_emission_round_link import VasquesEmissionRoundLink
 from models.wrf_round import WRFRound
 from models.wrf_round_status import WRFRoundStatus
 from sqlalchemy import DateTime, asc, cast
-
-from .server_namelists.vasques_emission_namelist import VasquesEmissionNamelist
 
 
 class WRFRoundRepository:
@@ -19,13 +18,11 @@ class WRFRoundRepository:
         if not vehicle_by_id:
             return
 
-        vehicle_namelist = VasquesEmissionNamelist(vehicle_by_id)
+        new_round = WRFRound("output_test")
 
-        namelist_content = vehicle_namelist.create_content()
+        link = VasquesEmissionRoundLink(vehicle_by_id, new_round)
 
-        new_round = WRFRound(namelist_content, "output_test")
-
-        self.__db.session.add(new_round)
+        self.__db.session.add(link)
 
         self.__db.session.commit()
 
