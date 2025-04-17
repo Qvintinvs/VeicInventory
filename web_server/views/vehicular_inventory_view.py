@@ -95,6 +95,11 @@ class VehicularInventoryView:
         # Extract latitudes and longitudes
         # lats = dataset.variables["XLAT"][0, :, :]  # Assuming 3D and selecting the first time slice
         # lons = dataset.variables["XLONG"][0, :, :]  # Assuming 3D and selecting the first time slice
+        alts = dataset.variables["XLAT"][:, 0, 0]
+        alts_length = alts.size
+        # print(f"alts_length: {alts_length}")
+        # alts_length = 0
+
 
         lats = dataset.variables["XLAT"][altitude, :, :]
         lons = dataset.variables["XLONG"][altitude, :, :]
@@ -122,9 +127,13 @@ class VehicularInventoryView:
 
         description = getattr(variable, 'description', 'N/A')
         units = getattr(variable, 'units', 'N/A')
+
         
         variable_values = variable[:]  # Convert to NumPy array
         # print(f"target_vars: {target_vars}")
+        
+        zmin = float(np.nanmin(variable_values))
+        zmax = float(np.nanmax(variable_values))
 
         # Handle MaskedArrays for CO2_ANT
         if isinstance(variable_values, np.ma.MaskedArray):
@@ -149,5 +158,8 @@ class VehicularInventoryView:
             "target_vars": target_vars,
             "description": description,
             "units": units,
+            "zmin": zmin,            
+            "zmax": zmax,
+            "alts_length": alts_length,
         })
 

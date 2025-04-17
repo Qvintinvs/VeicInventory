@@ -9,6 +9,7 @@ let selectedVar = "CO2_BIO"
 let altitude = 0
 let intervalId = null
 let delay = parseInt(delayRange.value)
+let alts_length
 
 async function fetchAndPlotHeatmap() {
     try {
@@ -27,6 +28,10 @@ async function fetchAndPlotHeatmap() {
         const lons = data.lons
         const description = data.description
         const units = data.units
+        const zmin = data.zmin
+        const zmax = data.zmax
+        // const time = data.time
+        alts_length = data.alts_length
         frames = data.frames
         targetVars = data.target_vars
         lastFrame = frames.length
@@ -42,6 +47,8 @@ async function fetchAndPlotHeatmap() {
                 y: lats.map(row => row[0]), // Latitude grid
                 type: 'heatmap',
                 colorscale: 'Viridis',
+                zmin: zmin,
+                zmax: zmax,
                 colorbar: {
                     title: `${description} (${units})`
                 }
@@ -50,7 +57,7 @@ async function fetchAndPlotHeatmap() {
 
         // Prepare layout
         const layout = {
-            title: description,
+            title: `${description} (altitude: ${altitude})`,
             xaxis: {
                 title: 'Longitude'
             },
@@ -135,6 +142,18 @@ document.body.addEventListener("keydown", (e) => {
     if (e.code === "KeyC") {
         isCycle = !isCycle
         console.log(`isCycle: ${isCycle}`)
+    }
+
+    if (e.code === "ArrowDown") {
+        e.preventDefault()
+        if (altitude > 0) updateAltitude(altitude-1)
+        console.log(`altitude: ${altitude}`)
+    }
+
+    if (e.code === "ArrowUp") {
+        e.preventDefault()
+        if (altitude+1 < alts_length) updateAltitude(altitude+1)
+        console.log(`altitude: ${altitude}`)
     }
 })
 
