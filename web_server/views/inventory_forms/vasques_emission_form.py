@@ -3,50 +3,29 @@ from typing import cast
 from flask_wtf import FlaskForm
 from models.city import City
 from models.vasques_emission_model import VasquesEmissionModel
-from wtforms import FloatField, IntegerField, SelectField, SubmitField
+from wtforms import FloatField, IntegerField, StringField
 from wtforms.validators import AnyOf, DataRequired, NumberRange
 
 from .subcategory_field import SubcategoryField
 
 
 class VasquesEmissionForm(FlaskForm):
-    year = IntegerField(
-        "Ano:",
-        render_kw={"placeholder": "Ex: 2024"},
-        validators=(DataRequired(), NumberRange(min=1886, max=2100)),
-    )
+    year = IntegerField(validators=(DataRequired(), NumberRange(1886, 2100)))
 
-    fuel = SelectField(
-        "Combustível:",
-        choices=(
-            ("", "Selecione..."),
-            ("Gasolina", "Gasolina"),
-            ("Álcool", "Álcool"),
-            ("Diesel", "Diesel"),
-            ("Elétrico", "Elétrico"),
-            ("Flex", "Flex"),
-        ),
+    fuel = StringField(
         validators=(
             DataRequired(),
             AnyOf(("Gasolina", "Álcool", "Diesel", "Elétrico", "Flex")),
-        ),
+        )
     )
 
     subcategory = SubcategoryField()
 
     exhaust_emission_factor = FloatField(
-        "Fator de Emissão por Exaustão:",
-        render_kw={"placeholder": "Ex: 0.25 (g/km)"},
-        validators=(DataRequired(), NumberRange(min=0)),
+        validators=(DataRequired(), NumberRange(min=0))
     )
 
-    autonomy = FloatField(
-        "Autonomia do Veículo (km/L ou km/kWh):",
-        render_kw={"placeholder": "Ex: 12.5 (km/L)"},
-        validators=(DataRequired(), NumberRange(min=0)),
-    )
-
-    submit = SubmitField("Salvar")
+    autonomy = FloatField(validators=(DataRequired(), NumberRange(min=0)))
 
     @property
     def vehicle_emission(self):
