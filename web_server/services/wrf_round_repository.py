@@ -3,7 +3,7 @@ from models.vasques_emission_model import VasquesEmissionModel
 from models.vasques_emission_round_link import VasquesEmissionRoundLink
 from models.wrf_round import WRFRound
 from models.wrf_round_status import WRFRoundStatus
-from sqlalchemy import DateTime, asc, cast
+from sqlalchemy import asc
 
 
 class WRFRoundRepository:
@@ -30,7 +30,7 @@ class WRFRoundRepository:
         rounds_read = (
             self.__db.session.query(WRFRound)
             .filter_by(status=WRFRoundStatus.PENDING)
-            .order_by(asc(cast(WRFRound.timestamp, DateTime)))
+            .order_by(asc(WRFRound.timestamp))
             .limit(5)
             .all()
         )
