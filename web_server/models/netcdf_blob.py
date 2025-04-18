@@ -1,5 +1,5 @@
-from sqlalchemy import Column, ForeignKey, Integer, LargeBinary
-from sqlalchemy.orm import relationship
+from sqlalchemy import ForeignKey, LargeBinary
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
 from .wrf_round import WRFRound
@@ -8,11 +8,15 @@ from .wrf_round import WRFRound
 class NETCDFBlob(Base):
     __tablename__ = "netcdf_blob"
 
-    id = Column(Integer, primary_key=True)
-    wrf_round_id = Column(Integer, ForeignKey(WRFRound.id), unique=True, nullable=False)
-    netcdf_data = Column(LargeBinary)
+    id: Mapped[int] = mapped_column(primary_key=True)
 
-    round = relationship(WRFRound, back_populates="blobs")
+    wrf_round_id: Mapped[int] = mapped_column(
+        ForeignKey(WRFRound.id), unique=True, nullable=False
+    )
+
+    netcdf_data: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
+
+    wrf_round: Mapped[WRFRound] = relationship(WRFRound, back_populates="blobs")
 
     def __init__(self, netcdf_file: bytes, scheduler_round_id: int):
         self.netcdf_data = netcdf_file

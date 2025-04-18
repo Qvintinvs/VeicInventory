@@ -1,7 +1,7 @@
 from datetime import UTC, datetime
 
-from sqlalchemy import Column, DateTime, Enum, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import DateTime, Enum, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
 from .wrf_round_status import WRFRoundStatus
@@ -10,12 +10,19 @@ from .wrf_round_status import WRFRoundStatus
 class WRFRound(Base):
     __tablename__ = "wrf_round"
 
-    id = Column(Integer, primary_key=True)
-    status = Column(Enum(WRFRoundStatus), default=WRFRoundStatus.PENDING)
-    output_file_path = Column(String(255))
-    timestamp = Column(DateTime, default=lambda: datetime.now(UTC))
+    id: Mapped[int] = mapped_column(primary_key=True)
 
-    blobs = relationship("NETCDFBlob", uselist=True, back_populates="round")
+    status: Mapped[WRFRoundStatus] = mapped_column(
+        Enum(WRFRoundStatus), default=WRFRoundStatus.PENDING, nullable=False
+    )
+
+    output_file_path: Mapped[str] = mapped_column(String(255), nullable=False)
+
+    timestamp: Mapped[datetime] = mapped_column(
+        DateTime, default=lambda: datetime.now(UTC), nullable=False
+    )
+
+    blobs = relationship("NETCDFBlob", uselist=True, back_populates="wrf_round")
 
     def __init__(self, output_file_path: str):
         self.output_file_path = output_file_path

@@ -1,13 +1,17 @@
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
+
 from .base import Base
-from sqlalchemy import Column, Float, Integer, String
 
 
 class City(Base):
     __tablename__ = "city"
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(50), nullable=False)
-    fuel_consumption = Column(Float, nullable=False)
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    name: Mapped[str] = mapped_column(String(50), nullable=False)
+
+    fuel_consumption: Mapped[float] = mapped_column(nullable=False)
 
     def __init__(self, name: str, fuel_consumption: float):
         self.name = name
