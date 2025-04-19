@@ -15,7 +15,7 @@ class VasquesEmissionForm(FlaskForm):
     fuel = StringField(
         validators=(
             DataRequired(),
-            AnyOf(("Gasolina", "Álcool", "Diesel", "Elétrico", "Flex")),
+            AnyOf(("Gasoline", "Alcohol", "Diesel", "Electric", "Flex")),
         )
     )
 
