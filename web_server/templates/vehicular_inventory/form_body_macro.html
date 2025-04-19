@@ -59,7 +59,9 @@
           class="form-control"
           id="exhaust_emission_factor"
           name="exhaust_emission_factor"
-          type="text"
+          type="number"
+          min="0"
+          step="0.01"
           placeholder="Ex: 0.25 (g/km)"
           required
         />
@@ -73,7 +75,9 @@
           class="form-control"
           id="autonomy"
           name="autonomy"
-          type="text"
+          type="number"
+          min="0.01"
+          step="0.01"
           placeholder="Ex: 12.5 (km/L)"
           required
         />
