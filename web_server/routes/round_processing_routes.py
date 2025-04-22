@@ -7,7 +7,7 @@ from views.round_processing import RoundProcessing
 
 
 @inject
-def register_round_processing_routes(
+def create_round_processing_blueprint(
     wrf_round_repository: WRFRoundRepository = Provide[
         InventoryAppContainer.wrf_round_repository
     ],

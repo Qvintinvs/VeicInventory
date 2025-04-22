@@ -6,7 +6,7 @@ from views.vasques_emission_inventory import VasquesEmissionInventory
 
 
 @inject
-def register_vehicular_inventory_routes(
+def create_vehicular_inventory_blueprint(
     vasques_emission_repository: VasquesEmissionRepository = Provide[
         InventoryAppContainer.vasques_emission_repository
     ],
