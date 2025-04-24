@@ -22,8 +22,8 @@ class InventoryAppContainer(containers.DeclarativeContainer):
         vasques_emission_repository.VasquesEmissionRepository, sql_db
     )
 
-    wrf_round_repository = providers.Singleton(
-        wrf_round_repository.WRFRoundRepository, sql_db
+    vasques_emission_round_repository = providers.Singleton(
+        wrf_round_repository.VasquesEmissionRoundRepository, sql_db
     )
 
     wrf_remote_connection_settings = providers.Singleton(

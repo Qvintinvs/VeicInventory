@@ -5,8 +5,10 @@ from models.wrf_round import WRFRound
 from models.wrf_round_status import WRFRoundStatus
 from sqlalchemy import asc
 
+from .server_namelists.vasques_emission_namelist import VasquesEmissionNamelist
 
-class WRFRoundRepository:
+
+class VasquesEmissionRoundRepository:
     """Will deal with the database rounds"""
 
     def __init__(self, sql_db: SQLAlchemy):
@@ -27,15 +29,15 @@ class WRFRoundRepository:
         self.__db.session.commit()
 
     def read_oldest_pending_rounds(self):
-        rounds_read = (
-            self.__db.session.query(WRFRound)
-            .filter_by(status=WRFRoundStatus.PENDING)
+        link = (
+            self.__db.session.query(VasquesEmissionRoundLink)
+            .join(VasquesEmissionRoundLink.wrf_round)
+            .filter(WRFRound.status == WRFRoundStatus.PENDING)
             .order_by(asc(WRFRound.timestamp))
-            .limit(5)
-            .all()
+            .first()
         )
 
-        return rounds_read if rounds_read else None
+        return VasquesEmissionNamelist(link.vasques_emission) if link else None
 
     def get_wrf_round_by_id(self, round_id: int):
         return self.__db.session.get(WRFRound, round_id)
