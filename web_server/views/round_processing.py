@@ -1,6 +1,6 @@
 from flask import redirect, url_for
+from services.vasques_emission_round_repository import VasquesEmissionRoundRepository
 from services.wrf_round_processor import WRFRoundProcessor
-from services.wrf_round_repository import VasquesEmissionRoundRepository
 
 from .inventory_forms.vehicle_interactions_form import VehicleInteractionsForm
 

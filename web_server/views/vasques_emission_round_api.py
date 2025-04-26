@@ -1,5 +1,5 @@
 from flask import jsonify
-from services.wrf_round_repository import VasquesEmissionRoundRepository
+from services.vasques_emission_round_repository import VasquesEmissionRoundRepository
 
 
 class VasquesEmissionRoundAPI:
