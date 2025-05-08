@@ -1,4 +1,7 @@
 const delayRange = document.getElementById("delayRange")
+const btPreviousFrame = document.getElementById("bt-previous-frame")
+const btNextFrame = document.getElementById("bt-next-frame")
+const frameLabel = document.getElementById("frame-label")
 let currentFrame = 0
 let isPaused = false
 let isCycle = true
@@ -79,6 +82,8 @@ async function fetchAndPlotHeatmap() {
             Plotly.update('heatmap', {
                 z: [frameData] // Update heatmap data
             });
+
+            
             if (currentFrame + 1 === frames.length && (!isPaused || isCycle)) {
                 console.log("got here lol")
                 // document.body.dispatchEvent(new KeyboardEvent(("keydown", { code: "Space" })))
@@ -87,9 +92,10 @@ async function fetchAndPlotHeatmap() {
             if (isPaused) {
                 return
             }
-
+            
             currentFrame = (currentFrame + 1) % frames.length; // Loop through frames
             console.log(`currentFrame: ${currentFrame}`)
+            frameLabel.textContent = `Frame: ${currentFrame}`
 
         }, delay)
     } catch (error) {
@@ -130,13 +136,15 @@ document.body.addEventListener("keydown", (e) => {
     }
 
     if (e.code === "ArrowLeft") {
-        (currentFrame > 0) ? currentFrame-- : currentFrame = 0
-        console.log("currentFrame:", currentFrame)
+        // (currentFrame > 0) ? currentFrame-- : currentFrame = 0
+        // console.log("currentFrame:", currentFrame)
+        btPreviousFrame.click()
     }
 
     if (e.code === "ArrowRight") {
-        (currentFrame < lastFrame) ? currentFrame++ : currentFrame = lastFrame
-        console.log("currentFrame:", currentFrame)
+        // (currentFrame < lastFrame) ? currentFrame++ : currentFrame = lastFrame
+        // console.log("currentFrame:", currentFrame)
+        btNextFrame.click()
     }
 
     if (e.code === "KeyC") {
@@ -183,9 +191,22 @@ delayRange.addEventListener("input", function () {
 
         currentFrame = (currentFrame + 1) % frames.length; // Loop through frames
         console.log(`currentFrame: ${currentFrame}`)
+        frameLabel.textContent = `Frame: ${currentFrame}`
 
     }, delay)
 
+})
+
+btPreviousFrame.addEventListener("click", (e) => {
+    (currentFrame > 0) ? currentFrame-- : currentFrame = 0
+    console.log("currentFrame:", currentFrame)
+    frameLabel.textContent = `Frame: ${currentFrame}`
+})
+
+btNextFrame.addEventListener("click", (e) => {
+    (currentFrame < lastFrame) ? currentFrame++ : currentFrame = lastFrame
+    console.log("currentFrame:", currentFrame)
+    frameLabel.textContent = `Frame: ${currentFrame}`
 })
 
 fetchAndPlotHeatmap()
@@ -216,3 +237,4 @@ function updateAltitude(newAltitude) {
 function getVariables() {
     return targetVars
 }
+

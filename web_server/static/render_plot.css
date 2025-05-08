@@ -12,7 +12,7 @@ span {
     justify-content: center;
 }
 
-.control-row {
+.range-row {
     display: flex;
     align-items: center;
     gap: 0.5rem;
