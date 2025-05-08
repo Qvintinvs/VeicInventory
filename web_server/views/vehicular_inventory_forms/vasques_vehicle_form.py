@@ -68,7 +68,7 @@ class VasquesVehicleForm(FlaskForm):
             # cast(int, self.year.data),
             cast(str, self.fuel.data),
             self.subcategory.cnh_subcategory,
-            cast(float, self.exhaust_emission_factor.data),
+            # cast(float, self.exhaust_emission_factor.data),
             cast(float, self.mileage.data),
             cast(float, self.fraction.data/100),
             cast(str, self.note.data),

@@ -25,7 +25,7 @@ class VasquesEmissionModel(Base):
     )
 
     mileage = Column(Float, nullable=False)
-    exhaust_emission_factor = Column(Float, nullable=False)
+    # exhaust_emission_factor = Column(Float, nullable=False)
     fraction = Column(Float, nullable=False)
     note = Column(String, nullable=True)
 
@@ -38,7 +38,7 @@ class VasquesEmissionModel(Base):
         # year: int,
         fuel: str,
         subcategory: VehicleSubcategory,
-        exhaust_emission_factor: float,
+        # exhaust_emission_factor: float,
         mileage: float,
         fraction: float,
         note: str,
@@ -47,7 +47,7 @@ class VasquesEmissionModel(Base):
         # self.year = year
         self.fuel = fuel
         self.subcategory = subcategory
-        self.exhaust_emission_factor = exhaust_emission_factor
+        # self.exhaust_emission_factor = exhaust_emission_factor
         self.mileage = mileage
         self.fraction = fraction
         self.note = note
@@ -60,7 +60,7 @@ class VasquesEmissionModel(Base):
             # year=cast(int, self.year),
             fuel=cast(str, self.fuel),
             subcategory=self.subcategory.name,
-            exhaust_emission_factor=cast(float, self.exhaust_emission_factor),
+            # exhaust_emission_factor=cast(float, self.exhaust_emission_factor),
             mileage=cast(float, self.mileage),
             fraction=cast(float, self.fraction),
             note=cast(str, self.note),
