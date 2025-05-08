@@ -40,15 +40,15 @@ class VasquesVehicleForm(FlaskForm):
 
     subcategory = SubcategoryField()
 
-    exhaust_emission_factor = FloatField(
-        "Fator de Emissão por Exaustão:",
-        render_kw={"placeholder": "Ex: 0.25 (g/km)"},
-        validators=(DataRequired(), NumberRange(min=0)),
-    )
+    # exhaust_emission_factor = FloatField(
+    #     "Fator de Emissão por Exaustão:",
+    #     render_kw={"placeholder": "Ex: 0.25 (g/km)"},
+    #     validators=(DataRequired(), NumberRange(min=0)),
+    # )
 
-    autonomy = FloatField(
-        "Autonomia do Veículo (km/L ou km/kWh):",
-        render_kw={"placeholder": "Ex: 12.5 (km/L)"},
+    mileage = FloatField(
+        "Quilometragem do veículo (km/dia):",
+        render_kw={"placeholder": "Ex: 12.5 (km/dia)"},
         validators=(DataRequired(), NumberRange(min=0)),
     )
 
@@ -69,7 +69,7 @@ class VasquesVehicleForm(FlaskForm):
             cast(str, self.fuel.data),
             self.subcategory.cnh_subcategory,
             cast(float, self.exhaust_emission_factor.data),
-            cast(float, self.autonomy.data),
+            cast(float, self.mileage.data),
             cast(float, self.fraction.data/100),
             cast(str, self.note.data),
             example_city,
