@@ -46,12 +46,15 @@ for vehicle in emission_data %}
     </tr>
   </thead>
 
+  {% set fuel_translations = { 'Gasoline': 'Gasolina', 'Alcohol': 'Álcool',
+  'Diesel': 'Diesel', 'Electric': 'Elétrico', 'Flex': 'Flex' } %}
+
   <tbody id="data-table">
     {% for vehicle in emission_data %}
     <tr>
       <td class="align-middle">{{ vehicle.id }}</td>
       <td class="align-middle">{{ vehicle.year }}</td>
-      <td class="align-middle">{{ vehicle.fuel }}</td>
+      <td class="align-middle">{{ fuel_translations[vehicle.fuel] }}</td>
       <td class="align-middle">{{ vehicle.subcategory.name }}</td>
       <td class="align-middle">
         <span
