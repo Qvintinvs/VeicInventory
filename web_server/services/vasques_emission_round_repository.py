@@ -1,6 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
 from models.vasques_emission_model import VasquesEmissionModel
-from models.vasques_emission_round_link import VasquesEmissionRoundLink
 from models.wrf_round import WRFRound
 from models.wrf_round_status import WRFRoundStatus
 from sqlalchemy import asc
@@ -20,24 +19,21 @@ class VasquesEmissionRoundRepository:
         if not vehicle_by_id:
             return
 
-        new_round = WRFRound("output_test")
+        namelist_file = VasquesEmissionNamelist(vehicle_by_id)
 
-        link = VasquesEmissionRoundLink(vehicle_by_id, new_round)
+        new_round = WRFRound("output_test", namelist_file.create_content())
 
-        self.__db.session.add(link)
+        self.__db.session.add(new_round)
 
         self.__db.session.commit()
 
     def read_oldest_pending_rounds(self):
-        link = (
-            self.__db.session.query(VasquesEmissionRoundLink)
-            .join(VasquesEmissionRoundLink.wrf_round)
+        return (
+            self.__db.session.query(WRFRound)
             .filter(WRFRound.status == WRFRoundStatus.PENDING)
             .order_by(asc(WRFRound.timestamp))
             .first()
         )
-
-        return VasquesEmissionNamelist(link.vasques_emission) if link else None
 
     def get_wrf_round_by_id(self, round_id: int):
         return self.__db.session.get(WRFRound, round_id)

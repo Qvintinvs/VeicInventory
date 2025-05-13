@@ -14,6 +14,4 @@ class VasquesEmissionRoundAPI:
         if urgent_round is None:
             return jsonify("No rounds at the moment"), 404
 
-        serialized_round_content = urgent_round.create_content()
-
-        return jsonify(serialized_round_content), 200
+        return jsonify(urgent_round.namelist), 200
