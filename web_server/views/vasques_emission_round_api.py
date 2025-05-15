@@ -14,4 +14,10 @@ class VasquesEmissionRoundAPI:
         if urgent_round is None:
             return jsonify("No rounds at the moment"), 404
 
-        return jsonify(urgent_round.namelist), 200
+        round_json_dict = {
+            "id": urgent_round.id,
+            "namelist": urgent_round.namelist,
+            "output_file_path": urgent_round.output_file_path,
+        }
+
+        return jsonify(round_json_dict), 200
