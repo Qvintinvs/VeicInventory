@@ -7,6 +7,7 @@ from sqlalchemy import asc
 from .server_namelists.vasques_emission_namelist import VasquesEmissionNamelist
 
 
+# TODO: Rename to WRFRoundRepository
 class VasquesEmissionRoundRepository:
     """Will deal with the database rounds"""
 
