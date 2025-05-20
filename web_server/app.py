@@ -7,7 +7,6 @@ from inventory_app_container import InventoryAppContainer
 from routes import (
     netcdf_api_routes,
     round_processing_routes,
-    vasques_emission_round_api_routes,
     vehicular_inventory_routes,
 )
 
@@ -46,22 +45,16 @@ def register_app_routes(app: Flask):
         vehicular_inventory_routes.create_vehicular_inventory_blueprint()
     )
 
-    vasques_api_blueprint = (
-        vasques_emission_round_api_routes.create_vasques_emission_round_api_blueprint()
-    )
-
     netcdf_api_blueprint = netcdf_api_routes.create_netcdf_api_blueprint()
 
     processing_blueprint = round_processing_routes.create_round_processing_blueprint()
 
-    csrf.exempt(vasques_api_blueprint)
     csrf.exempt(netcdf_api_blueprint)
 
     app.register_blueprint(inventory_blueprint)
     app.register_blueprint(processing_blueprint)
 
     app.register_blueprint(netcdf_api_blueprint)
-    app.register_blueprint(vasques_api_blueprint)
 
     app.register_error_handler(405, request_method_error)
 
@@ -76,12 +69,7 @@ def create_app():
     container = initialize_app_container(app)
 
     container.wire(
-        modules=(
-            vehicular_inventory_routes,
-            vasques_emission_round_api_routes,
-            round_processing_routes,
-            database_setup,
-        )
+        modules=(vehicular_inventory_routes, round_processing_routes, database_setup)
     )
 
     return app
