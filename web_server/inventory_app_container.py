@@ -6,6 +6,7 @@ from services import (
     netcdf_blob_repository,
     vasques_emission_repository,
     vasques_emission_round_repository,
+    wrf_round_processor,
 )
 
 
@@ -29,4 +30,8 @@ class InventoryAppContainer(containers.DeclarativeContainer):
     # TODO: include the dotenv variables
     redis_client = providers.Singleton(
         redis.Redis, host="localhost", port=6379, decode_responses=True
+    )
+
+    wrf_round_processor = providers.Singleton(
+        wrf_round_processor.WRFRoundProcessor, redis_client
     )
