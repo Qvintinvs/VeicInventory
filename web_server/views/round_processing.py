@@ -1,6 +1,6 @@
 from flask import redirect, url_for
-from services.vasques_emission_round_repository import VasquesEmissionRoundRepository
 from services.wrf_round_processor import WRFRoundProcessor
+from services.wrf_round_repository import WRFRoundRepository
 
 from .inventory_forms.vehicle_interactions_form import VehicleInteractionsForm
 
@@ -9,10 +9,10 @@ from .inventory_forms.vehicle_interactions_form import VehicleInteractionsForm
 class RoundProcessing:
     def __init__(
         self,
-        vasques_emission_round_repository: VasquesEmissionRoundRepository,
+        wrf_round_repository: WRFRoundRepository,
         wrf_round_processor: WRFRoundProcessor,
     ):
-        self.__rounds = vasques_emission_round_repository
+        self.__rounds = wrf_round_repository
         self.__processor = wrf_round_processor
 
     def process(self):

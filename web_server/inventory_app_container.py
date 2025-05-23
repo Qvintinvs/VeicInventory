@@ -5,8 +5,8 @@ from models.base import Base
 from services import (
     netcdf_blob_repository,
     vasques_emission_repository,
-    vasques_emission_round_repository,
     wrf_round_processor,
+    wrf_round_repository,
 )
 
 
@@ -19,8 +19,8 @@ class InventoryAppContainer(containers.DeclarativeContainer):
         vasques_emission_repository.VasquesEmissionRepository, sql_db
     )
 
-    vasques_emission_round_repository = providers.Singleton(
-        vasques_emission_round_repository.VasquesEmissionRoundRepository, sql_db
+    wrf_round_repository = providers.Singleton(
+        wrf_round_repository.WRFRoundRepository, sql_db
     )
 
     netcdf_blob_repository = providers.Singleton(
