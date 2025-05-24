@@ -24,7 +24,3 @@ class WRFRoundProcessor:
             return
         except Exception:
             return
-
-    def run(self):
-        while True:
-            self.send_next_round()
