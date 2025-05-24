@@ -14,7 +14,6 @@ class VasquesEmissionNamelist:
 
     def create_content(self):
         emission_namelist = {
-            "id": self.__variables.id,
             "year": self.__variables.year,
             "fuel": self.__variables.fuel,
             "subcategory": self.__variables.subcategory,
