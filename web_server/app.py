@@ -69,7 +69,12 @@ def create_app():
     container = initialize_app_container(app)
 
     container.wire(
-        modules=(vehicular_inventory_routes, round_processing_routes, database_setup)
+        modules=(
+            database_setup,
+            vehicular_inventory_routes,
+            round_processing_routes,
+            netcdf_api_routes,
+        )
     )
 
     return app
