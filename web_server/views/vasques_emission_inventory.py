@@ -37,3 +37,19 @@ class VasquesEmissionInventory:
             self.__inventory.delete_data_by_id(id_to_delete)
 
         return redirect(url_for("vehicular_inventory.render_inventory_page"))
+
+    def schedule_round(self):
+        process_form: VehicleInteractionsForm = VehicleInteractionsForm()
+
+        selected_emission_id = process_form.action_id
+
+        emission_namelist = (
+            self.__inventory.read_emission_as_namelist(selected_emission_id)
+            if process_form.validate()
+            else None
+        )
+
+        if emission_namelist:
+            self.__inventory.schedule_emission_round(emission_namelist)
+
+        return redirect(url_for("vehicular_inventory.render_inventory_page"))
