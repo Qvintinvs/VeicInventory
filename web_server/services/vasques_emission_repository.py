@@ -1,5 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from models.vasques_emission_model import VasquesEmissionModel
+from models.wrf_round import WRFRound
+
+from .server_namelists.vasques_emission_namelist import VasquesEmissionNamelist
 
 
 class VasquesEmissionRepository:
@@ -16,5 +19,20 @@ class VasquesEmissionRepository:
 
     def delete_data_by_id(self, emission_id: int):
         self.__db.session.query(VasquesEmissionModel).filter_by(id=emission_id).delete()
+
+        self.__db.session.commit()
+
+    def read_emission_as_namelist(self, vehicle_emission_id: int):
+        emission_read = self.__db.session.get(VasquesEmissionModel, vehicle_emission_id)
+
+        return VasquesEmissionNamelist(emission_read) if emission_read else None
+
+    # TODO: merge the WRFRoundRepository to send to Redis and insertion
+    def schedule_emission_round(self, namelist: VasquesEmissionNamelist):
+        namelist_file_content = namelist.create_content()
+
+        emission_round = WRFRound("vasques_emission", namelist_file_content)
+
+        self.__db.session.add(emission_round)
 
         self.__db.session.commit()
