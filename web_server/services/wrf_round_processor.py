@@ -19,8 +19,5 @@ class WRFRoundProcessor:
 
         self.__redis.rpush("wrf-queue", json.dumps(round_json_dict))
 
-    def send_next_round(self):
-        try:
-            return
-        except Exception:
-            return
+    def retrieve_round_completeness(self):
+        raise NotImplementedError()
