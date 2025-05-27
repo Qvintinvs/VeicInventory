@@ -31,8 +31,4 @@ class VasquesEmissionRepository:
     def schedule_emission_round(self, namelist: VasquesEmissionNamelist):
         namelist_file_content = namelist.create_content()
 
-        emission_round = WRFRound("vasques_emission", namelist_file_content)
-
-        self.__db.session.add(emission_round)
-
-        self.__db.session.commit()
+        return WRFRound("vasques_emission", namelist_file_content)

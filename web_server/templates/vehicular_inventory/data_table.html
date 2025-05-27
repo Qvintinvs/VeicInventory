@@ -94,7 +94,7 @@ for vehicle in emission_data %}
 
         <form
           method="POST"
-          action="{{ url_for('round_processing.process') }}"
+          action="{{ url_for('vehicular_inventory.schedule_round') }}"
           class="d-inline"
         >
           {{ form.hidden_tag() }}

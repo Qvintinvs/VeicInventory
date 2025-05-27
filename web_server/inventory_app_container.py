@@ -19,10 +19,6 @@ class InventoryAppContainer(containers.DeclarativeContainer):
         vasques_emission_repository.VasquesEmissionRepository, sql_db
     )
 
-    wrf_round_repository = providers.Singleton(
-        wrf_round_repository.WRFRoundRepository, sql_db
-    )
-
     netcdf_blob_repository = providers.Singleton(
         netcdf_blob_repository.NETCDFBlobRepository, sql_db
     )
@@ -34,4 +30,8 @@ class InventoryAppContainer(containers.DeclarativeContainer):
 
     wrf_round_processor = providers.Singleton(
         wrf_round_processor.WRFRoundProcessor, redis_client
+    )
+
+    wrf_round_repository = providers.Singleton(
+        wrf_round_repository.WRFRoundRepository, sql_db, wrf_round_processor
     )

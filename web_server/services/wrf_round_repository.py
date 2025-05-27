@@ -1,39 +1,38 @@
 from flask_sqlalchemy import SQLAlchemy
-from models.vasques_emission_model import VasquesEmissionModel
 from models.wrf_round import WRFRound
 from models.wrf_round_status import WRFRoundStatus
+from services.wrf_round_processor import WRFRoundProcessor
 from sqlalchemy import asc
-
-from .server_namelists.vasques_emission_namelist import VasquesEmissionNamelist
 
 
 class WRFRoundRepository:
     """Will deal with the database rounds"""
 
-    def __init__(self, sql_db: SQLAlchemy):
+    def __init__(self, sql_db: SQLAlchemy, wrf_round_processor: WRFRoundProcessor):
         self.__db = sql_db
+        self.__processor = wrf_round_processor
 
-    def schedule_emission_round(self, vehicle_emission_id: int):
-        vehicle_by_id = self.__db.session.get(VasquesEmissionModel, vehicle_emission_id)
-
-        if not vehicle_by_id:
-            return
-
-        namelist_file = VasquesEmissionNamelist(vehicle_by_id)
-
-        new_round = WRFRound("output_test", namelist_file.create_content())
-
+    def schedule_emission_round(self, new_round: WRFRound):
         self.__db.session.add(new_round)
 
         self.__db.session.commit()
 
-    def read_oldest_pending_rounds(self):
-        return (
+    def enqueue_pending_round(self):
+        oldest_pending_round = (
             self.__db.session.query(WRFRound)
             .filter(WRFRound.status == WRFRoundStatus.PENDING)
             .order_by(asc(WRFRound.timestamp))
             .first()
         )
+
+        if not oldest_pending_round:
+            return
+
+        self.__processor.enqueue_round(oldest_pending_round)
+
+        oldest_pending_round.status = WRFRoundStatus.RUNNING
+
+        self.__db.session.commit()
 
     def get_wrf_round_by_id(self, round_id: int):
         return self.__db.session.get(WRFRound, round_id)

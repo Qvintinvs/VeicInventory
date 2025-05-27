@@ -1,13 +1,19 @@
 from flask import redirect, render_template, url_for
 from services.vasques_emission_repository import VasquesEmissionRepository
+from services.wrf_round_repository import WRFRoundRepository
 
 from .inventory_forms.vasques_emission_form import VasquesEmissionForm
 from .inventory_forms.vehicle_interactions_form import VehicleInteractionsForm
 
 
 class VasquesEmissionInventory:
-    def __init__(self, vehicle_emissions_repository: VasquesEmissionRepository):
+    def __init__(
+        self,
+        vehicle_emissions_repository: VasquesEmissionRepository,
+        wrf_round_repository: WRFRoundRepository,
+    ):
         self.__inventory = vehicle_emissions_repository
+        self.__rounds = wrf_round_repository
 
     def render_inventory_page(self):
         vasques_form: VasquesEmissionForm = VasquesEmissionForm()
@@ -50,6 +56,13 @@ class VasquesEmissionInventory:
         )
 
         if emission_namelist:
-            self.__inventory.schedule_emission_round(emission_namelist)
+            persisted_round = self.__inventory.schedule_emission_round(
+                emission_namelist
+            )
+
+            # TODO: Rename this method and create a function to send to the queue
+            self.__rounds.schedule_emission_round(persisted_round)
+
+            self.__rounds.enqueue_pending_round()
 
         return redirect(url_for("vehicular_inventory.render_inventory_page"))
