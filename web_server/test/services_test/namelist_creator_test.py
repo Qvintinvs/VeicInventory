@@ -1,7 +1,7 @@
 from types import MappingProxyType
 
 import pytest
-from services.namelist_server_sending.namelist_creator import NamelistContentCreator
+from services.server_namelists.namelist_content_creator import NamelistContentCreator
 
 
 class TestNamelistContentCreator:
