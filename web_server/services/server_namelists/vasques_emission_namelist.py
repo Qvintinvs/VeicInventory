@@ -1,19 +1,23 @@
 from types import MappingProxyType
+from typing import LiteralString
 
 from models.vasques_emission_model import VasquesEmissionModel
+from models.wrf_round import WRFRound
 
 from .match_to_a_namelist_group import match_to_a_namelist_group
 from .namelist_content_creator import NamelistContentCreator
 
 
 class VasquesEmissionNamelist:
-    __namelist = NamelistContentCreator("vasques_namelist")
+    __title: LiteralString = "vasques_emission"
+
+    __namelist = NamelistContentCreator(__title)
 
     def __init__(self, variables: VasquesEmissionModel):
         self.__variables = variables
 
-    def create_content(self):
-        emission_namelist = {
+    def create_round_content(self):
+        emission_variables = {
             "year": self.__variables.year,
             "fuel": self.__variables.fuel,
             "subcategory": self.__variables.subcategory,
@@ -21,6 +25,12 @@ class VasquesEmissionNamelist:
             "autonomy": self.__variables.autonomy,
         }
 
-        ndict = match_to_a_namelist_group(MappingProxyType(emission_namelist))
+        wrf_format_variables = match_to_a_namelist_group(
+            MappingProxyType(emission_variables)
+        )
 
-        return self.__namelist.create_namelist_through(MappingProxyType(ndict))
+        wrf_format_namelist = self.__namelist.create_namelist_through(
+            MappingProxyType(wrf_format_variables)
+        )
+
+        return WRFRound(self.__title, wrf_format_namelist)

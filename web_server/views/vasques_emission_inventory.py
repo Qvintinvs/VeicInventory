@@ -56,9 +56,7 @@ class VasquesEmissionInventory:
         )
 
         if emission_namelist:
-            persisted_round = self.__inventory.schedule_emission_round(
-                emission_namelist
-            )
+            persisted_round = emission_namelist.create_round_content()
 
             # TODO: Rename this method and create a function to send to the queue
             self.__rounds.schedule_emission_round(persisted_round)
