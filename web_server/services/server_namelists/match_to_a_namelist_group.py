@@ -1,7 +1,7 @@
 from types import MappingProxyType
 
 
-def match_to_a_namelist_group(nml_data: MappingProxyType[str, float | int | str]):
+def match_to_a_namelist_group(nml_data: MappingProxyType[str, float | int]):
     data = dict(nml_data)
 
     group = ""
