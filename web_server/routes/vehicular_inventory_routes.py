@@ -32,13 +32,15 @@ def create_vehicular_inventory_blueprint(
     )
 
     inventory_blueprint.add_url_rule(
-        "/delete_vehicle_emission",
+        "/delete_vehicle_emission/<int:emission_id>",
         view_func=inventory.delete_vehicle_emission,
         methods=["POST"],
     )
 
     inventory_blueprint.add_url_rule(
-        "/schedule_round", view_func=inventory.schedule_round, methods=["POST"]
+        "/schedule_emission_round/<int:emission_id>",
+        view_func=inventory.schedule_emission_round,
+        methods=["POST"],
     )
 
     return inventory_blueprint
