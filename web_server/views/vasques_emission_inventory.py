@@ -29,11 +29,12 @@ class VasquesEmissionInventory:
         if vasques_form.validate_on_submit():
             vehicle_form_data = vasques_form.vehicle_emission
 
-            self.__inventory.insert_vehicle_emission(vehicle_form_data)
+            self.__inventory.save_vehicle_emission(vehicle_form_data)
 
         return redirect(url_for("vehicular_inventory.render_inventory_page"))
 
     def delete_vehicle_emission(self, emission_id: int):
+        # TODO: return a status value that will be passed to the template
         try:
             self.__inventory.delete_data_by_id(emission_id)
         except Exception:
@@ -41,17 +42,19 @@ class VasquesEmissionInventory:
 
         return redirect(url_for("vehicular_inventory.render_inventory_page"))
 
-    def schedule_emission_round(self, emission_id: int):
+    def schedule_emission_round(self):
+        self.__rounds.enqueue_pending_round()
+
+        return redirect(url_for("vehicular_inventory.render_inventory_page"))
+
+    def create_round_for_emission(self, emission_id: int):
         emission_namelist = self.__inventory.read_emission_as_namelist(emission_id)
 
         if emission_namelist is None:
             abort(404, description=f"No emission found for ID {emission_id}")
 
-        persisted_round = emission_namelist.create_round_content()
+        emission_round = emission_namelist.create_round_content()
 
-        # TODO: Rename this method and create a function to send to the queue
-        self.__rounds.schedule_emission_round(persisted_round)
+        self.__rounds.save_emission_round(emission_round)
 
-        self.__rounds.enqueue_pending_round()
-
-        return redirect(url_for("vehicular_inventory.render_inventory_page"))
+        return self.schedule_emission_round()

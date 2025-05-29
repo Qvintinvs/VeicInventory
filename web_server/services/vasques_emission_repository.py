@@ -8,7 +8,7 @@ class VasquesEmissionRepository:
     def __init__(self, sql_db: SQLAlchemy):
         self.__db = sql_db
 
-    def insert_vehicle_emission(self, emission_data: VasquesEmissionModel):
+    def save_vehicle_emission(self, emission_data: VasquesEmissionModel):
         self.__db.session.add(emission_data)
 
         self.__db.session.commit()

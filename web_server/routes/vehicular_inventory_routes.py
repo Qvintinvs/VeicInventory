@@ -38,8 +38,8 @@ def create_vehicular_inventory_blueprint(
     )
 
     inventory_blueprint.add_url_rule(
-        "/schedule_emission_round/<int:emission_id>",
-        view_func=inventory.schedule_emission_round,
+        "/create_round_for_emission/<int:emission_id>",
+        view_func=inventory.create_round_for_emission,
         methods=["POST"],
     )
 

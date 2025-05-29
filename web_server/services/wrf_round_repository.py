@@ -12,7 +12,7 @@ class WRFRoundRepository:
         self.__db = sql_db
         self.__processor = wrf_round_processor
 
-    def schedule_emission_round(self, new_round: WRFRound):
+    def save_emission_round(self, new_round: WRFRound):
         self.__db.session.add(new_round)
 
         self.__db.session.commit()
