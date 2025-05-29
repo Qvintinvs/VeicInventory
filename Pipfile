@@ -9,8 +9,8 @@ flask-sqlalchemy = "*"
 flask-wtf = "*"
 python-dotenv = "*"
 dependency-injector = "*"
-f90nml = "*"
 redis = "*"
+f90nml = "*"
 
 [dev-packages]
 ruff = "*"
