@@ -1,16 +1,18 @@
+import json
+
+import redis
 from flask_sqlalchemy import SQLAlchemy
 from models.wrf_round import WRFRound
 from models.wrf_round_status import WRFRoundStatus
-from services.wrf_round_processor import WRFRoundProcessor
 from sqlalchemy import asc
 
 
 class WRFRoundRepository:
     """Will deal with the database rounds"""
 
-    def __init__(self, sql_db: SQLAlchemy, wrf_round_processor: WRFRoundProcessor):
+    def __init__(self, sql_db: SQLAlchemy, redis_client: redis.Redis):
         self.__db = sql_db
-        self.__processor = wrf_round_processor
+        self.__redis = redis_client
 
     def save_emission_round(self, new_round: WRFRound):
         self.__db.session.add(new_round)
@@ -18,19 +20,25 @@ class WRFRoundRepository:
         self.__db.session.commit()
 
     def enqueue_pending_round(self):
-        oldest_pending_round = (
+        pending_round = (
             self.__db.session.query(WRFRound)
             .filter(WRFRound.status == WRFRoundStatus.PENDING)
             .order_by(asc(WRFRound.timestamp))
             .first()
         )
 
-        if not oldest_pending_round:
+        if pending_round is None:
             return
 
-        self.__processor.enqueue_round(oldest_pending_round)
+        round_json_dict = {
+            "id": pending_round.id,
+            "namelist": pending_round.namelist,
+            "output_file_path": pending_round.output_file_path,
+        }
 
-        oldest_pending_round.status = WRFRoundStatus.RUNNING
+        self.__redis.rpush("wrf-queue", json.dumps(round_json_dict))
+
+        pending_round.status = WRFRoundStatus.RUNNING
 
         self.__db.session.commit()
 
