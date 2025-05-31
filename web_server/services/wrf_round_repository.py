@@ -3,7 +3,6 @@ import json
 import redis
 from flask_sqlalchemy import SQLAlchemy
 from models.wrf_round import WRFRound
-from models.wrf_round_status import WRFRoundStatus
 
 
 class WRFRoundRepository:
@@ -27,7 +26,7 @@ class WRFRoundRepository:
 
         self.__redis.rpush("wrf-queue", json.dumps(round_json_dict))
 
-        pending_round.status = WRFRoundStatus.RUNNING
+        pending_round.run_if_pending()
 
         self.__db.session.commit()
 

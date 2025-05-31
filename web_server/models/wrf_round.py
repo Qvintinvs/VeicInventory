@@ -30,6 +30,10 @@ class WRFRound(Base):
         self.output_file_path = output_file_path
         self.namelist = namelist
 
+    def run_if_pending(self):
+        if self.status is WRFRoundStatus.PENDING:
+            self.status = WRFRoundStatus.RUNNING
+
     def complete_if_running(self):
         if self.status is WRFRoundStatus.RUNNING:
             self.status = WRFRoundStatus.COMPLETED
