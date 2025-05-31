@@ -42,11 +42,6 @@ class VasquesEmissionInventory:
 
         return redirect(url_for("vehicular_inventory.render_inventory_page"))
 
-    def schedule_emission_round(self):
-        self.__rounds.enqueue_pending_round()
-
-        return redirect(url_for("vehicular_inventory.render_inventory_page"))
-
     def create_round_for_emission(self, emission_id: int):
         emission_namelist = self.__inventory.read_emission_as_namelist(emission_id)
 
@@ -57,4 +52,6 @@ class VasquesEmissionInventory:
 
         self.__rounds.save_emission_round(emission_round)
 
-        return self.schedule_emission_round()
+        self.__rounds.schedule_pending_round(emission_round)
+
+        return redirect(url_for("vehicular_inventory.render_inventory_page"))

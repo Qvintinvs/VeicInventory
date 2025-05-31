@@ -4,7 +4,6 @@ import redis
 from flask_sqlalchemy import SQLAlchemy
 from models.wrf_round import WRFRound
 from models.wrf_round_status import WRFRoundStatus
-from sqlalchemy import asc
 
 
 class WRFRoundRepository:
@@ -19,17 +18,7 @@ class WRFRoundRepository:
 
         self.__db.session.commit()
 
-    def enqueue_pending_round(self):
-        pending_round = (
-            self.__db.session.query(WRFRound)
-            .filter(WRFRound.status == WRFRoundStatus.PENDING)
-            .order_by(asc(WRFRound.timestamp))
-            .first()
-        )
-
-        if pending_round is None:
-            return
-
+    def schedule_pending_round(self, pending_round: WRFRound):
         round_json_dict = {
             "id": pending_round.id,
             "namelist": pending_round.namelist,
