@@ -2,7 +2,6 @@ from dependency_injector.wiring import Provide, inject
 from flask import Blueprint
 from inventory_app_container import InventoryAppContainer
 from services.vasques_emission_repository import VasquesEmissionRepository
-from services.wrf_round_repository import WRFRoundRepository
 from views.vasques_emission_inventory import VasquesEmissionInventory
 
 
@@ -11,13 +10,8 @@ def create_vehicular_inventory_blueprint(
     vasques_emission_repository: VasquesEmissionRepository = Provide[
         InventoryAppContainer.vasques_emission_repository
     ],
-    wrf_round_repository: WRFRoundRepository = Provide[
-        InventoryAppContainer.wrf_round_repository
-    ],
 ):
-    inventory = VasquesEmissionInventory(
-        vasques_emission_repository, wrf_round_repository
-    )
+    inventory = VasquesEmissionInventory(vasques_emission_repository)
 
     inventory_blueprint = Blueprint("vehicular_inventory", __name__)
 
@@ -34,12 +28,6 @@ def create_vehicular_inventory_blueprint(
     inventory_blueprint.add_url_rule(
         "/delete_vehicle_emission/<int:emission_id>",
         view_func=inventory.delete_vehicle_emission,
-        methods=["POST"],
-    )
-
-    inventory_blueprint.add_url_rule(
-        "/create_round_for_emission/<int:emission_id>",
-        view_func=inventory.create_round_for_emission,
         methods=["POST"],
     )
 
