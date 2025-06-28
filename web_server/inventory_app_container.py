@@ -5,7 +5,7 @@ from models.base import Base
 from services import (
     netcdf_blob_repository,
     vasques_emission_repository,
-    wrf_round_repository,
+    wrf_round_command_repository,
 )
 
 
@@ -27,6 +27,6 @@ class InventoryAppContainer(containers.DeclarativeContainer):
         redis.Redis, host="localhost", port=6379, decode_responses=True
     )
 
-    wrf_round_repository = providers.Singleton(
-        wrf_round_repository.WRFRoundRepository, sql_db, redis_client
+    wrf_round_command_repository = providers.Singleton(
+        wrf_round_command_repository.WRFRoundCommandRepository, sql_db, redis_client
     )
