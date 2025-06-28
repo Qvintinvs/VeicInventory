@@ -4,7 +4,7 @@ from services.vasques_emission_repository import VasquesEmissionRepository
 from .inventory_forms.vasques_emission_form import VasquesEmissionForm
 
 
-class VasquesEmissionInventory:
+class VasquesEmissionView:
     def __init__(self, vehicle_emissions_repository: VasquesEmissionRepository):
         self.__inventory = vehicle_emissions_repository
 
