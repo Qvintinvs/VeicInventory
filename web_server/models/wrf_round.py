@@ -1,6 +1,6 @@
 from datetime import UTC, datetime
 
-from sqlalchemy import DateTime, Enum, String, Text
+from sqlalchemy import DateTime, Enum, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
@@ -24,7 +24,11 @@ class WRFRound(Base):
 
     namelist: Mapped[str] = mapped_column(Text, nullable=False)
 
-    blobs = relationship("NETCDFBlob", uselist=True, back_populates="wrf_round")
+    netcdf_blob = relationship("NETCDFBlob", uselist=True, back_populates="wrf_round")
+
+    vehicle_id: Mapped[int] = mapped_column(ForeignKey("vehicle.id"))
+
+    vehicle = relationship("VasquesEmissionModel", back_populates="wrf_rounds")
 
     def __init__(self, output_file_path: str, namelist: str):
         self.output_file_path = output_file_path

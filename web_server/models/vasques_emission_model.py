@@ -1,9 +1,12 @@
+from typing import List
+
 from sqlalchemy import CHAR, Float, ForeignKey, String
 from sqlalchemy.orm import Mapped, composite, mapped_column, relationship
 
 from .base import Base
 from .city import City
 from .vehicle_subcategory import VehicleSubcategory
+from .wrf_round import WRFRound
 
 
 class VasquesEmissionModel(Base):
@@ -30,6 +33,10 @@ class VasquesEmissionModel(Base):
 
     vehicle_city: Mapped[City] = relationship(City, uselist=False)
 
+    wrf_rounds: Mapped[List[WRFRound]] = relationship(
+        WRFRound, uselist=True, viewonly=True, back_populates="vehicle"
+    )
+
     def __init__(
         self,
         year: int,
@@ -45,3 +52,6 @@ class VasquesEmissionModel(Base):
         self.exhaust_emission_factor = exhaust_emission_factor
         self.autonomy = autonomy
         self.vehicle_city = vehicle_city
+
+    def add_round(self, wrf_round: WRFRound):
+        self.wrf_rounds += wrf_round

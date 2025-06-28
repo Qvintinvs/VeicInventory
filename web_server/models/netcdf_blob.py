@@ -16,7 +16,7 @@ class NETCDFBlob(Base):
 
     netcdf_data: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
 
-    wrf_round: Mapped[WRFRound] = relationship(WRFRound, back_populates="blobs")
+    wrf_round: Mapped[WRFRound] = relationship(WRFRound, back_populates="netcdf_blob")
 
     def __init__(self, netcdf_file: bytes, scheduler_round_id: int):
         self.netcdf_data = netcdf_file
