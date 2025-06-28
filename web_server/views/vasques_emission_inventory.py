@@ -11,7 +11,7 @@ class VasquesEmissionInventory:
     def render_inventory_page(self):
         vasques_form: VasquesEmissionForm = VasquesEmissionForm()
 
-        vehicle_emissions = self.__inventory.read_emission_data()
+        vehicle_emissions = self.__inventory.list_emissions()
 
         return render_template(
             "index.html", emission_data=vehicle_emissions, form=vasques_form

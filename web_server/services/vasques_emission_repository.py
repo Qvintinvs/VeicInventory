@@ -11,7 +11,7 @@ class VasquesEmissionRepository:
 
         self.__db.session.commit()
 
-    def read_emission_data(self):
+    def list_emissions(self):
         return self.__db.session.query(VasquesEmissionModel).limit(5).all()
 
     def read_emission_by_id(self, vehicle_emission_id: int):
