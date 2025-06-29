@@ -6,7 +6,7 @@ from services.insert_round_output_status import InsertRoundOutputStatus
 from services.netcdf_blob_repository import NETCDFBlobRepository
 
 
-class NETCDFAPI:
+class NETCDFAPIView:
     def __init__(self, netcdf_blob_repository: NETCDFBlobRepository):
         self.__blob_storage = netcdf_blob_repository
 
