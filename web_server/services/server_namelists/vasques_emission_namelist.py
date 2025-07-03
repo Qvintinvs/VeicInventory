@@ -33,4 +33,4 @@ class VasquesEmissionNamelist:
             MappingProxyType(wrf_format_variables)
         )
 
-        return WRFRound(self.__title, wrf_format_namelist)
+        return WRFRound(self.__title, wrf_format_namelist, self.__variables)

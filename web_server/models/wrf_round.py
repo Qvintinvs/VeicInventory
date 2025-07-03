@@ -1,10 +1,15 @@
 from datetime import UTC, datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import DateTime, Enum, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
+from .vasques_emission_model import VasquesEmissionModel
 from .wrf_round_status import WRFRoundStatus
+
+if TYPE_CHECKING:
+    from .vasques_emission_model import VasquesEmissionModel
 
 
 class WRFRound(Base):
@@ -28,11 +33,16 @@ class WRFRound(Base):
 
     vehicle_id: Mapped[int] = mapped_column(ForeignKey("vehicle.id"))
 
-    vehicle = relationship("VasquesEmissionModel", back_populates="wrf_rounds")
+    vehicle: Mapped["VasquesEmissionModel"] = relationship(
+        "VasquesEmissionModel", back_populates="wrf_rounds"
+    )
 
-    def __init__(self, output_file_path: str, namelist: str):
+    def __init__(
+        self, output_file_path: str, namelist: str, vehicle: "VasquesEmissionModel"
+    ):
         self.output_file_path = output_file_path
         self.namelist = namelist
+        self.vehicle = vehicle
 
     def run_if_pending(self):
         if self.status is WRFRoundStatus.PENDING:

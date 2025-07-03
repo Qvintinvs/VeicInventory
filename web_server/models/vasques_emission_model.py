@@ -1,4 +1,4 @@
-from typing import List
+from typing import TYPE_CHECKING, List
 
 from sqlalchemy import CHAR, Float, ForeignKey, String
 from sqlalchemy.orm import Mapped, composite, mapped_column, relationship
@@ -6,7 +6,9 @@ from sqlalchemy.orm import Mapped, composite, mapped_column, relationship
 from .base import Base
 from .city import City
 from .vehicle_subcategory import VehicleSubcategory
-from .wrf_round import WRFRound
+
+if TYPE_CHECKING:
+    from .wrf_round import WRFRound
 
 
 class VasquesEmissionModel(Base):
@@ -33,8 +35,8 @@ class VasquesEmissionModel(Base):
 
     vehicle_city: Mapped[City] = relationship(City, uselist=False)
 
-    wrf_rounds: Mapped[List[WRFRound]] = relationship(
-        WRFRound, uselist=True, viewonly=True, back_populates="vehicle"
+    wrf_rounds: Mapped[List["WRFRound"]] = relationship(
+        "WRFRound", uselist=True, viewonly=True, back_populates="vehicle"
     )
 
     def __init__(
@@ -53,5 +55,5 @@ class VasquesEmissionModel(Base):
         self.autonomy = autonomy
         self.vehicle_city = vehicle_city
 
-    def add_round(self, wrf_round: WRFRound):
-        self.wrf_rounds += wrf_round
+    def add_round(self, wrf_round: "WRFRound"):
+        self.wrf_rounds.append(wrf_round)
