@@ -87,8 +87,8 @@ for vehicle in emission_data %}
         </form>
 
         <form
-          method="GET"
-          action="{{ url_for('vehicular_inventory.render_inventory_page') }}"
+          method="POST"
+          action="{{ url_for('emission_round.create_and_schedule_emission_round', emission_id=vehicle.id) }}"
           class="d-inline"
         >
           {{ form.hidden_tag() }}

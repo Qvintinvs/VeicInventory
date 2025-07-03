@@ -5,6 +5,7 @@ from models.base import Base
 from services import (
     netcdf_blob_repository,
     vasques_emission_repository,
+    vasques_round_query_repository,
     wrf_round_command_repository,
 )
 
@@ -25,6 +26,10 @@ class InventoryAppContainer(containers.DeclarativeContainer):
     # TODO: include the dotenv variables
     redis_client = providers.Singleton(
         redis.Redis, host="localhost", port=6379, decode_responses=True
+    )
+
+    vasques_round_query_repository = providers.Singleton(
+        vasques_round_query_repository.VasquesRoundQueryRepository, sql_db
     )
 
     wrf_round_command_repository = providers.Singleton(
