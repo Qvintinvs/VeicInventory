@@ -31,7 +31,7 @@ class EmissionRoundView:
 
         return redirect(url_for("emission_round.render_emission_selection_page"))
 
-    def create_and_schedule_emission_round(self, emission_id: int):
+    def schedule_emission_round(self, emission_id: int):
         emission_round = self.__inventory.generate_round_from_emission(emission_id)
 
         if emission_round is None:

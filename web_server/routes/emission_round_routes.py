@@ -29,7 +29,7 @@ def create_emission_round_blueprint(
 
     emission_round_blueprint.add_url_rule(
         "/schedule_emission_round/<int:emission_id>",
-        view_func=emission_round_view.create_and_schedule_emission_round,
+        view_func=emission_round_view.schedule_emission_round,
         methods=["POST"],
     )
 

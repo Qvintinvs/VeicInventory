@@ -88,7 +88,7 @@ for vehicle in emission_data %}
 
         <form
           method="POST"
-          action="{{ url_for('emission_round.create_and_schedule_emission_round', emission_id=vehicle.id) }}"
+          action="{{ url_for('emission_round.schedule_emission_round', emission_id=vehicle.id) }}"
           class="d-inline"
         >
           {{ form.hidden_tag() }}
