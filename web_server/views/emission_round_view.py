@@ -1,8 +1,7 @@
 from flask import abort, redirect, render_template, url_for
+from forms.vasques_emission_form import VasquesEmissionForm
 from services.vasques_round_query_repository import VasquesRoundQueryRepository
 from services.wrf_round_command_repository import WRFRoundCommandRepository
-
-from .inventory_forms.vasques_emission_form import VasquesEmissionForm
 
 
 class EmissionRoundView:
