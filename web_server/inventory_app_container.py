@@ -15,19 +15,19 @@ class InventoryAppContainer(containers.DeclarativeContainer):
 
     sql_db = providers.Singleton(SQLAlchemy, model_class=Base)
 
+    redis_client = providers.Singleton(
+        redis.Redis,
+        host=config.redis_host,
+        port=config.redis_port.as_int(),
+        decode_responses=True,
+    )
+
     vasques_emission_repository = providers.Singleton(
         vasques_emission_repository.VasquesEmissionRepository, sql_db
     )
 
     netcdf_blob_repository = providers.Singleton(
         netcdf_blob_repository.NETCDFBlobRepository, sql_db
-    )
-
-    redis_client = providers.Singleton(
-        redis.Redis,
-        host=config.redis_host,
-        port=config.redis_port.as_int(),
-        decode_responses=True,
     )
 
     vasques_round_query_repository = providers.Singleton(
