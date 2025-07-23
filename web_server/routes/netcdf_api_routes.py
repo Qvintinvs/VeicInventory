@@ -1,7 +1,7 @@
 from dependency_injector.wiring import Provide, inject
 from flask import Blueprint
 from inventory_app_container import InventoryAppContainer
-from services.netcdf_blob_repository import NETCDFBlobRepository
+from repositories.netcdf_blob_repository import NETCDFBlobRepository
 from views.netcdf_api_view import NETCDFAPIView
 
 

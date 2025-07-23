@@ -2,7 +2,7 @@ import redis
 from dependency_injector import containers, providers
 from flask_sqlalchemy import SQLAlchemy
 from models.base import Base
-from services import (
+from repositories import (
     netcdf_blob_repository,
     vasques_emission_repository,
     vasques_round_query_repository,

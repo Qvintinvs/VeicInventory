@@ -1,8 +1,8 @@
 from dependency_injector.wiring import Provide, inject
 from flask import Blueprint
 from inventory_app_container import InventoryAppContainer
-from services.vasques_round_query_repository import VasquesRoundQueryRepository
-from services.wrf_round_command_repository import WRFRoundCommandRepository
+from repositories.vasques_round_query_repository import VasquesRoundQueryRepository
+from repositories.wrf_round_command_repository import WRFRoundCommandRepository
 from views.emission_round_view import EmissionRoundView
 
 
