@@ -23,9 +23,11 @@ class InventoryAppContainer(containers.DeclarativeContainer):
         netcdf_blob_repository.NETCDFBlobRepository, sql_db
     )
 
-    # TODO: include the dotenv variables
     redis_client = providers.Singleton(
-        redis.Redis, host="localhost", port=6379, decode_responses=True
+        redis.Redis,
+        host=config.redis_host,
+        port=config.redis_port.as_int(),
+        decode_responses=True,
     )
 
     vasques_round_query_repository = providers.Singleton(
