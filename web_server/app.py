@@ -23,11 +23,8 @@ def initialize_app_container(app: Flask):
 
     config = container.config
 
-    config.namelist_remote_path.from_env("NAMELIST_REMOTE_PATH", required=True)
-
-    config.hostname.from_env("SSH_HOST", required=True)
-    config.username.from_env("SSH_NAME", required=True)
-    config.password.from_env("SSH_PASS")
+    config.redis_host.from_env("REDIS_HOST", required=True)
+    config.redis_port.from_env("REDIS_PORT", required=True)
 
     config.from_dict(app.config)
 

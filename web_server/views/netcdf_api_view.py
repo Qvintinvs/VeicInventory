@@ -2,8 +2,8 @@ from io import BytesIO
 
 from flask import jsonify, request
 from models.netcdf_blob import NETCDFBlob
-from services.insert_round_output_status import InsertRoundOutputStatus
-from services.netcdf_blob_repository import NETCDFBlobRepository
+from repositories.insert_round_output_status import InsertRoundOutputStatus
+from repositories.netcdf_blob_repository import NETCDFBlobRepository
 
 
 class NETCDFAPIView:

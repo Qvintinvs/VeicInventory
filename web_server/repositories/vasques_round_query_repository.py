@@ -1,8 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from models.vasques_emission_model import VasquesEmissionModel
 from models.wrf_round import WRFRound
-
-from .server_namelists.vasques_emission_namelist import VasquesEmissionNamelist
+from services.vasques_emission_namelist import VasquesEmissionNamelist
 
 
 class VasquesRoundQueryRepository:

@@ -2,7 +2,7 @@ import redis
 from dependency_injector import containers, providers
 from flask_sqlalchemy import SQLAlchemy
 from models.base import Base
-from services import (
+from repositories import (
     netcdf_blob_repository,
     vasques_emission_repository,
     vasques_round_query_repository,
@@ -15,17 +15,19 @@ class InventoryAppContainer(containers.DeclarativeContainer):
 
     sql_db = providers.Singleton(SQLAlchemy, model_class=Base)
 
+    redis_client = providers.Singleton(
+        redis.Redis,
+        host=config.redis_host,
+        port=config.redis_port.as_int(),
+        decode_responses=True,
+    )
+
     vasques_emission_repository = providers.Singleton(
         vasques_emission_repository.VasquesEmissionRepository, sql_db
     )
 
     netcdf_blob_repository = providers.Singleton(
         netcdf_blob_repository.NETCDFBlobRepository, sql_db
-    )
-
-    # TODO: include the dotenv variables
-    redis_client = providers.Singleton(
-        redis.Redis, host="localhost", port=6379, decode_responses=True
     )
 
     vasques_round_query_repository = providers.Singleton(

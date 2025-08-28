@@ -1,6 +1,6 @@
 from flask import flash, redirect, render_template, url_for
 from forms.vasques_emission_form import VasquesEmissionForm
-from services.vasques_emission_repository import VasquesEmissionRepository
+from repositories.vasques_emission_repository import VasquesEmissionRepository
 
 
 class VasquesEmissionView:
