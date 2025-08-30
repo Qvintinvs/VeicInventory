@@ -49,17 +49,21 @@ while True:
     if item:
         try:
             text = item.decode("utf-8")
+
             json_object = json.loads(text)
+
             print("Round recebido:")
             print(json.dumps(json_object, indent=4))
         except json.JSONDecodeError as e:
             print("Erro ao decodificar JSON:", e)
+
             continue
 
         print("Executando run.sh...")
 
         if not os.access(run_script_path, os.X_OK):
             print(f"Erro: run.sh não é executável.\n{run_script_path}")
+
             exit(1)
 
         # Executa o script e mostra a saída
