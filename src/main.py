@@ -1,6 +1,7 @@
 import json
 import os
 import time
+from typing import Union, cast
 
 import redis
 
@@ -43,7 +44,7 @@ def run_and_capture():
 
 
 while True:
-    item = r.lpop(queue_name)
+    item = cast(Union[bytes, None], r.lpop(queue_name))
 
     if item:
         try:
