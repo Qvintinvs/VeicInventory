@@ -1,6 +1,5 @@
 import json
 import os
-import subprocess
 import time
 
 import redis
@@ -11,7 +10,35 @@ queue_name = "wrf-queue"
 
 run_script_path = "../fortran/build/emiss.exe"
 
+env = os.environ.copy()
+
 print("Aguardando round na fila...")
+
+
+def run_and_capture():
+    r_fd, w_fd = os.pipe()
+
+    actions = [
+        (os.POSIX_SPAWN_DUP2, w_fd, 1),  # dup2(w_fd, STDOUT_FILENO)
+        (os.POSIX_SPAWN_DUP2, w_fd, 2),  # dup2(w_fd, STDERR_FILENO)
+        (os.POSIX_SPAWN_CLOSE, r_fd),  # Fecha r_fd no filho
+        (os.POSIX_SPAWN_CLOSE, w_fd),  # Fecha w_fd no filho
+    ]
+
+    pid = os.posix_spawn(run_script_path, ("/bin/bash",), env, file_actions=actions)
+
+    # Fecha o lado de escrita no pai
+    os.close(w_fd)
+
+    # Lê toda a saída
+    output = os.read(r_fd, 65535).decode()
+    os.close(r_fd)
+
+    # Espera o processo terminar
+    _, status = os.waitpid(pid, 0)
+
+    return status, output
+
 
 while True:
     item = r.lpop(queue_name)
@@ -38,14 +65,11 @@ while True:
             exit(1)
 
         # Executa o script e mostra a saída
-        result = subprocess.run(
-            (run_script_path,), capture_output=True, text=True, shell=False
-        )
+        status, output = run_and_capture()
 
-        print("Saída do run.sh:")
-        print(result.stdout)
-        if result.stderr:
-            print("Erros do run.sh:")
-            print(result.stderr)
+        print(f"Saída do run.sh:\n{output}")
+
+        if status:
+            print(f"Erros do run.sh:\n{status}")
     else:
         time.sleep(1)
