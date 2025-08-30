@@ -8,7 +8,9 @@ r = redis.Redis(host="localhost", port=6379)
 
 queue_name = "wrf-queue"
 
-run_script_path = "../fortran/build/emiss.exe"
+run_script_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "fortran", "run.sh")
+)
 
 env = os.environ.copy()
 
@@ -54,10 +56,6 @@ while True:
             continue
 
         print("Executando run.sh...")
-
-        run_script_path = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), "..", "fortran", "run.sh")
-        )
 
         if not os.access(run_script_path, os.X_OK):
             print("Erro: run.sh não é executável.")
