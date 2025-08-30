@@ -34,13 +34,14 @@ def run_and_capture():
     os.close(w_fd)
 
     # Lê toda a saída
-    output = os.read(r_fd, 65535).decode()
+    output = b"".join(iter(lambda: os.read(r_fd, 4096), b""))
+
+    # Fecha o lado de leitura no pai
     os.close(r_fd)
 
-    # Espera o processo terminar
     _, status = os.waitpid(pid, 0)
 
-    return status, output
+    return status, output.decode()
 
 
 while True:
