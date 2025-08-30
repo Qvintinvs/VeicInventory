@@ -20,12 +20,12 @@ print("Aguardando round na fila...")
 def run_and_capture():
     r_fd, w_fd = os.pipe()
 
-    actions = [
+    actions = (
         (os.POSIX_SPAWN_DUP2, w_fd, 1),  # dup2(w_fd, STDOUT_FILENO)
         (os.POSIX_SPAWN_DUP2, w_fd, 2),  # dup2(w_fd, STDERR_FILENO)
         (os.POSIX_SPAWN_CLOSE, r_fd),  # Fecha r_fd no filho
         (os.POSIX_SPAWN_CLOSE, w_fd),  # Fecha w_fd no filho
-    ]
+    )
 
     pid = os.posix_spawn(run_script_path, ("/bin/bash",), env, file_actions=actions)
 
@@ -58,8 +58,7 @@ while True:
         print("Executando run.sh...")
 
         if not os.access(run_script_path, os.X_OK):
-            print("Erro: run.sh não é executável.")
-            print(run_script_path)
+            print(f"Erro: run.sh não é executável.\n{run_script_path}")
             exit(1)
 
         # Executa o script e mostra a saída
