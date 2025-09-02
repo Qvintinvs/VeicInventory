@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 redis = "==6.2.0"
+sqlalchemy = "*"
 
 [dev-packages]
 ruff = "*"
