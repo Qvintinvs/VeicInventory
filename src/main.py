@@ -4,6 +4,10 @@ import time
 from typing import Union, cast
 
 import redis
+from dotenv import load_dotenv
+
+from db import session
+from file import File
 
 r = redis.Redis(host="localhost", port=6379)
 
