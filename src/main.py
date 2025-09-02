@@ -22,6 +22,27 @@ env = os.environ.copy()
 print("Aguardando round na fila...")
 
 
+def insert_round_wrfem_output():
+    load_dotenv()  # carrega variáveis do .env
+
+    file_00to12_path = os.getenv("WRFEM_OUTPUT_00TO12")
+    file_12to24_path = os.getenv("WRFEM_OUTPUT_12TO24")
+
+    if not file_00to12_path or not file_12to24_path:
+        raise ValueError("Caminhos dos arquivos não configurados no .env")
+
+    new_file1: File = File(
+        name="wrfem_00to12z_d01", data=open(file_00to12_path, "rb").read()
+    )
+    new_file2: File = File(
+        name="wrfem_12to24z_d01", data=open(file_12to24_path, "rb").read()
+    )
+
+    session.add(new_file1)
+    session.add(new_file2)
+    session.commit()
+
+
 def run_and_capture():
     r_fd, w_fd = os.pipe()
 
