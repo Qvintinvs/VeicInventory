@@ -99,5 +99,7 @@ while True:
 
         if status:
             print(f"Erros do run.sh:\n{status}")
+
+        insert_round_wrfem_output()
     else:
         time.sleep(1)
