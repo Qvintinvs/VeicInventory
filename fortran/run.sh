@@ -1,10 +1,17 @@
 #!/bin/bash
 set -e
 
+# Carregar variáveis do .env
+# (ignora linhas comentadas e exporta chaves)
+set -a
+source "$(dirname "$0")/../.env"
+set +a
+
 # Absolute path to the project root
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
+# Usar variáveis do .env
 cd "$PROJECT_ROOT/data/raw" || exit 1
 
 if [ ! -f "$PROJECT_ROOT/fortran/build/emiss.exe" ]; then
@@ -19,9 +26,9 @@ fi
 }
 
 # Paths to data directories
-ghg_emis="$PROJECT_ROOT/data/ghg_emis"
-wrf_emis="$PROJECT_ROOT/data/wrf_emis"
-emis_emis="$PROJECT_ROOT/data/emis_emis"
+ghg_emis="$GHG_EMIS_DIR"
+wrf_emis="$WRF_EMIS_DIR"
+emis_emis="$EMIS_EMIS_DIR"
 
 # Check if wrfem_* files were generated
 if ls "$ghg_emis/wrfem_"* 1>/dev/null 2>&1; then
