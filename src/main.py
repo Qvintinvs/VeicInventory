@@ -4,6 +4,7 @@ import time
 from typing import Union, cast
 
 import redis
+import zstandard as zstd
 from dotenv import load_dotenv
 
 from db import session
@@ -22,6 +23,15 @@ env = os.environ.copy()
 print("Aguardando round na fila...")
 
 
+def compress_file(path: str) -> bytes:
+    with open(path, "rb") as f:
+        data = f.read()
+
+    cctx = zstd.ZstdCompressor(level=3)  # ajuste nível conforme tradeoff
+
+    return cctx.compress(data)
+
+
 def insert_round_wrfem_output():
     load_dotenv()  # carrega variáveis do .env
 
@@ -32,10 +42,10 @@ def insert_round_wrfem_output():
         raise ValueError("Caminhos dos arquivos não configurados no .env")
 
     new_file1: File = File(
-        name="wrfem_00to12z_d01", data=open(file_00to12_path, "rb").read()
+        name="wrfem_00to12z_d01", data=compress_file(file_00to12_path)
     )
     new_file2: File = File(
-        name="wrfem_12to24z_d01", data=open(file_12to24_path, "rb").read()
+        name="wrfem_12to24z_d01", data=compress_file(file_12to24_path)
     )
 
     session.add(new_file1)
