@@ -1,6 +1,7 @@
 import redis
 from dependency_injector import containers, providers
 from flask_sqlalchemy import SQLAlchemy
+from minio import Minio
 from models.base import Base
 from repositories import (
     netcdf_blob_repository,
@@ -21,6 +22,13 @@ class InventoryAppContainer(containers.DeclarativeContainer):
         port=config.redis_port.as_int(),
         decode_responses=True,
     )
+
+    repo = Minio(
+        endpoint="localhost:9000",
+        access_key="minioadmin",
+        secret_key="minioadmin",
+        secure=False,
+    )  # nosec
 
     vasques_emission_repository = providers.Singleton(
         vasques_emission_repository.VasquesEmissionRepository, sql_db
