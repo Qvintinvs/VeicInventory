@@ -16,10 +16,10 @@ class MinioRepository:
 
     def list_files(self, prefix: str = ""):
         """Lista arquivos no bucket"""
-        return [
+        return (
             obj.object_name
             for obj in self.__client.list_objects(self.__bucket_name, prefix=prefix)
-        ]
+        )
 
     def delete_file(self, object_name: str) -> None:
         """Remove um arquivo do MinIO"""
