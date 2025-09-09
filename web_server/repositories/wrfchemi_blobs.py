@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from minio import Minio
 
 
@@ -11,15 +9,6 @@ class MinioRepository:
         # Cria o bucket se não existir
         if not self.__client.bucket_exists(bucket_name):
             self.__client.make_bucket(bucket_name)
-
-    def upload_file(self, file_path: str, object_name: str | None = None) -> None:
-        """Envia um arquivo local para o MinIO"""
-        minio_path = Path(file_path)
-
-        if object_name is None:
-            object_name = minio_path.name
-
-        self.__client.fput_object(self.__bucket_name, object_name, str(file_path))
 
     def download_file(self, object_name: str, dest_path: str) -> None:
         """Baixa um arquivo do MinIO"""
