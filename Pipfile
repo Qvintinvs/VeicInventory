@@ -8,6 +8,7 @@ redis = "==6.2.0"
 sqlalchemy = "*"
 python-dotenv = "*"
 zstandard = "*"
+boto3 = "*"
 
 [dev-packages]
 ruff = "*"
