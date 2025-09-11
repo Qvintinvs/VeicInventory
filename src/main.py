@@ -3,6 +3,7 @@ import os
 import time
 from typing import Union, cast
 
+import boto3
 import redis
 import zstandard as zstd
 from dotenv import load_dotenv
@@ -22,8 +23,19 @@ env = os.environ.copy()
 
 print("Aguardando round na fila...")
 
+s3 = boto3.client(
+    "s3",
+    endpoint_url="localhost:9000",
+    aws_access_key_id="minioadmin",
+    aws_secret_access_key="minioadmin",
+)  # nosec
 
-def compress_file(path: str) -> bytes:
+
+def upload_to_minio(local_path, bucket_name, object_key):
+    s3.upload_file(local_path, bucket_name, object_key)
+
+
+def compress_file(path: str):
     with open(path, "rb") as f:
         data = f.read()
 
@@ -51,6 +63,12 @@ def insert_round_wrfem_output():
     session.add(new_file1)
     session.add(new_file2)
     session.commit()
+
+    object_key1 = f"wrfchemi/round_{new_file1.id}.zst"
+    object_key2 = f"wrfchemi/round_{new_file1.id}.zst"
+
+    upload_to_minio(new_file1.data, "wrfchemi_blobs", object_key1)
+    upload_to_minio(new_file2.data, "wrfchemi_blobs", object_key2)
 
 
 def run_and_capture():
