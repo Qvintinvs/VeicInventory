@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 class WRFStandardEmission(Base):
-    __tablename__ = "vehicle"
+    __tablename__ = "wrf_standard_emission"
 
     id: Mapped[int] = mapped_column(primary_key=True)
 

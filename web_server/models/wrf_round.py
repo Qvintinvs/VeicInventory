@@ -5,11 +5,10 @@ from sqlalchemy import DateTime, Enum, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
-from .vasques_emission_model import VasquesEmissionModel
 from .wrf_round_status import WRFRoundStatus
 
 if TYPE_CHECKING:
-    from .vasques_emission_model import VasquesEmissionModel
+    from .wrf_standard_emission import WRFStandardEmission
 
 
 class WRFRound(Base):
@@ -31,14 +30,14 @@ class WRFRound(Base):
 
     netcdf_blob = relationship("NETCDFBlob", uselist=True, back_populates="wrf_round")
 
-    vehicle_id: Mapped[int] = mapped_column(ForeignKey("vehicle.id"))
+    vehicle_id: Mapped[int] = mapped_column(ForeignKey("wrf_standard_emission.id"))
 
-    vehicle: Mapped["VasquesEmissionModel"] = relationship(
-        "VasquesEmissionModel", back_populates="wrf_rounds"
+    vehicle: Mapped["WRFStandardEmission"] = relationship(
+        "WRFStandardEmission", back_populates="wrf_rounds"
     )
 
     def __init__(
-        self, output_file_path: str, namelist: str, vehicle: "VasquesEmissionModel"
+        self, output_file_path: str, namelist: str, vehicle: "WRFStandardEmission"
     ):
         self.output_file_path = output_file_path
         self.namelist = namelist

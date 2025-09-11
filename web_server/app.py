@@ -4,7 +4,12 @@ from dotenv import load_dotenv
 from flask import Flask
 from flask_wtf import CSRFProtect
 from inventory_app_container import InventoryAppContainer
-from routes import emission_round_routes, netcdf_api_routes, vehicular_inventory_routes
+from routes import (
+    emission_round_routes,
+    netcdf_api_routes,
+    vehicular_inventory_routes,
+    wrf_standard_emission_routes,
+)
 
 
 def request_method_error(error: Exception):
@@ -38,16 +43,19 @@ def register_app_routes(app: Flask):
         vehicular_inventory_routes.create_vehicular_inventory_blueprint()
     )
 
+    wrf_inventory_blueprint = (
+        wrf_standard_emission_routes.create_wrf_standard_emission_blueprint()
+    )
+
     netcdf_api_blueprint = netcdf_api_routes.create_netcdf_api_blueprint()
 
     emission_rounds_blueprint = emission_round_routes.create_emission_round_blueprint()
 
     csrf.exempt(netcdf_api_blueprint)
 
-    app.register_blueprint(inventory_blueprint)
-
+    # app.register_blueprint(inventory_blueprint)
+    app.register_blueprint(wrf_inventory_blueprint)
     app.register_blueprint(netcdf_api_blueprint)
-
     app.register_blueprint(emission_rounds_blueprint)
 
     app.register_error_handler(405, request_method_error)
@@ -66,6 +74,7 @@ def create_app():
         modules=(
             database_setup,
             vehicular_inventory_routes,
+            wrf_standard_emission_routes,
             netcdf_api_routes,
             emission_round_routes,
         )
