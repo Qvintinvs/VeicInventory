@@ -1,19 +1,19 @@
 from dependency_injector.wiring import Provide, inject
 from flask import Blueprint
 from inventory_app_container import InventoryAppContainer
-from repositories.vasques_emission_repository import VasquesEmissionRepository
-from views.vasques_emission_view import VasquesEmissionView
+from repositories.wrf_standard_emission_repository import WRFStandardEmissionRepository
+from views.wrf_standard_emission_view import WRFStandardEmissionView
 
 
 @inject
-def create_vehicular_inventory_blueprint(
-    vasques_emission_repository: VasquesEmissionRepository = Provide[
-        InventoryAppContainer.vasques_emission_repository
+def create_wrf_standard_emission_blueprint(
+    wrf_standard_emission_repository: WRFStandardEmissionRepository = Provide[
+        InventoryAppContainer.wrf_standard_emission_repository
     ],
 ):
-    inventory = VasquesEmissionView(vasques_emission_repository)
+    inventory = WRFStandardEmissionView(wrf_standard_emission_repository)
 
-    inventory_blueprint = Blueprint("vehicular_inventory", __name__)
+    inventory_blueprint = Blueprint("wrf_standard", __name__)
 
     inventory_blueprint.add_url_rule(
         "/", view_func=inventory.render_inventory_page, methods=["GET"]
@@ -29,6 +29,14 @@ def create_vehicular_inventory_blueprint(
         "/delete_vehicle_emission/<int:emission_id>",
         view_func=inventory.delete_vehicle_emission,
         methods=["POST"],
+    )
+
+    inventory_blueprint.add_url_rule(
+        "/get_netcdf_data", view_func=inventory.get_netcdf_data, methods=["GET"]
+    )
+
+    inventory_blueprint.add_url_rule(
+        "/visualize", view_func=inventory.visualize, methods=["GET"]
     )
 
     """

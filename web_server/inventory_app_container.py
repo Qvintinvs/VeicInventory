@@ -8,6 +8,7 @@ from repositories import (
     vasques_emission_repository,
     vasques_round_query_repository,
     wrf_round_command_repository,
+    wrf_standard_emission_repository,
 )
 
 
@@ -32,6 +33,10 @@ class InventoryAppContainer(containers.DeclarativeContainer):
 
     vasques_emission_repository = providers.Singleton(
         vasques_emission_repository.VasquesEmissionRepository, sql_db
+    )
+
+    wrf_standard_emission_repository = providers.Singleton(
+        wrf_standard_emission_repository.WRFStandardEmissionRepository, sql_db
     )
 
     netcdf_blob_repository = providers.Singleton(

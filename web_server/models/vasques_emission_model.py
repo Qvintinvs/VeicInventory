@@ -35,9 +35,11 @@ class VasquesEmissionModel(Base):
 
     vehicle_city: Mapped[City] = relationship(City, uselist=False)
 
+    """
     wrf_rounds: Mapped[List["WRFRound"]] = relationship(
         "WRFRound", uselist=True, viewonly=True, back_populates="vehicle"
     )
+    """
 
     def __init__(
         self,

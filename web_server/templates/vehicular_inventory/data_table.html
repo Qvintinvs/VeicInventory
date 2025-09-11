@@ -14,10 +14,10 @@ for vehicle in emission_data %}
 
       <form
         id="editForm{{ vehicle.id }}"
-        action="{{ url_for('vehicular_inventory.render_inventory_page') }}"
+        action="{{ url_for('wrf_standard.render_inventory_page') }}"
         method="GET"
       >
-      <form id="#editForm{{ vehicle.id }}" action="{{ url_for('vehicular_inventory.edit') }}" method="POST">
+      <form id="#editForm{{ vehicle.id }}" action="{{ url_for('wrf_standard.render_inventory_page') }}" method="POST">
         {{ render_form_body(form) }}
         <input type="hidden" name="interaction_id" value="{{ vehicle.id }}"/>
       </form>
@@ -60,7 +60,7 @@ for vehicle in emission_data %}
 
         <form
           method="POST"
-          action="{{ url_for('vehicular_inventory.delete_vehicle_emission', emission_id=vehicle.id) }}"
+          action="{{ url_for('wrf_standard.delete_vehicle_emission', emission_id=vehicle.id) }}"
           class="d-inline delete-form"
         >
           {{ form.hidden_tag() }}
@@ -80,8 +80,8 @@ for vehicle in emission_data %}
         >
           {{ form.hidden_tag() }}
 
-        <!-- TODO: Check out this process button >
-        <!-- <form method="POST" action="{{ url_for('vehicular_inventory.process') }}" class="d-inline process-form">
+        <!-- TODO: Check out this process button -->
+        <!-- <form method="POST" action="url_for('vehicular_inventory.process')" class="d-inline process-form">
           {{ form.hidden_tag() }}
 
           <input type="hidden" name="interaction_id" value="{{ vehicle.id }}"/>
