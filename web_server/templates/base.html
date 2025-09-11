@@ -61,7 +61,7 @@
       {% block data_table %} {% endblock %}
 
       <div class="d-flex justify-content-end">
-        <button class="btn btn-outline-secondary me-2" 
+        <button class="btn btn-outline-secondary me-2"
         data-bs-toggle="modal" data-bs-target="#visualizeModal"
         >
           Visualizar dados
@@ -80,7 +80,7 @@
             </div>
           </div>
         </div>
-        
+
         <button class="btn btn-outline-secondary me-2" id="export-json">
           Exportar JSON
         </button>
@@ -88,11 +88,11 @@
           Exportar CSV
         </button>
       </div>
-      
+
       <div class="mt-auto d-flex justify-content-end">
-        <form method="POST" action="{{ url_for('vehicular_inventory.process') }}" class="d-inline process-form">
+        <form method="POST" action="{{ url_for('emission_round.schedule_emission_round', emission_id=1) }}" class="d-inline process-form">
           {{ form.hidden_tag() }}
-          
+
           <input type="hidden" name="interaction_id" value="{{ 1 }}"/>
           <button class="process-button btn btn-outline-secondary btn-lg">
             <i class="bi bi-gear"></i>

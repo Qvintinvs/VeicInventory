@@ -31,23 +31,19 @@ def create_vehicular_inventory_blueprint(
         methods=["POST"],
     )
 
-    """
-    Proposed urls:
-
     inventory_blueprint.add_url_rule(
-        "/process", view_func=inventory.process, methods=["POST"]
-    )
-    
-    inventory_blueprint.add_url_rule(
-        "/edit", view_func=inventory.edit, methods=["POST"]
+        "/get_netcdf_data", view_func=inventory.get_netcdf_data, methods=["GET"]
     )
 
     inventory_blueprint.add_url_rule(
         "/visualize", view_func=inventory.visualize, methods=["GET"]
     )
 
+    """
+    Proposed urls:
+
     inventory_blueprint.add_url_rule(
-        "/get_netcdf_data", view_func=inventory.get_netcdf_data, methods=["GET"]
+        "/edit", view_func=inventory.edit, methods=["POST"]
     )
     """
 
