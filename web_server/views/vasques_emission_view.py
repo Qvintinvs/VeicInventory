@@ -33,9 +33,11 @@ class VasquesEmissionView:
 
         return redirect(url_for("vehicular_inventory.render_inventory_page"))
 
+    # TODO: move this method to a dedicated class
     def visualize(self):
         return render_template("render_plot.html")
 
+    # TODO: move this method to a dedicated class, same as visualize
     def get_netcdf_data(
         self, data_variable: str | None = None, altitude: int | None = None
     ):
