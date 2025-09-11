@@ -2,7 +2,7 @@
 <div class="modal-body">
   <div class="row">
     <div class="col-md-6">
-      <div class="mb-3">
+      <!-- div class="mb-3">
         <label class="form-label" for="year">Ano:</label>
         <input
           class="form-control"
@@ -14,7 +14,7 @@
           placeholder="Ex: 2024"
           required
         />
-      </div>
+      </div-->
 
       <div class="mb-3">
         <label class="form-label" for="fuel">Combustível:</label>
@@ -50,7 +50,7 @@
       </div>
     </div>
 
-    <div class="col-md-6">
+    <!-- div class="col-md-6">
       <div class="mb-3">
         <label class="form-label" for="exhaust_emission_factor"
           >Fator de Emissão por Exaustão:</label
@@ -65,9 +65,9 @@
           placeholder="Ex: 0.25 (g/km)"
           required
         />
-      </div>
+      </div-->
 
-      <div class="mb-3">
+      <!--div class="mb-3">
         <label class="form-label" for="autonomy"
           >Autonomia do Veículo (km/L ou km/kWh):</label
         >
@@ -81,7 +81,16 @@
           placeholder="Ex: 12.5 (km/L)"
           required
         />
-      </div>
+      </div-->
+
+  <dl class="row">
+    <div class="col-md-6 d-flex flex-column">
+      {{ render_field(form.note) }} {{ render_field(form.fuel) }} {{
+      render_field(form.subcategory) }}
+    </div>
+
+    <div class="col-md-6 d-flex flex-column">
+       {{ render_field(form.mileage) }} {{ render_field(form.fraction) }}
     </div>
   </div>
 </div>

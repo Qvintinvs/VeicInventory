@@ -1,25 +1,15 @@
 {% from "vehicular_inventory/form_body_macro.html" import render_form_body %} {%
 for vehicle in emission_data %}
 <!-- Modal to edit data -->
-<div
-  class="modal fade"
-  id="editModal{{ vehicle.id }}"
-  tabindex="-1"
-  aria-labelledby="editModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="editModal{{ vehicle.id }}" tabindex="-1" aria-labelledby="editModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="editModalLabel{{ vehicle.id }}">
           Editar Veículo
         </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <form
@@ -27,7 +17,9 @@ for vehicle in emission_data %}
         action="{{ url_for('vehicular_inventory.render_inventory_page') }}"
         method="GET"
       >
+      <form id="#editForm{{ vehicle.id }}" action="{{ url_for('vehicular_inventory.edit') }}" method="POST">
         {{ render_form_body(form) }}
+        <input type="hidden" name="interaction_id" value="{{ vehicle.id }}"/>
       </form>
     </div>
   </div>
@@ -57,18 +49,11 @@ for vehicle in emission_data %}
       <td class="align-middle">{{ fuel_translations[vehicle.fuel] }}</td>
       <td class="align-middle">{{ vehicle.subcategory.name }}</td>
       <td class="align-middle">
-        <span
-          class="d-inline-block badge bg-danger badge-transition"
-          data-status="not-processed"
-        ></span>
+        <span class="d-inline-block badge bg-danger badge-transition" data-status="not-processed"></span>
       </td>
       <td class="table-actions align-middle">
-        <button
-          class="btn btn-info btn-sm"
-          id="edit-data"
-          data-bs-toggle="modal"
-          data-bs-target="#editModal{{ vehicle.id }}"
-        >
+        <button class="btn btn-info btn-sm" id="edit-data" data-bs-toggle="modal"
+          data-bs-target="#editModal{{ vehicle.id }}">
           <i class="bi bi-pencil"></i>
           <span class="d-none d-sm-inline">Editar</span>
         </button>
@@ -79,6 +64,8 @@ for vehicle in emission_data %}
           class="d-inline delete-form"
         >
           {{ form.hidden_tag() }}
+
+          <input type="hidden" name="interaction_id" value="{{ vehicle.id }}"/>
 
           <button type="submit" class="btn btn-danger btn-sm">
             <i class="bi bi-trash"></i>
@@ -93,11 +80,21 @@ for vehicle in emission_data %}
         >
           {{ form.hidden_tag() }}
 
+        <!-- TODO: Check out this process button >
+        <!-- <form method="POST" action="{{ url_for('vehicular_inventory.process') }}" class="d-inline process-form">
+          {{ form.hidden_tag() }}
+
+          <input type="hidden" name="interaction_id" value="{{ vehicle.id }}"/>
+>>>>>>> dev_bruno
           <button class="process-button btn btn-secondary btn-sm">
             <i class="bi bi-gear"></i>
             <span class="d-none d-sm-inline">Processar</span>
           </button>
+<<<<<<< HEAD
         </form>
+=======
+        </form> -->
+
       </td>
     </tr>
     {% endfor %}

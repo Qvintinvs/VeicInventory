@@ -12,6 +12,7 @@ dependency-injector = "*"
 redis = "*"
 minio = "*"
 f90nml = "*"
+netcdf4 = "*"
 
 [dev-packages]
 ruff = "*"
