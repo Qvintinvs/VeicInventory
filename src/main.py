@@ -1,3 +1,4 @@
+import io
 import json
 import os
 import time
@@ -25,14 +26,15 @@ print("Aguardando round na fila...")
 
 s3 = boto3.client(
     "s3",
-    endpoint_url="localhost:9000",
+    endpoint_url="http://localhost:9000",
     aws_access_key_id="minioadmin",
     aws_secret_access_key="minioadmin",
 )  # nosec
 
 
-def upload_to_minio(local_path, bucket_name, object_key):
-    s3.upload_file(local_path, bucket_name, object_key)
+def upload_to_minio(file_bytes, bucket_name: str, object_key: str):
+    fileobj = io.BytesIO(file_bytes)  # transforma bytes em "arquivo em memória"
+    s3.upload_fileobj(fileobj, bucket_name, object_key)
 
 
 def compress_file(path: str):
@@ -67,8 +69,8 @@ def insert_round_wrfem_output():
     object_key1 = f"wrfchemi/round_{new_file1.id}.zst"
     object_key2 = f"wrfchemi/round_{new_file1.id}.zst"
 
-    upload_to_minio(new_file1.data, "wrfchemi_blobs", object_key1)
-    upload_to_minio(new_file2.data, "wrfchemi_blobs", object_key2)
+    upload_to_minio(new_file1.data, "wrfchemi-blobs", object_key1)
+    upload_to_minio(new_file2.data, "wrfchemi-blobs", object_key2)
 
 
 def run_and_capture():
