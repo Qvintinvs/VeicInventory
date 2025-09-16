@@ -8,7 +8,7 @@ from views.emission_round_view import WRFStandardRoundView
 
 @inject
 def create_emission_round_blueprint(
-    vasques_round_query_repository: WRFStandardRoundQueryRepository = Provide[
+    wrf_standard_round_query_repository: WRFStandardRoundQueryRepository = Provide[
         InventoryAppContainer.wrf_standard_round_query_repository
     ],
     wrf_round_command_repository: WRFRoundCommandRepository = Provide[
@@ -16,7 +16,7 @@ def create_emission_round_blueprint(
     ],
 ):
     emission_round_view = WRFStandardRoundView(
-        vasques_round_query_repository, wrf_round_command_repository
+        wrf_standard_round_query_repository, wrf_round_command_repository
     )
 
     emission_round_blueprint = Blueprint("emission_round", __name__)

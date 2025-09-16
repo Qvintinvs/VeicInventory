@@ -43,8 +43,8 @@ class InventoryAppContainer(containers.DeclarativeContainer):
         netcdf_blob_repository.NETCDFBlobRepository, sql_db
     )
 
-    vasques_round_query_repository = providers.Singleton(
-        vasques_round_query_repository.VasquesRoundQueryRepository, sql_db
+    wrf_standard_round_query_repository = providers.Singleton(
+        vasques_round_query_repository.WRFStandardRoundQueryRepository, sql_db
     )
 
     wrf_round_command_repository = providers.Singleton(

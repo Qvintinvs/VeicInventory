@@ -1,0 +1,101 @@
+{% macro render_form_body(form) %} {{ form.hidden_tag() }}
+<div class="modal-body">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label class="form-label" for="year">Ano:</label>
+        <input
+          class="form-control"
+          id="year"
+          name="year"
+          type="number"
+          min="1886"
+          max="2100"
+          placeholder="Ex: 2024"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="fuel">Combustível:</label>
+        <select class="form-control" id="fuel" name="fuel" required>
+          <option value="">Selecione...</option>
+          <option value="Gasoline">Gasolina</option>
+          <option value="Alcohol">Álcool</option>
+          <option value="Diesel">Diesel</option>
+          <option value="Electric">Elétrico</option>
+          <option value="Flex">Flex</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="subcategory">Subcategoria:</label>
+        <select
+          class="form-control"
+          id="subcategory"
+          name="subcategory"
+          required
+        >
+          <option value="">Selecione a subcategoria de CNH...</option>
+          <option value="A">A - Motos, motonetas e triciclos</option>
+          <option value="B">
+            B - Carros de passeio, utilitário/SUV, minivan, picape
+          </option>
+          <option value="C">C - Caminhões, caminhonetes, vans de carga</option>
+          <option value="D">
+            D - Ônibus, microônibus, vans de passageiros
+          </option>
+          <option value="E">E - Veículos pesados</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label class="form-label" for="exhaust_emission_factor"
+          >Fator de Emissão por Exaustão:</label
+        >
+        <input
+          class="form-control"
+          id="exhaust_emission_factor"
+          name="exhaust_emission_factor"
+          type="number"
+          min="0.01"
+          step="0.01"
+          placeholder="Ex: 0.25 (g/km)"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="autonomy"
+          >Autonomia do Veículo (km/L ou km/kWh):</label
+        >
+        <input
+          class="form-control"
+          id="autonomy"
+          name="autonomy"
+          type="number"
+          min="0.01"
+          step="0.01"
+          placeholder="Ex: 12.5 (km/L)"
+          required
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+    Cancelar
+  </button>
+  <input
+    class="btn btn-primary"
+    id="saveData"
+    name="submit"
+    type="submit"
+    value="Salvar"
+  />
+</div>
+{% endmacro %}

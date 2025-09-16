@@ -1,13 +1,13 @@
 from flask import abort, redirect, render_template, url_for
-from forms.vasques_emission_form import VasquesEmissionForm
-from repositories.vasques_round_query_repository import VasquesRoundQueryRepository
+from forms.wrf_standard_emission_form import WRFStandardEmissionForm
+from repositories.vasques_round_query_repository import WRFStandardRoundQueryRepository
 from repositories.wrf_round_command_repository import WRFRoundCommandRepository
 
 
-class EmissionRoundView:
+class WRFStandardRoundView:
     def __init__(
         self,
-        vehicle_emissions_repository: VasquesRoundQueryRepository,
+        vehicle_emissions_repository: WRFStandardRoundQueryRepository,
         wrf_round_command_repository: WRFRoundCommandRepository,
     ):
         self.__inventory = vehicle_emissions_repository
@@ -17,7 +17,9 @@ class EmissionRoundView:
         vehicle_emissions = self.__inventory.list_emissions()
 
         return render_template(
-            "index.html", emission_data=vehicle_emissions, form=VasquesEmissionForm()
+            "index.html",
+            emission_data=vehicle_emissions,
+            form=WRFStandardEmissionForm(),
         )
 
     def dispatch_round_execution(self, round_id: int):
