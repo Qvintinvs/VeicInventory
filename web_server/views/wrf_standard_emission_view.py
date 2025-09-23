@@ -1,11 +1,17 @@
 from flask import flash, redirect, render_template, request, url_for
 from forms.wrf_standard_emission_form import WRFStandardEmissionForm
 from repositories.wrf_standard_emission_repository import WRFStandardEmissionRepository
+from repositories.wrfchemi_blobs import MinioRepository
 
 
 class WRFStandardEmissionView:
-    def __init__(self, vehicle_emissions_repository: WRFStandardEmissionRepository):
+    def __init__(
+        self,
+        vehicle_emissions_repository: WRFStandardEmissionRepository,
+        wrfchemi_blobs_repository: MinioRepository,
+    ):
         self.__inventory = vehicle_emissions_repository
+        self.__wrfchemi = wrfchemi_blobs_repository
 
     def render_inventory_page(self):
         vehicle_emissions = self.__inventory.list_emissions()

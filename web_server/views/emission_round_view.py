@@ -9,9 +9,11 @@ class WRFStandardRoundView:
         self,
         vehicle_emissions_repository: WRFStandardRoundQueryRepository,
         wrf_round_command_repository: WRFRoundCommandRepository,
+        wrfchemi_blobs_repository,
     ):
         self.__inventory = vehicle_emissions_repository
         self.__rounds = wrf_round_command_repository
+        self.__wrfchemi_repo = wrfchemi_blobs_repository
 
     def render_emission_selection_page(self):
         vehicle_emissions = self.__inventory.list_emissions()

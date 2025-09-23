@@ -10,8 +10,11 @@ def create_wrf_standard_emission_blueprint(
     wrf_standard_emission_repository: WRFStandardEmissionRepository = Provide[
         InventoryAppContainer.wrf_standard_emission_repository
     ],
+    wrfchemi_blobs_repository=Provide[InventoryAppContainer.wrfchemi_blobs_repository],
 ):
-    inventory = WRFStandardEmissionView(wrf_standard_emission_repository)
+    inventory = WRFStandardEmissionView(
+        wrf_standard_emission_repository, wrfchemi_blobs_repository
+    )
 
     inventory_blueprint = Blueprint("wrf_standard", __name__)
 

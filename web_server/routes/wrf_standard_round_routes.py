@@ -14,9 +14,12 @@ def create_emission_round_blueprint(
     wrf_round_command_repository: WRFRoundCommandRepository = Provide[
         InventoryAppContainer.wrf_round_command_repository
     ],
+    wrfchemi_blobs_repository=Provide[InventoryAppContainer.wrfchemi_blobs_repository],
 ):
     emission_round_view = WRFStandardRoundView(
-        wrf_standard_round_query_repository, wrf_round_command_repository
+        wrf_standard_round_query_repository,
+        wrf_round_command_repository,
+        wrfchemi_blobs_repository,
     )
 
     emission_round_blueprint = Blueprint("emission_round", __name__)
