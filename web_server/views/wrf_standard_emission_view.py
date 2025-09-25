@@ -1,4 +1,6 @@
-from flask import flash, redirect, render_template, request, url_for
+import numpy as np
+import xarray as xr
+from flask import flash, jsonify, redirect, render_template, request, url_for
 from forms.wrf_standard_emission_form import WRFStandardEmissionForm
 from repositories.wrf_standard_emission_repository import WRFStandardEmissionRepository
 from repositories.wrfchemi_blobs import MinioRepository
@@ -57,23 +59,20 @@ class WRFStandardEmissionView:
         if not altitude:
             altitude = 0
 
-        import numpy as np
-        from flask import jsonify
-        from netCDF4 import Dataset
+        nc_file = self.__wrfchemi.read_file(prefix="round_1")
 
-        nc_file_path = "D:/Users/Public/Documents/arquivos/Trabalhos/College/IFSC/Projeto de Pesquisa WRF/wrf stuff/web-ui wrf/VeicInventory/test/wrfout"
-        dataset = Dataset(nc_file_path, mode="r")
+        dataset = xr.open_dataset(nc_file, engine="scipy")
 
-        # Extract latitudes and longitudes
-        # lats = dataset.variables["XLAT"][0, :, :]  # Assuming 3D and selecting the first time slice
-        # lons = dataset.variables["XLONG"][0, :, :]  # Assuming 3D and selecting the first time slice
-        alts = dataset.variables["XLAT"][:, 0, 0]
+        # --- Altitudes ---
+        # Parece que você queria só um eixo vertical da grade
+        alts = dataset["XLAT"].isel(south_north=0, west_east=0).values
         alts_length = alts.size
-        # print(f"alts_length: {alts_length}")
-        # alts_length = 0
 
-        lats = dataset.variables["XLAT"][altitude, :, :]
-        lons = dataset.variables["XLONG"][altitude, :, :]
+        # --- Latitudes e longitudes ---
+        # XLAT e XLONG geralmente têm dims (time, south_north, west_east)
+        # Selecionando slice na dimensão altitude (ou time se for o caso)
+        lats = dataset["XLAT"].isel(time=altitude).values
+        lons = dataset["XLONG"].isel(time=altitude).values
 
         # Handle MaskedArrays
         if isinstance(lats, np.ma.MaskedArray):
@@ -82,21 +81,16 @@ class WRFStandardEmissionView:
             lons = lons.filled(np.nan)  # Replace masked values with NaN
 
         # Extract time and CO2_ANT data
-        times = dataset.variables["XTIME"][:]  # Assuming time is not masked
+        times = dataset["XTIME"].values
 
         # Get all variable names
         variable_names = dataset.variables.keys()
 
         # Filter the ones containing XTIME, XLAT, and XLONG
         target_vars = [
-            var for var in variable_names if len(dataset.variables[var].dimensions) == 4
+            var for var in variable_names if len(dataset.variables[var].dims) == 4
         ]
         variable = dataset.variables[data_variable]
-
-        # Print attributes (before slicing!)
-        # print(f"Attributes for variable '{data_variable}':")
-        # for attr in variable.ncattrs():
-        #     print(f"{attr}: {getattr(variable, attr)}")
 
         description = getattr(variable, "description", "N/A")
         units = getattr(variable, "units", "N/A")
@@ -113,12 +107,12 @@ class WRFStandardEmissionView:
                 np.nan
             )  # Replace masked values with NaN
 
-        # Create frames for CO2_ANT
         variable_frames = []
-        for t in range(variable_values.shape[0]):  # Iterate over the time dimension
-            variable_frames.append(
-                variable_values[t, altitude, :, :].tolist()
-            )  # Assuming bottom_top=0 for simplicity
+
+        for t_idx in range(variable.sizes["time"]):  # iterando sobre a dimensão tempo
+            # isel seleciona por índice
+            frame = variable.isel(time=t_idx, altitude=altitude).values  # np.ndarray 2D
+            variable_frames.append(frame.tolist())
 
         # Close the dataset
         dataset.close()
