@@ -54,5 +54,5 @@ class InventoryAppContainer(containers.DeclarativeContainer):
     )
 
     wrfchemi_blobs_repository = providers.Singleton(
-        wrfchemi_blobs.MinioRepository, minio_db
+        wrfchemi_blobs.MinioRepository, minio_db, "wrfchemi-blobs"
     )
