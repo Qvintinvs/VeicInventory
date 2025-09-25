@@ -65,14 +65,14 @@ class WRFStandardEmissionView:
 
         # --- Altitudes ---
         # Parece que você queria só um eixo vertical da grade
-        alts = dataset["XLAT"].isel(south_north=0, west_east=0).values
-        alts_length = alts.size
+        # alts = dataset["west_east"].isel(south_north=0, west_east=0).values
+        # alts_length = alts.size
 
         # --- Latitudes e longitudes ---
         # XLAT e XLONG geralmente têm dims (time, south_north, west_east)
         # Selecionando slice na dimensão altitude (ou time se for o caso)
-        lats = dataset["XLAT"].isel(time=altitude).values
-        lons = dataset["XLONG"].isel(time=altitude).values
+        lats = dataset["south_north"].values
+        lons = dataset["west_east"].values
 
         # Handle MaskedArrays
         if isinstance(lats, np.ma.MaskedArray):
@@ -81,7 +81,7 @@ class WRFStandardEmissionView:
             lons = lons.filled(np.nan)  # Replace masked values with NaN
 
         # Extract time and CO2_ANT data
-        times = dataset["XTIME"].values
+        times = dataset["Time"].values
 
         # Get all variable names
         variable_names = dataset.variables.keys()
@@ -95,7 +95,7 @@ class WRFStandardEmissionView:
         description = getattr(variable, "description", "N/A")
         units = getattr(variable, "units", "N/A")
 
-        variable_values = variable[:]  # Convert to NumPy array
+        variable_values = variable.values  # Convert to NumPy array
         # print(f"target_vars: {target_vars}")
 
         zmin = float(np.nanmin(variable_values))
@@ -109,9 +109,9 @@ class WRFStandardEmissionView:
 
         variable_frames = []
 
-        for t_idx in range(variable.sizes["time"]):  # iterando sobre a dimensão tempo
+        for t_idx in range(variable.sizes["Time"]):  # iterando sobre a dimensão tempo
             # isel seleciona por índice
-            frame = variable.isel(time=t_idx, altitude=altitude).values  # np.ndarray 2D
+            frame = variable.isel(Time=t_idx).values  # np.ndarray 2D
             variable_frames.append(frame.tolist())
 
         # Close the dataset
@@ -129,6 +129,6 @@ class WRFStandardEmissionView:
                 "units": units,
                 "zmin": zmin,
                 "zmax": zmax,
-                "alts_length": alts_length,
+                "alts_length": 0,
             }
         )
