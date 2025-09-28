@@ -13,6 +13,7 @@ redis = "*"
 minio = "*"
 f90nml = "*"
 netcdf4 = "*"
+django = "5.2.6"
 
 [dev-packages]
 ruff = "*"
