@@ -20,6 +20,7 @@ ruff = "*"
 isort = "*"
 bandit = "*"
 pytest = "*"
+django-stubs = "5.2.5"
 
 [requires]
 python_version = "3.11"
