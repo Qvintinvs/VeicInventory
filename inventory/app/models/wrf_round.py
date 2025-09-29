@@ -5,10 +5,10 @@ from .wrf_standard_emission import WRFStandardEmission
 
 
 class WRFRound(models.Model):
-    status: models.IntegerField[WRFRoundStatus, int] = models.IntegerField(
+    status = models.IntegerField(
         choices=WRFRoundStatus.choices, default=WRFRoundStatus.PENDING
     )
-    timestamp = models.DateTimeField(auto_now=True, auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now=True)
     output_file_path = models.CharField(max_length=255, blank=False)
     namelist = models.TextField(blank=False)
 

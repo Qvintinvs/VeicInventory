@@ -15,7 +15,7 @@ class WRFStandardEmission(models.Model):
     mileage = models.FloatField()
     note = models.CharField(max_length=256, null=True, blank=True)
 
-    subcategory_name: models.CharField[str, str] = models.CharField(max_length=50)
+    subcategory_name = models.CharField(max_length=50)
     subcategory_deterioration_factor = models.FloatField()
     subcategory_category_consumption = models.FloatField()
 
