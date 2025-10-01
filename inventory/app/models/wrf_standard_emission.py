@@ -9,6 +9,17 @@ if TYPE_CHECKING:
     from .wrf_round import WRFRound
 
 
+class WRFStandardEmissionManager(models.Manager):
+    def list_emissions(self, limit=5) -> models.QuerySet["WRFStandardEmission"]:
+        return self.all()[:limit]
+
+    def read_emission_by_id(self, emission_id: int) -> "WRFStandardEmission | None":
+        return self.filter(id=emission_id).first()
+
+    def delete_data_by_id(self, emission_id: int):
+        return self.filter(id=emission_id).delete()
+
+
 class WRFStandardEmission(models.Model):
     fuel = models.CharField(max_length=50)
     fraction = models.FloatField()
@@ -19,19 +30,7 @@ class WRFStandardEmission(models.Model):
     subcategory_deterioration_factor = models.FloatField()
     subcategory_category_consumption = models.FloatField()
 
-    def __init__(
-        self,
-        fuel: str,
-        subcategory: CNHSubcategory,
-        fraction: float,
-        mileage: float,
-        note: str,
-    ):
-        self.fuel = fuel
-        self.subcategory = subcategory
-        self.fraction = fraction
-        self.mileage = mileage
-        self.note = note
+    emissions = WRFStandardEmissionManager()
 
     @property
     def subcategory(self):
@@ -50,14 +49,3 @@ class WRFStandardEmission(models.Model):
     def add_round(self, wrf_round: "WRFRound"):
         wrf_round.vehicle = self
         wrf_round.save()
-
-
-class WRFStandardEmissionManager(models.Manager):
-    def list_emissions(self, limit=5) -> models.QuerySet[WRFStandardEmission]:
-        return self.all()[:limit]
-
-    def read_emission_by_id(self, emission_id: int) -> WRFStandardEmission | None:
-        return self.filter(id=emission_id).first()
-
-    def delete_data_by_id(self, emission_id: int):
-        return self.filter(id=emission_id).delete()
