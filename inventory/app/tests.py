@@ -1,7 +1,7 @@
 from django.test import TestCase
+from emission_core.models import CNHSubcategory
 
 from .models import WRFStandardEmission
-from .models.cnh_subcategory import CNHSubcategory
 
 
 class WRFEmissionTests(TestCase):
