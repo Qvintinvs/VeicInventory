@@ -30,6 +30,8 @@ class WRFStandardEmission(models.Model):
     subcategory_deterioration_factor = models.FloatField()
     subcategory_category_consumption = models.FloatField()
 
+    objects = models.Manager()
+
     emissions = WRFStandardEmissionManager()
 
     @property
