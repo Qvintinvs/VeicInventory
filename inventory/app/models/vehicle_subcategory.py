@@ -1,9 +1,7 @@
-from dataclasses import dataclass
-from typing import LiteralString
+from typing import LiteralString, NamedTuple
 
 
-@dataclass
-class VehicleSubcategory:
+class VehicleSubcategory(NamedTuple):
     name: LiteralString | str
     deterioration_factor: float
     category_consumption: float
