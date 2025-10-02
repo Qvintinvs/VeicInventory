@@ -1,23 +1,9 @@
-from typing import TYPE_CHECKING
-
 from django.db import models
+from emission_core.models import EmissionManager
 
 from .cnh_subcategory import CNHSubcategory
 from .vehicle_subcategory import VehicleSubcategory
-
-if TYPE_CHECKING:
-    from .wrf_round import WRFRound
-
-
-class WRFStandardEmissionManager(models.Manager):
-    def list_emissions(self, limit=5) -> models.QuerySet["WRFStandardEmission"]:
-        return self.all()[:limit]
-
-    def read_emission_by_id(self, emission_id: int) -> "WRFStandardEmission | None":
-        return self.filter(id=emission_id).first()
-
-    def delete_data_by_id(self, emission_id: int):
-        return self.filter(id=emission_id).delete()
+from .wrf_round import WRFRound
 
 
 class WRFStandardEmission(models.Model):
@@ -30,9 +16,15 @@ class WRFStandardEmission(models.Model):
     subcategory_deterioration_factor = models.FloatField()
     subcategory_category_consumption = models.FloatField()
 
-    objects = models.Manager()
+    round = models.ForeignKey(
+        WRFRound,
+        on_delete=models.CASCADE,
+        related_name="wrf_standard_emissions",
+        null=True,
+    )
 
-    emissions = WRFStandardEmissionManager()
+    objects = models.Manager()
+    emissions = EmissionManager()
 
     @property
     def subcategory(self):
