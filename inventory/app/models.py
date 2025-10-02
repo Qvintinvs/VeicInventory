@@ -36,7 +36,3 @@ class WRFStandardEmission(models.Model):
         self.subcategory_name = subcategory.value.name
         self.subcategory_deterioration_factor = subcategory.value.deterioration_factor
         self.subcategory_category_consumption = subcategory.value.category_consumption
-
-    def add_round(self, wrf_round: "WRFRound"):
-        wrf_round.vehicle = self
-        wrf_round.save()
