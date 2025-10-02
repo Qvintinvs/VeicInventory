@@ -1,6 +1,11 @@
 from django.db import models
 
-from .wrf_round_status import WRFRoundStatus
+
+class WRFRoundStatus(models.IntegerChoices):
+    PENDING = 1, "Pending"
+    RUNNING = 2, "Running"
+    COMPLETED = 3, "Completed"
+    ERROR = 4, "Error"
 
 
 class WRFRound(models.Model):

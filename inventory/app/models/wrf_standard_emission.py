@@ -1,9 +1,9 @@
 from django.db import models
 from emission_core.models import EmissionManager
+from rounds.models import WRFRound
 
 from .cnh_subcategory import CNHSubcategory
 from .vehicle_subcategory import VehicleSubcategory
-from .wrf_round import WRFRound
 
 
 class WRFStandardEmission(models.Model):
