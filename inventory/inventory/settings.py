@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rounds",
-    "app",
+    "wrf_standard",
 ]
 
 MIDDLEWARE = [
