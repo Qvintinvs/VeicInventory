@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, List
 
+from django.db import models
 from sqlalchemy import CHAR, Float, ForeignKey, String
 from sqlalchemy.orm import Mapped, composite, mapped_column, relationship
 
@@ -9,6 +10,15 @@ from .vehicle_subcategory import VehicleSubcategory
 
 if TYPE_CHECKING:
     from .wrf_round import WRFRound
+
+
+class City(models.Model):
+    name = models.CharField(max_length=50)
+    fuel_consumption = models.FloatField()
+
+    def __init__(self, name: str, fuel_consumption: float):
+        self.name = name
+        self.fuel_consumption = fuel_consumption
 
 
 class VasquesEmissionModel(Base):
