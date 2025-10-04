@@ -5,7 +5,7 @@ from django.db import models
 
 
 class VehicleSubcategory(NamedTuple):
-    name: LiteralString | str
+    name: LiteralString
     deterioration_factor: float
     category_consumption: float
 
