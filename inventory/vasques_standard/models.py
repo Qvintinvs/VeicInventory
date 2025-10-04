@@ -16,12 +16,14 @@ class VasquesEmission(models.Model):
 
     subcategory = models.CharField(max_length=1, choices=CNHChoices.choices)
 
-    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name="vasques_emissions")
+    city = models.ForeignKey(
+        City, on_delete=models.CASCADE, related_name="vasques_emissions"
+    )
 
     round = models.ForeignKey(
         WRFRound,
         on_delete=models.CASCADE,
-        related_name="wrf_standard_emissions",
+        related_name="vasques_standard_emissions",
         null=True,
     )
 
