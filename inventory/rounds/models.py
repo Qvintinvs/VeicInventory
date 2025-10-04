@@ -1,16 +1,18 @@
+from enum import auto
+
 from django.db import models
 
 
-class WRFRoundStatus(models.IntegerChoices):
-    PENDING = 1, "Pending"
-    RUNNING = 2, "Running"
-    COMPLETED = 3, "Completed"
-    ERROR = 4, "Error"
+class RoundStatus(models.IntegerChoices):
+    PENDING = auto()
+    RUNNING = auto()
+    COMPLETED = auto()
+    ERROR = auto()
 
 
 class WRFRound(models.Model):
     status = models.IntegerField(
-        choices=WRFRoundStatus.choices, default=WRFRoundStatus.PENDING
+        choices=RoundStatus.choices, default=RoundStatus.PENDING
     )
     timestamp = models.DateTimeField(auto_now=True)
     output_file_path = models.CharField(max_length=255, blank=False)
@@ -21,13 +23,13 @@ class WRFRound(models.Model):
         self.namelist = namelist
 
     def run_if_pending(self):
-        if self.status == WRFRoundStatus.PENDING:
-            self.status = WRFRoundStatus.RUNNING
+        if self.status == RoundStatus.PENDING:
+            self.status = RoundStatus.RUNNING
             self.save(update_fields="status")
 
     def complete_if_running(self):
-        if self.status == WRFRoundStatus.RUNNING:
-            self.status = WRFRoundStatus.COMPLETED
+        if self.status == RoundStatus.RUNNING:
+            self.status = RoundStatus.COMPLETED
             self.save(update_fields=("status", "timestamp"))
 
 
