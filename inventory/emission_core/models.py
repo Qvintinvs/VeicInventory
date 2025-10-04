@@ -18,6 +18,14 @@ class CNHSubcategory(Enum):
     E = VehicleSubcategory("E", 0.3, 20.0)
 
 
+class CNHChoices(models.TextChoices):
+    A = "A"
+    B = "B"
+    C = "C"
+    D = "D"
+    E = "E"
+
+
 class EmissionManager(models.Manager):
     def list_emissions(self, limit=5):
         return self.all()[:limit]
