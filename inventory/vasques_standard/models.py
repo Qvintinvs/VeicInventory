@@ -1,71 +1,29 @@
-from typing import TYPE_CHECKING, List
-
 from django.db import models
-from sqlalchemy import CHAR, Float, ForeignKey, String
-from sqlalchemy.orm import Mapped, composite, mapped_column, relationship
-
-from .base import Base
-from .city import City
-from .vehicle_subcategory import VehicleSubcategory
-
-if TYPE_CHECKING:
-    from .wrf_round import WRFRound
+from emission_core.models import CNHChoices, EmissionManager
+from rounds.models import WRFRound
 
 
 class City(models.Model):
     name = models.CharField(max_length=50)
     fuel_consumption = models.FloatField()
 
-    def __init__(self, name: str, fuel_consumption: float):
-        self.name = name
-        self.fuel_consumption = fuel_consumption
 
+class VasquesEmission(models.Model):
+    year = models.PositiveIntegerField()
+    fuel = models.CharField(max_length=50)
+    autonomy = models.FloatField()
+    exhaust_emission_factor = models.FloatField()
 
-class VasquesEmissionModel(Base):
-    __tablename__ = "vehicle"
+    subcategory = models.CharField(max_length=1, choices=CNHChoices.choices)
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name="vasques_emissions")
 
-    year: Mapped[int] = mapped_column(nullable=False)
-
-    fuel: Mapped[str] = mapped_column(String(50), nullable=False)
-
-    subcategory: Mapped[VehicleSubcategory] = composite(
-        VehicleSubcategory,
-        mapped_column(CHAR, nullable=False),
-        mapped_column(Float, nullable=False),
-        mapped_column(Float, nullable=False),
+    round = models.ForeignKey(
+        WRFRound,
+        on_delete=models.CASCADE,
+        related_name="wrf_standard_emissions",
+        null=True,
     )
 
-    autonomy: Mapped[float] = mapped_column(nullable=False)
-
-    exhaust_emission_factor: Mapped[float] = mapped_column(nullable=False)
-
-    vehicle_city_key: Mapped[int] = mapped_column(ForeignKey(City.id), nullable=False)
-
-    vehicle_city: Mapped[City] = relationship(City, uselist=False)
-
-    """
-    wrf_rounds: Mapped[List["WRFRound"]] = relationship(
-        "WRFRound", uselist=True, viewonly=True, back_populates="vehicle"
-    )
-    """
-
-    def __init__(
-        self,
-        year: int,
-        fuel: str,
-        subcategory: VehicleSubcategory,
-        exhaust_emission_factor: float,
-        autonomy: float,
-        vehicle_city: City,
-    ):
-        self.year = year
-        self.fuel = fuel
-        self.subcategory = subcategory
-        self.exhaust_emission_factor = exhaust_emission_factor
-        self.autonomy = autonomy
-        self.vehicle_city = vehicle_city
-
-    def add_round(self, wrf_round: "WRFRound"):
-        self.wrf_rounds.append(wrf_round)
+    objects = models.Manager()
+    emissions = EmissionManager()
