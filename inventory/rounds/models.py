@@ -18,10 +18,6 @@ class WRFRound(models.Model):
     output_file_path = models.CharField(max_length=255, blank=False)
     namelist = models.TextField(blank=False)
 
-    def __init__(self, output_file_path: str, namelist: str):
-        self.output_file_path = output_file_path
-        self.namelist = namelist
-
     def run_if_pending(self):
         if self.status == RoundStatus.PENDING:
             self.status = RoundStatus.RUNNING
@@ -40,7 +36,3 @@ class NETCDFBlob(models.Model):
         related_name="netcdf_blob",
     )
     netcdf_data = models.BinaryField()
-
-    def __init__(self, netcdf_file: bytes, scheduler_round_id: int):
-        self.netcdf_data = netcdf_file
-        self.wrf_round_id = scheduler_round_id
