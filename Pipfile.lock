@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b4b12a418d40bbdc921b839d2e592faa502d140f5329d7fcb5f9369d6a532136"
+            "sha256": "316f871088e16a03c81d7aed669dbc904fc99be50f72f66db32602acbccc1518"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -32,6 +32,13 @@
             ],
             "markers": "python_version >= '3.9'",
             "version": "==1.40.28"
+        },
+        "f90nml": {
+            "hashes": [
+                "sha256:132ed8d72543e121de4f154fd7f0052f567401901ef9e8a0992f044b9d21c907"
+            ],
+            "index": "pypi",
+            "version": "==1.4.5"
         },
         "greenlet": {
             "hashes": [
