@@ -4,12 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = "*"
-flask-sqlalchemy = "*"
-flask-wtf = "*"
 python-dotenv = "*"
 dependency-injector = "*"
-redis = "*"
 minio = "*"
 f90nml = "*"
 netcdf4 = "*"
@@ -20,7 +16,6 @@ django-rq = "3.1"
 ruff = "*"
 isort = "*"
 bandit = "*"
-pytest = "*"
 django-stubs = "5.2.5"
 
 [requires]
