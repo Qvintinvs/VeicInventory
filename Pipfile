@@ -14,6 +14,7 @@ minio = "*"
 f90nml = "*"
 netcdf4 = "*"
 django = "5.2.6"
+django-rq = "3.1"
 
 [dev-packages]
 ruff = "*"
