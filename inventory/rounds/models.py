@@ -1,5 +1,7 @@
 from enum import auto
 
+import django_rq
+from django.core import serializers
 from django.db import models
 
 
@@ -10,6 +12,15 @@ class RoundStatus(models.IntegerChoices):
     ERROR = auto()
 
 
+class WRFRoundManager(models.Manager):
+    def send_to_queue(self, emission_instance):
+        emission_data = serializers.serialize("json", (emission_instance,))[1:-1]
+
+        queue = django_rq.get_queue("emission_queue")
+
+        queue.enqueue("app.tasks.process_emission", emission_data)
+
+
 class WRFRound(models.Model):
     status = models.IntegerField(
         choices=RoundStatus.choices, default=RoundStatus.PENDING
@@ -17,6 +28,8 @@ class WRFRound(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     output_file_path = models.CharField(max_length=255, blank=False)
     namelist = models.TextField(blank=False)
+
+    queue = WRFRoundManager()
 
     def run_if_pending(self):
         if self.status == RoundStatus.PENDING:
