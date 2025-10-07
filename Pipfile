@@ -9,6 +9,7 @@ sqlalchemy = "*"
 python-dotenv = "*"
 zstandard = "*"
 boto3 = "*"
+f90nml = "*"
 
 [dev-packages]
 ruff = "*"
