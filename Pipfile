@@ -12,10 +12,10 @@ django = "5.2.6"
 django-rq = "3.1"
 
 [dev-packages]
-ruff = "*"
-isort = "*"
-bandit = "*"
 django-stubs = "5.2.5"
+ruff = "0.14.0"
+isort = "6.1.0"
+bandit = "1.8.6"
 
 [requires]
 python_version = "3.11"
