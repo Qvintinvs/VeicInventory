@@ -11,3 +11,7 @@ class VasquesEmissionForm(forms.ModelForm):
 
     def clean_city(self):
         return City("Itajaí", 1.1)
+
+
+class VasquesEmissionView(views.View):
+    pass
