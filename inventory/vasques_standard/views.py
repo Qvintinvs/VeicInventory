@@ -1,3 +1,10 @@
+from django import forms
 from django.shortcuts import render
 
-# Create your views here.
+from .models import VasquesEmission
+
+
+class VasquesEmissionForm(forms.ModelForm):
+    class Meta:
+        model = VasquesEmission
+        exclude = ("city",)
