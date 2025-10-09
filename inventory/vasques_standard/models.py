@@ -1,3 +1,6 @@
+from datetime import date
+
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from emission_core.models import CNHChoices, EmissionManager
 from rounds.models import WRFRound
@@ -9,7 +12,11 @@ class City(models.Model):
 
 
 class VasquesEmission(models.Model):
-    year = models.PositiveIntegerField()
+    current_year = date.today().year
+
+    year = models.PositiveIntegerField(
+        validators=(MinValueValidator(1900), MaxValueValidator(current_year + 1))
+    )
     fuel = models.CharField(max_length=50)
     autonomy = models.FloatField()
     exhaust_emission_factor = models.FloatField()
