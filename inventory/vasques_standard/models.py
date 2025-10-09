@@ -1,7 +1,6 @@
-from datetime import date
-
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils import timezone
 from emission_core.models import CNHChoices, EmissionManager
 from rounds.models import WRFRound
 
@@ -12,7 +11,7 @@ class City(models.Model):
 
 
 class VasquesEmission(models.Model):
-    current_year = date.today().year
+    current_year = timezone.now().date().year
 
     year = models.PositiveIntegerField(
         validators=(MinValueValidator(1900), MaxValueValidator(current_year + 1))
