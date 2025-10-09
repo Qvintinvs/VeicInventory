@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django_rq",
     "rounds",
     "wrf_standard",
+    "vasques_standard",
 ]
 
 MIDDLEWARE = [
