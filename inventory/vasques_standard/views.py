@@ -1,6 +1,7 @@
-from django import forms, views
+from django import forms
 from django.contrib import messages
-from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, ListView
 
 from .models import City, VasquesEmission
 
@@ -14,32 +15,29 @@ class VasquesEmissionForm(forms.ModelForm):
         return City("Itajaí", 1.1)
 
 
-class VasquesEmissionView(views.View):
+class VasquesEmissionListView(ListView):
+    model = VasquesEmission
+    template_name = "vasques_list.html"
+
+
+class VasquesEmissionCreateView(CreateView):
+    model = VasquesEmission
+    form_class = VasquesEmissionForm
     template_name = "index.html"
+    success_url = reverse_lazy("vasques_inventory")
 
-    def get(self, request):
-        emissions = VasquesEmission.objects.all()
+    def form_valid(self, form):
+        messages.success(self.request, "Emissão adicionada com sucesso.")
+        return super().form_valid(form)
 
-        form = VasquesEmissionForm()
 
-        return render(
-            request, self.template_name, {"emission_data": emissions, "form": form}
-        )
+class VasquesEmissionDeleteView(DeleteView):
+    model = VasquesEmission
+    success_url = reverse_lazy("vasques_inventory")
 
-    def post(self, request):
-        form = VasquesEmissionForm(request.POST)
-
-        if form.is_valid():
-            form.save()
-
-            messages.success(request, "Emissão adicionada com sucesso.")
-
-        return redirect("vasques_inventory")
-
-    def delete(self, request, pk):
-        emission = get_object_or_404(VasquesEmission, pk=pk)
-        emission.delete()
-
+    def delete(self, request, *args, **kwargs):
+        obj = self.get_object()
+        pk = obj.pk
+        response = super().delete(request, *args, **kwargs)
         messages.success(request, f"Emissão com ID {pk} removida.")
-
-        return redirect("vasques_inventory")
+        return response
