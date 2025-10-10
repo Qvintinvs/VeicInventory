@@ -1,7 +1,8 @@
 from enum import Enum
-from typing import LiteralString, NamedTuple
+from typing import Generic, LiteralString, NamedTuple, TypeVar
 
 from django.db import models
+from django.db.models import QuerySet
 
 
 class VehicleSubcategory(NamedTuple):
@@ -26,7 +27,10 @@ class CNHChoices(models.TextChoices):
     E = "E"
 
 
-class EmissionManager(models.Manager):
+T = TypeVar("T", bound=models.Model)
+
+
+class EmissionQuerySet(QuerySet[T]):
     def list_emissions(self, limit=5):
         return self.all()[:limit]
 
@@ -35,3 +39,7 @@ class EmissionManager(models.Manager):
 
     def delete_data_by_id(self, emission_id: int):
         return self.filter(id=emission_id).delete()
+
+
+class EmissionManager(models.Manager.from_queryset(EmissionQuerySet), Generic[T]):
+    pass
