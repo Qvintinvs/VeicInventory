@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator
 from django.db import models
 from emission_core.models import CNHChoices, EmissionManager
 from rounds.models import WRFRound
@@ -5,8 +6,8 @@ from rounds.models import WRFRound
 
 class WRFStandardEmission(models.Model):
     fuel = models.CharField(max_length=50)
-    fraction = models.FloatField()
-    mileage = models.FloatField()
+    fraction = models.FloatField(validators=(MinValueValidator(0.0),))
+    mileage = models.FloatField(validators=(MinValueValidator(0.0),))
     note = models.CharField(max_length=256, null=True, blank=True)
 
     subcategory = models.CharField(max_length=1, choices=CNHChoices.choices)

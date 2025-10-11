@@ -17,8 +17,8 @@ class VasquesEmission(models.Model):
         validators=(MinValueValidator(1900), MaxValueValidator(current_year + 1))
     )
     fuel = models.CharField(max_length=50)
-    autonomy = models.FloatField()
-    exhaust_emission_factor = models.FloatField()
+    autonomy = models.FloatField(validators=(MinValueValidator(0.0),))
+    exhaust_emission_factor = models.FloatField(validators=(MinValueValidator(0.0),))
 
     subcategory = models.CharField(max_length=1, choices=CNHChoices.choices)
 
