@@ -7,7 +7,9 @@ from rounds.models import WRFRound
 
 class City(models.Model):
     name = models.CharField(max_length=50)
-    fuel_consumption = models.FloatField()
+    fuel_consumption = models.DecimalField(
+        max_digits=5, decimal_places=2, validators=(MinValueValidator(0.0),)
+    )
 
 
 class VasquesEmission(models.Model):
