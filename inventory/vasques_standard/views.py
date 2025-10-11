@@ -24,7 +24,7 @@ class VasquesEmissionCreateView(CreateView):
     model = VasquesEmission
     form_class = VasquesEmissionForm
     template_name = "index.html"
-    success_url = reverse_lazy("vasques_inventory")
+    success_url = reverse_lazy("vasques")
 
     def form_valid(self, form):
         messages.success(self.request, "Emissão adicionada com sucesso.")
@@ -33,7 +33,7 @@ class VasquesEmissionCreateView(CreateView):
 
 class VasquesEmissionDeleteView(DeleteView):
     model = VasquesEmission
-    success_url = reverse_lazy("vasques_inventory")
+    success_url = reverse_lazy("vasques")
 
     def delete(self, request, *args, **kwargs):
         obj = self.get_object()
