@@ -1,7 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
-from emission_core.models import CNHChoices, EmissionManager
+from emission_core.models import CNHChoices, EmissionManager, FuelChoices
 from rounds.models import WRFRound
 
 
@@ -16,7 +16,7 @@ class VasquesEmission(models.Model):
     year = models.PositiveIntegerField(
         validators=(MinValueValidator(1900), MaxValueValidator(current_year + 1))
     )
-    fuel = models.CharField(max_length=50)
+    fuel = models.CharField(max_length=50, choices=FuelChoices.choices)
     autonomy = models.FloatField(validators=(MinValueValidator(0.0),))
     exhaust_emission_factor = models.FloatField(validators=(MinValueValidator(0.0),))
 

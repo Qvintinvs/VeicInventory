@@ -27,6 +27,14 @@ class CNHChoices(models.TextChoices):
     E = "E"
 
 
+class FuelChoices(models.TextChoices):
+    GASOLINE = "Gasoline"
+    ALCOHOL = "Alcohol"
+    DIESEL = "Diesel"
+    ELECTRIC = "Electric"
+    FLEX = "Flex"
+
+
 T = TypeVar("T", bound=models.Model)
 
 
