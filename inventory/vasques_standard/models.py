@@ -31,6 +31,3 @@ class VasquesEmission(models.Model):
     round = models.ForeignKey(
         WRFRound, on_delete=models.CASCADE, related_name="vasques_emissions", null=True
     )
-
-    objects = models.Manager()
-    emissions = EmissionManager()

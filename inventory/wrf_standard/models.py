@@ -18,6 +18,3 @@ class WRFStandardEmission(models.Model):
         related_name="wrf_standard_emissions",
         null=True,
     )
-
-    objects = models.Manager()
-    emissions = EmissionManager()
