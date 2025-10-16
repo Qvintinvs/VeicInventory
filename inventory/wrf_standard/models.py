@@ -1,6 +1,6 @@
 from django.core.validators import MinValueValidator
 from django.db import models
-from emission_core.models import CNHChoices, EmissionManager, FuelChoices
+from emission_core.models import CNHChoices, FuelChoices
 from rounds.models import WRFRound
 
 
