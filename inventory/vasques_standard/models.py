@@ -2,7 +2,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
 from emission_core.models import CNHChoices, FuelChoices
-from rounds.models import WRFRound
+from rounds.models import RoundsPanel
 
 
 class City(models.Model):
@@ -28,6 +28,10 @@ class VasquesEmission(models.Model):
         City, on_delete=models.CASCADE, related_name="vasques_emissions"
     )
 
-    round = models.ForeignKey(
-        WRFRound, on_delete=models.CASCADE, related_name="vasques_emissions", null=True
+    rounds_panel = models.OneToOneField(
+        RoundsPanel,
+        on_delete=models.SET_NULL,
+        related_name="vasques_emissions",
+        null=True,
+        editable=False,
     )

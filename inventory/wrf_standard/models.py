@@ -12,9 +12,10 @@ class WRFStandardEmission(models.Model):
 
     subcategory = models.CharField(max_length=1, choices=CNHChoices.choices)
 
-    round = models.ForeignKey(
+    rounds_panel = models.OneToOneField(
         RoundsPanel,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name="wrf_standard_emissions",
         null=True,
+        editable=False,
     )
