@@ -24,6 +24,10 @@ class WRFRoundManager(models.Manager):
         queue.enqueue("app.tasks.process_emission", emission_data)
 
 
+class RoundsPanel(models.Model):
+    pass
+
+
 class WRFRound(models.Model):
     status = models.IntegerField(
         choices=RoundStatus.choices, default=RoundStatus.PENDING
@@ -31,6 +35,10 @@ class WRFRound(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     output_file_path = models.CharField(max_length=255, blank=False)
     namelist = models.TextField(blank=False)
+
+    panel = models.ForeignKey(
+        RoundsPanel, on_delete=models.CASCADE, related_name="rounds"
+    )
 
     queue = WRFRoundManager()
 

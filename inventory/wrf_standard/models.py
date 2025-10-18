@@ -1,7 +1,7 @@
 from django.core.validators import MinValueValidator
 from django.db import models
 from emission_core.models import CNHChoices, FuelChoices
-from rounds.models import WRFRound
+from rounds.models import RoundsPanel
 
 
 class WRFStandardEmission(models.Model):
@@ -13,7 +13,7 @@ class WRFStandardEmission(models.Model):
     subcategory = models.CharField(max_length=1, choices=CNHChoices.choices)
 
     round = models.ForeignKey(
-        WRFRound,
+        RoundsPanel,
         on_delete=models.CASCADE,
         related_name="wrf_standard_emissions",
         null=True,
