@@ -3,16 +3,16 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView
 
-from .models import City, VasquesEmission
+from .models import UrbanConsumption, VasquesEmission
 
 
 class VasquesEmissionForm(forms.ModelForm):
     class Meta:
         model = VasquesEmission
-        exclude = ("city",)
+        exclude = ("urban_consumption",)
 
-    def clean_city(self):
-        return City("Itajaí", 1.1)
+    def clean_urban_consumption(self):
+        return UrbanConsumption("Itajaí", 1.1)
 
 
 class VasquesEmissionListView(ListView):

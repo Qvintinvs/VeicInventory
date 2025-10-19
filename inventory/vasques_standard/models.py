@@ -5,8 +5,8 @@ from emission_core.models import CNHChoices, FuelChoices
 from rounds.models import RoundsPanel
 
 
-class City(models.Model):
-    name = models.CharField(max_length=50)
+class UrbanConsumption(models.Model):
+    city_name = models.CharField(max_length=50)
     fuel_consumption = models.DecimalField(
         max_digits=5, decimal_places=2, validators=(MinValueValidator(0.0),)
     )
@@ -24,8 +24,8 @@ class VasquesEmission(models.Model):
 
     subcategory = models.CharField(max_length=1, choices=CNHChoices.choices)
 
-    city = models.ForeignKey(
-        City, on_delete=models.CASCADE, related_name="vasques_emissions"
+    urban_consumption = models.ForeignKey(
+        UrbanConsumption, on_delete=models.CASCADE, related_name="vasques_emissions"
     )
 
     rounds_panel = models.OneToOneField(
