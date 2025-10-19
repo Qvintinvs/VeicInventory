@@ -34,7 +34,7 @@ class WRFRound(models.Model):
     )
     timestamp = models.DateTimeField(auto_now=True)
     output_file_path = models.CharField(max_length=255, blank=False)
-    namelist = models.TextField(blank=False)
+    namelist = models.JSONField(blank=False)
 
     panel = models.ForeignKey(
         RoundsPanel, on_delete=models.CASCADE, related_name="rounds"
