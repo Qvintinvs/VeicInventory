@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import sys
 from pathlib import Path
+
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -133,3 +136,13 @@ RQ_QUEUES = {
         "DEFAULT_TIMEOUT": 360,
     }
 }
+
+DATABASE_URL = dj_database_url.config("DATABASE_URL")
+
+TEST_DATABASE_URL = dj_database_url.config(
+    "TEST_DATABASE_URL", default="sqlite:///:memory:"
+)
+
+DATABASES = (
+    {"default": TEST_DATABASE_URL} if "test" in sys.argv else {"default": DATABASE_URL}
+)
