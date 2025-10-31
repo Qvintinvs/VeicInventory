@@ -11,6 +11,7 @@ netcdf4 = "*"
 django = "5.2.6"
 django-rq = "3.1"
 dj-database-url = "3.0.1"
+psycopg2-binary = "2.9.11"
 
 [dev-packages]
 django-stubs = "5.2.5"
