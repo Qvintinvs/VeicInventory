@@ -79,13 +79,16 @@ WSGI_APPLICATION = "inventory.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
+DATABASE_DEFAULTS = (
+    {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
-}
+    if "test" in sys.argv
+    else dj_database_url.config(conn_max_age=600)
+)
 
+DATABASES = {"default": DATABASE_DEFAULTS}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -136,13 +139,3 @@ RQ_QUEUES = {
         "DEFAULT_TIMEOUT": 360,
     }
 }
-
-DATABASE_URL = dj_database_url.config("DATABASE_URL")
-
-TEST_DATABASE_URL = dj_database_url.config(
-    "TEST_DATABASE_URL", default="sqlite:///:memory:"
-)
-
-DATABASES = (
-    {"default": TEST_DATABASE_URL} if "test" in sys.argv else {"default": DATABASE_URL}
-)
