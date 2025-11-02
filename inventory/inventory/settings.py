@@ -132,7 +132,17 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Queue
+# Caches
 REDIS_URL = os.getenv("REDIS_URL")
 
-RQ_QUEUES = {"default": {"URL": REDIS_URL, "DEFAULT_TIMEOUT": 360}}
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": REDIS_URL,
+        "OPTIONS": {"MAX_ENTRIES": 5000, "DEFAULT_TIMEOUT": 360},
+    },
+}
+
+# Queue
+
+RQ_QUEUES = {"default": {"USE_REDIS_CACHE": "default"}}
