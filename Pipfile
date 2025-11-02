@@ -4,8 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-python-dotenv = "*"
-dependency-injector = "*"
 minio = "*"
 netcdf4 = "*"
 django = "5.2.6"
