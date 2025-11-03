@@ -4,6 +4,8 @@ import django_rq
 from django.core import serializers
 from django.db import models
 
+from .storage import NetCDFMinioStorage
+
 
 class RoundStatus(models.IntegerChoices):
     PENDING = auto()
@@ -35,6 +37,10 @@ class WRFRound(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     output_file_path = models.CharField(max_length=255, blank=False)
     namelist = models.JSONField(blank=False)
+
+    netcdf = models.FileField(
+        storage=NetCDFMinioStorage(), upload_to="round_outputs/", null=True
+    )
 
     panel = models.ForeignKey(
         RoundsPanel, on_delete=models.CASCADE, related_name="rounds"
