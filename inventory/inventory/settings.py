@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_rq",
+    "storages",
     "rounds",
     "wrf_standard",
     "vasques_standard",
