@@ -2,6 +2,8 @@ services:
   postgres:
     image: postgres:15
     restart: unless-stopped
+    env_file:
+      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -12,6 +14,8 @@ services:
   redis:
     image: redis:7
     restart: unless-stopped
+    env_file:
+      - .env
     volumes:
       - redis_data:/data
     ports:
@@ -21,6 +25,8 @@ services:
 
   minio:
     image: minio/minio:latest
+    env_file:
+      - .env
     container_name: minio
     restart: unless-stopped
     ports:
@@ -34,6 +40,8 @@ services:
 
   web:
     build: .
+    env_file:
+      - .env
     command: >
       sh -c "python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
