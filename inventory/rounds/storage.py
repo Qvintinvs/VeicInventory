@@ -6,7 +6,3 @@ class NetCDFMinioStorage(S3Boto3Storage):
     default_acl = "private"
     file_overwrite = False
     custom_domain = False
-
-    def read_netcdf(self, name):
-        with self.open(name, mode="rb") as f:
-            return f.read()
