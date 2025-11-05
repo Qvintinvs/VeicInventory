@@ -15,8 +15,7 @@ class RoundStatus(models.IntegerChoices):
 
 
 class WRFRoundManager(models.Manager):
-    def schedule_emission_round(self, emission_id: int) -> "WRFRound":
-        raise NotImplementedError
+    "TODO: method to schedule / dipatch rounds"
 
     def send_to_queue(self, emission_instance):
         emission_data = serializers.serialize("json", (emission_instance,))[1:-1]
