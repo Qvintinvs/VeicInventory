@@ -1,0 +1,48 @@
+# Etapa 1: build do WRF
+FROM ubuntu:22.04 AS build
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y \
+    build-essential gfortran g++ m4 csh perl tcsh git wget curl tar unzip \
+    libjpeg-dev libpng-dev \
+    libnetcdf-dev libnetcdff-dev mpich libmpich-dev \
+    libtirpc-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+
+# Variáveis NetCDF
+ENV NETCDF_CLASSIC=1
+ENV NETCDF=/usr
+ENV NETCDF_C=/usr
+ENV NETCDF_FORTRAN=/usr
+ENV PATH=$NETCDF/bin:$PATH
+ENV LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+
+WORKDIR /opt
+
+# Clona o código WRF
+RUN git clone --depth=1 https://github.com/wrf-model/WRF.git
+
+WORKDIR /opt/WRF
+# Evita o erro de rpc/types.h
+RUN cp share/landread.c.dist share/landread.c
+
+# Compila o WRF (dmpar + em_real)
+RUN printf '35\n1\n' | ./configure && ./compile em_real > compile.log 2>&1 || (cat compile.log && false)
+# (34 = dm+smpar+nesting, 1 = gcc/gfortran + dmpar)
+
+# Etapa 2: imagem final limpa
+FROM ubuntu:22.04 AS runtime
+
+RUN apt-get update && apt-get install -y \
+    libnetcdf-dev libnetcdff-dev mpich && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/local/wrf
+
+# Copia os executáveis do WRF compilado
+COPY --from=build /opt/WRF/main/*.exe /usr/local/wrf/
+# COPY --from=build /opt/WPS/*.exe ./WPS/
+
+# Define o executável principal
+ENTRYPOINT ["/usr/local/wrf/wrf.exe"]

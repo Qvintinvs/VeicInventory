@@ -1,4 +1,15 @@
 services:
+  wrf:
+    build:
+      context: .
+      dockerfile: Dockerfile.wrf
+    container_name: wrf
+    volumes:
+      - ./data:/data
+    working_dir: /data
+    tty: true
+
+
   postgres:
     image: postgres:15
     restart: unless-stopped
