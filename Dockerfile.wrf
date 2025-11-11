@@ -1,48 +1,78 @@
-# Etapa 1: build do WRF
+# ==============================
+# 🏗️ Stage 1 — Build do WRF
+# ==============================
 FROM ubuntu:22.04 AS build
 
 ENV DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update && apt-get install -y \
-    build-essential gfortran g++ m4 csh perl tcsh git wget curl tar unzip \
-    libjpeg-dev libpng-dev \
-    libnetcdf-dev libnetcdff-dev mpich libmpich-dev \
-    libtirpc-dev \
+    build-essential gfortran g++ gcc m4 make perl csh tcsh time mpich wget git curl cmake \
+    libpng-dev zlib1g-dev libcurl4-openssl-dev libhdf5-dev libhdf5-serial-dev \
+    libnetcdf-dev libnetcdff-dev openmpi-bin libopenmpi-dev libmpich-dev \
+    gawk file binutils coreutils findutils tar grep sed util-linux \
+    python3 \
     && rm -rf /var/lib/apt/lists/*
 
 
-# Variáveis NetCDF
-ENV NETCDF_CLASSIC=1
-ENV NETCDF=/usr
-ENV NETCDF_C=/usr
-ENV NETCDF_FORTRAN=/usr
-ENV PATH=$NETCDF/bin:$PATH
-ENV LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+# 📦 Compila e instala Jasper
+WORKDIR /opt/libs
+RUN wget https://github.com/mdadams/jasper/archive/refs/tags/version-2.0.33.tar.gz \
+    && tar -xf version-2.0.33.tar.gz \
+    && cd jasper-version-2.0.33 \
+    && cmake -G "Unix Makefiles" -H. -Bbuild -DCMAKE_INSTALL_PREFIX=/usr/local \
+    && cmake --build build --target install \
+    && ldconfig \
+    && cd / && rm -rf /opt/libs
 
+# 🌎 Variáveis de ambiente do NetCDF
+ENV NETCDF_CLASSIC=1 \
+    NETCDF=/usr \
+    NETCDF_C=/usr \
+    NETCDF_FORTRAN=/usr \
+    PATH=/usr/bin:$PATH \
+    LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH \
+    JASPERLIB=/usr/local/lib \
+    JASPERINC=/usr/local/include \
+    CPPFLAGS="-I/usr/include -I/usr/include/hdf5/serial" \
+    LDFLAGS="-L/usr/lib/x86_64-linux-gnu"
+
+# 📥 Clona e compila o WRF
 WORKDIR /opt
-
-# Clona o código WRF
 RUN git clone --depth=1 https://github.com/wrf-model/WRF.git
-
 WORKDIR /opt/WRF
-# Evita o erro de rpc/types.h
 RUN cp share/landread.c.dist share/landread.c
 
-# Compila o WRF (dmpar + em_real)
-RUN printf '35\n1\n' | ./configure && ./compile em_real > compile.log 2>&1 || (cat compile.log && false)
-# (34 = dm+smpar+nesting, 1 = gcc/gfortran + dmpar)
+RUN printf '35\n1\n' | ./configure && \
+    ./compile em_real 2>&1 | tee /opt/WRF/compile.log && \
+    echo "🧩 Verificando resultados da compilação..." && \
+    ls -lh main || true && \
+    echo "🪵 Últimas linhas do log:" && tail -n 40 /opt/WRF/compile.log
 
-# Etapa 2: imagem final limpa
-FROM ubuntu:22.04 AS runtime
+# ==============================
+# 🚀 Stage 2 — Runtime leve
+# ==============================
+FROM ubuntu:22.04
 
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Só dependências de execução (sem toolchain)
 RUN apt-get update && apt-get install -y \
-    libnetcdf-dev libnetcdff-dev mpich && \
+    libnetcdf-dev libnetcdff-dev openmpi-bin libhdf5-serial-dev && \
     rm -rf /var/lib/apt/lists/*
 
-WORKDIR /usr/local/wrf
+# Variáveis de ambiente (mesmas do build)
+ENV NETCDF_CLASSIC=1 \
+    NETCDF=/usr \
+    NETCDF_C=/usr \
+    NETCDF_FORTRAN=/usr \
+    PATH=/usr/bin:$PATH \
+    LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+    JASPERLIB=/usr/local/lib \
+    JASPERINC=/usr/local/include
 
-# Copia os executáveis do WRF compilado
+# Copia apenas os binários e o log do build
 COPY --from=build /opt/WRF/main/*.exe /usr/local/wrf/
-# COPY --from=build /opt/WPS/*.exe ./WPS/
+COPY --from=build /opt/WRF/compile.log /usr/local/wrf/compile.log
 
-# Define o executável principal
+WORKDIR /usr/local/wrf
 ENTRYPOINT ["/usr/local/wrf/wrf.exe"]
