@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     libpng-dev zlib1g-dev libcurl4-openssl-dev libhdf5-dev libhdf5-serial-dev \
     libnetcdf-dev libnetcdff-dev openmpi-bin libopenmpi-dev libmpich-dev \
     gawk file binutils coreutils findutils tar grep sed util-linux \
-    python3 \
+    python3-minimal \
     && rm -rf /var/lib/apt/lists/*
 
 
