@@ -66,7 +66,7 @@ ENV NETCDF_CLASSIC=1 \
     NETCDF_C=/usr \
     NETCDF_FORTRAN=/usr \
     PATH=/usr/bin:$PATH \
-    LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+    LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH \
     JASPERLIB=/usr/local/lib \
     JASPERINC=/usr/local/include
 
