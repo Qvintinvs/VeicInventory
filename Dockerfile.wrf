@@ -36,6 +36,9 @@ RUN --mount=type=cache,target=/opt/cache \
     ldconfig && \
     cd / && rm -rf /opt/libs
 
+ENV JASPERLIB=/usr/local/lib \
+    JASPERINC=/usr/local/include
+
 # ==============================
 # 🌀 Stage 3 — Build do WRF
 # ==============================
@@ -58,8 +61,6 @@ ENV NETCDF_CLASSIC=1 \
     NETCDF_FORTRAN=/usr \
     PATH=/usr/bin:$PATH \
     LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH \
-    JASPERLIB=/usr/local/lib \
-    JASPERINC=/usr/local/include \
     CPPFLAGS="-I/usr/include -I/usr/include/hdf5/serial" \
     LDFLAGS="-L/usr/lib/x86_64-linux-gnu"
 
@@ -86,19 +87,14 @@ RUN apt-get update && apt-get install -y \
     libnetcdf-dev libnetcdff-dev openmpi-bin libhdf5-serial-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# Variáveis de ambiente (mesmas do build)
-ENV NETCDF_CLASSIC=1 \
-    NETCDF=/usr \
-    NETCDF_C=/usr \
-    NETCDF_FORTRAN=/usr \
-    PATH=/usr/bin:$PATH \
-    LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH \
-    JASPERLIB=/usr/local/lib \
-    JASPERINC=/usr/local/include
+WORKDIR /opt/wrf
 
 # Copia apenas os binários e o log do build
-COPY --from=build /opt/WRF/main/*.exe /usr/local/wrf/
-COPY --from=build /opt/WRF/compile.log /usr/local/wrf/compile.log
+COPY --from=build /usr/local /usr/local
+COPY --from=build /opt/WRF /opt/WRF
 
-WORKDIR /usr/local/wrf
-ENTRYPOINT ["/usr/local/wrf/wrf.exe"]
+# Variáveis de ambiente (mesmas do build)
+ENV PATH=/opt/wrf-bin:$PATH \
+    LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+
+ENTRYPOINT ["/opt/wrf-bin/wrf.exe"]
