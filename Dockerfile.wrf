@@ -1,28 +1,55 @@
 # ==============================
-# 🏗️ Stage 1 — Build do WRF
+# 🏗️ Stage 1 — Base mínima de compilação
 # ==============================
-FROM ubuntu:22.04 AS build
+FROM ubuntu:22.04 AS base
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# 🔧 Ferramentas básicas (compiladores e utilitários)
 RUN apt-get update && apt-get install -y \
-    build-essential gfortran g++ gcc m4 make perl csh tcsh time mpich wget git curl cmake \
-    libpng-dev zlib1g-dev libcurl4-openssl-dev libhdf5-dev libhdf5-serial-dev \
-    libnetcdf-dev libnetcdff-dev openmpi-bin libopenmpi-dev libmpich-dev \
-    gawk file binutils coreutils findutils tar grep sed util-linux \
+    build-essential gfortran g++ gcc m4 make cmake \
+    perl csh tcsh wget git curl time gawk file \
+    binutils coreutils findutils tar grep sed util-linux \
+    && rm -rf /var/lib/apt/lists/*
+
+# ==============================
+# 🧱 Stage 2 — Dependências científicas (NetCDF, Jasper, HDF5)
+# ==============================
+FROM base AS deps
+
+# ⚙️ Libs científicas e paralelismo
+RUN apt-get update && apt-get install -y \
+    mpich libmpich-dev openmpi-bin libopenmpi-dev \
+    libpng-dev zlib1g-dev libcurl4-openssl-dev \
+    libhdf5-dev libhdf5-serial-dev \
+    libnetcdf-dev libnetcdff-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# 📦 Compila e instala Jasper (com cache persistente BuildKit)
+WORKDIR /opt/libs
+RUN --mount=type=cache,target=/opt/cache \
+    wget https://github.com/mdadams/jasper/archive/refs/tags/version-2.0.33.tar.gz -O jasper.tar.gz && \
+    tar -xf jasper.tar.gz && \
+    cd jasper-* && \
+    cmake -G "Unix Makefiles" -Bbuild -DCMAKE_INSTALL_PREFIX=/usr/local . && \
+    cmake --build build --target install && \
+    ldconfig && \
+    cd / && rm -rf /opt/libs
+
+# ==============================
+# 🌀 Stage 3 — Build do WRF
+# ==============================
+FROM deps AS build
+
+RUN apt-get update && apt-get install -y \
     python3-minimal \
     && rm -rf /var/lib/apt/lists/*
 
+WORKDIR /opt
+RUN git clone --depth=1 https://github.com/wrf-model/WRF.git
 
-# 📦 Compila e instala Jasper
-WORKDIR /opt/libs
-RUN wget https://github.com/mdadams/jasper/archive/refs/tags/version-2.0.33.tar.gz \
-    && tar -xf version-2.0.33.tar.gz \
-    && cd jasper-version-2.0.33 \
-    && cmake -G "Unix Makefiles" -H. -Bbuild -DCMAKE_INSTALL_PREFIX=/usr/local \
-    && cmake --build build --target install \
-    && ldconfig \
-    && cd / && rm -rf /opt/libs
+WORKDIR /opt/WRF
+RUN cp share/landread.c.dist share/landread.c
 
 # 🌎 Variáveis de ambiente do NetCDF
 ENV NETCDF_CLASSIC=1 \
@@ -36,22 +63,21 @@ ENV NETCDF_CLASSIC=1 \
     CPPFLAGS="-I/usr/include -I/usr/include/hdf5/serial" \
     LDFLAGS="-L/usr/lib/x86_64-linux-gnu"
 
-# 📥 Clona e compila o WRF
-WORKDIR /opt
-RUN git clone --depth=1 https://github.com/wrf-model/WRF.git
-WORKDIR /opt/WRF
-RUN cp share/landread.c.dist share/landread.c
-
-RUN printf '35\n1\n' | ./configure && \
-    ./compile em_real 2>&1 | tee /opt/WRF/compile.log && \
+# ⚙️ Configura e compila
+RUN --mount=type=cache,target=/opt/cache/wrf-build \
+    --mount=type=tmpfs,target=/tmp/wrf-tmp \
+    printf '35\n1\n' | ./configure -r8 && \
+    echo "🚀 Compilando WRF..." && \
+    TMPDIR=/tmp/wrf-tmp ./compile em_real 2>&1 | tee /opt/WRF/compile.log && \
     echo "🧩 Verificando resultados da compilação..." && \
     ls -lh main || true && \
-    echo "🪵 Últimas linhas do log:" && tail -n 40 /opt/WRF/compile.log
+    echo "💾 Sincronizando build cache..." && \
+    rsync -a main/ /opt/cache/wrf-build/main/ || true
 
 # ==============================
-# 🚀 Stage 2 — Runtime leve
+# 🚀 Stage 4 — Runtime
 # ==============================
-FROM ubuntu:22.04
+FROM ubuntu:22.04 AS runtime
 
 ENV DEBIAN_FRONTEND=noninteractive
 
