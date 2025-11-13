@@ -85,14 +85,19 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Só dependências de execução (sem toolchain)
 RUN apt-get update && apt-get install -y \
-    libnetcdf-dev libnetcdff-dev openmpi-bin libhdf5-serial-dev && \
-    rm -rf /var/lib/apt/lists/*
+    libnetcdf-dev libnetcdff-dev libhdf5-serial-dev libpng-dev zlib1g-dev mpich openmpi-bin \
+    && rm -rf /var/lib/apt/lists/*
+
+# Jasper
+COPY --from=deps /usr/local/lib /usr/local/lib
+COPY --from=deps /usr/local/include /usr/local/include
 
 WORKDIR /opt/WRF
 
 # Copia apenas os binários e o log do build
-COPY --from=build /usr/local /usr/local
-COPY --from=build /opt/WRF /opt/WRF
+COPY --from=build /opt/WRF/main/*.exe /opt/WRF/main/
+COPY --from=build /opt/WRF/run /opt/WRF/run
+COPY --from=build /opt/WRF/phys/noahmp/parameters/MPTABLE.TBL /opt/WRF/phys/noahmp/parameters/MPTABLE.TBL
 
 ENV PATH=/usr/WRF/main:$PATH \
     LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
