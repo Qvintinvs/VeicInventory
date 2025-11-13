@@ -12,6 +12,11 @@ RUN apt-get update && apt-get install -y \
     binutils coreutils findutils tar grep sed util-linux \
     && rm -rf /var/lib/apt/lists/*
 
+ENV PATH=/opt/wrf-bin:$PATH \
+    LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH \
+    CPPFLAGS="-I/usr/include -I/usr/include/hdf5/serial" \
+    LDFLAGS="-L/usr/lib/x86_64-linux-gnu"
+
 # ==============================
 # 🧱 Stage 2 — Dependências científicas (NetCDF, Jasper, HDF5)
 # ==============================
@@ -58,11 +63,7 @@ RUN cp share/landread.c.dist share/landread.c
 ENV NETCDF_CLASSIC=1 \
     NETCDF=/usr \
     NETCDF_C=/usr \
-    NETCDF_FORTRAN=/usr \
-    PATH=/usr/bin:$PATH \
-    LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH \
-    CPPFLAGS="-I/usr/include -I/usr/include/hdf5/serial" \
-    LDFLAGS="-L/usr/lib/x86_64-linux-gnu"
+    NETCDF_FORTRAN=/usr
 
 # ⚙️ Configura e compila
 RUN --mount=type=cache,target=/opt/cache/wrf-build \
@@ -87,14 +88,13 @@ RUN apt-get update && apt-get install -y \
     libnetcdf-dev libnetcdff-dev openmpi-bin libhdf5-serial-dev && \
     rm -rf /var/lib/apt/lists/*
 
-WORKDIR /opt/wrf
+WORKDIR /opt/WRF
 
 # Copia apenas os binários e o log do build
 COPY --from=build /usr/local /usr/local
 COPY --from=build /opt/WRF /opt/WRF
 
-# Variáveis de ambiente (mesmas do build)
-ENV PATH=/opt/wrf-bin:$PATH \
+ENV PATH=/usr/WRF/main:$PATH \
     LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 
 ENTRYPOINT ["/opt/wrf-bin/wrf.exe"]
