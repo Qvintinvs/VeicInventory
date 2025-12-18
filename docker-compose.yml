@@ -41,7 +41,7 @@ services:
     restart: unless-stopped
     ports:
       - "9000:9000"   # API
-      - "9001:9001"   # Web Console
+      - "9001"   # Web Console
     command: server /data --console-address ":9001"
     volumes:
       - minio_data:/data

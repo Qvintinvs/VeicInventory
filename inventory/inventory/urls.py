@@ -17,7 +17,12 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
+from wrf_standard.views import render_inventory_page, delete_vehicle_emission, schedule_emission_round, visualize
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", render_inventory_page, name="home"),
+    path("delete/<int:emission_id>/", delete_vehicle_emission, name="delete_vehicle_emission"),
+    path("schedule/<int:emission_id>/", schedule_emission_round, name="schedule_emission_round"),
+    path("visualize/", visualize, name="visualize"),
 ]

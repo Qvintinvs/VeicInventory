@@ -62,8 +62,16 @@ ROOT_URLCONF = "inventory.urls"
 
 TEMPLATES = [
     {
+        "BACKEND": "django.template.backends.jinja2.Jinja2",
+        "DIRS": [BASE_DIR.parent / "web_server" / "templates"],
+        "APP_DIRS": False,
+        "OPTIONS": {
+            "environment": "inventory.jinja2_environment.create_jinja2_environment",
+        },
+    },
+    {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -127,6 +135,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
+
+# Add the Flask-style web UI static files and templates folder so Django can
+# render the Jinja2 templates used by the Flask app.
+# web_server/ is a sibling to inventory/, so use BASE_DIR.parent
+STATICFILES_DIRS = [BASE_DIR.parent / "web_server" / "static"]
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

@@ -58,20 +58,13 @@ for vehicle in emission_data %}
           <span class="d-none d-sm-inline">Editar</span>
         </button>
 
-        <form
-          method="POST"
-          action="{{ url_for('wrf_standard.delete_vehicle_emission', emission_id=vehicle.id) }}"
-          class="d-inline delete-form"
+        <a 
+          href="{{ url_for('wrf_standard.delete_vehicle_emission', emission_id=vehicle.id) }}"
+          class="btn btn-danger btn-sm delete-link"
         >
-          {{ form.hidden_tag() }}
-
-          <input type="hidden" name="interaction_id" value="{{ vehicle.id }}"/>
-
-          <button type="submit" class="btn btn-danger btn-sm">
-            <i class="bi bi-trash"></i>
-            <span class="d-none d-sm-inline">Excluir</span>
-          </button>
-        </form>
+          <i class="bi bi-trash"></i>
+          <span class="d-none d-sm-inline">Excluir</span>
+        </a>
 
         <form
           method="POST"

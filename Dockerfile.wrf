@@ -102,4 +102,5 @@ COPY --from=build /opt/WRF/phys/noahmp/parameters/MPTABLE.TBL /opt/WRF/phys/noah
 ENV PATH=/usr/WRF/main:$PATH \
     LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 
-ENTRYPOINT ["/opt/wrf-bin/wrf.exe"]
+# ENTRYPOINT ["/opt/wrf-bin/wrf.exe"]
+ENTRYPOINT ["bash"]
