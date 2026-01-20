@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetCDF Heatmap Visualization</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>NetCDF Heatmap Visualization</h1>
+    <div id="heatmap" style="width: 100%; height: 600px;"></div>
+
+    <script>
+        async function fetchAndPlotHeatmap() {
+            try {
+                // Fetch the data from the Flask backend
+                const response = await fetch('/get_netcdf_data');
+                const data = await response.json();
+
+                // Extract data from the JSON response
+                const lats = data.lats;
+                const lons = data.lons;
+                const frames = data.frames;
+
+                // Initialize the heatmap with the first frame
+                const initialFrame = frames[0];
+
+                // Prepare Plotly data
+                const plotData = [
+                    {
+                        z: initialFrame, // First time step's data
+                        x: lons[0], // Longitude grid
+                        y: lats.map(row => row[0]), // Latitude grid
+                        type: 'heatmap',
+                        colorscale: 'Viridis',
+                        colorbar: {
+                            title: 'CO2 Mixing Ratio (ppmv)'
+                        }
+                    }
+                ];
+
+                // Prepare layout
+                const layout = {
+                    title: 'NetCDF Heatmap Visualization',
+                    xaxis: {
+                        title: 'Longitude'
+                    },
+                    yaxis: {
+                        title: 'Latitude'
+                    }
+                };
+
+                // Initialize the heatmap
+                Plotly.newPlot('heatmap', plotData, layout);
+
+                // Animate through frames
+                let currentFrame = 0;
+                setInterval(() => {
+                    currentFrame = (currentFrame + 1) % frames.length; // Loop through frames
+                    const frameData = frames[currentFrame];
+
+                    // Update the heatmap with new frame data
+                    Plotly.update('heatmap', {
+                        z: [frameData] // Update heatmap data
+                    });
+                }, 0); // Update every 1 second
+            } catch (error) {
+                console.error('Error fetching or plotting NetCDF data:', error);
+            }
+        }
+
+        // Call the function to fetch and plot heatmap data
+        fetchAndPlotHeatmap();
+    </script>
+</body>
+</html>
