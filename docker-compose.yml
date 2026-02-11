@@ -2,7 +2,7 @@ services:
   wrf:
     build:
       context: .
-      dockerfile: Dockerfile.wrf
+      dockerfile: docker/Dockerfile.wrf
     container_name: wrf
     volumes:
       - ./data:/data
@@ -49,7 +49,8 @@ services:
       - backend_network
 
   web:
-    build: .
+    build:
+      dockerfile: docker/Dockerfile.web
     env_file:
       - .env
     command: >

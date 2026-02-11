@@ -47,7 +47,8 @@ services:
       - backend_network
 
   web:
-    build: .
+    build:
+      dockerfile: docker/Dockerfile.web
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app

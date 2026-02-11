@@ -10,16 +10,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install pipenv
 RUN pip install --no-cache-dir pipenv
 
-# Copy Pipfile and Pipfile.lock first (for caching)
-COPY Pipfile Pipfile.lock* ./
+# Copy the Pipfile from the web service folder
+COPY services/web/Pipfile services/web/Pipfile.lock* ./
 
 # Install dependencies system-wide (so Django runs normally)
 RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy --system
 
-# Copy the rest of the app
-COPY . .
+# Copy the Django project (only the web folder)
+COPY services/web/ /app/
 
-WORKDIR /app/inventory
+WORKDIR /app
 
 EXPOSE 8000
 EXPOSE 9001
