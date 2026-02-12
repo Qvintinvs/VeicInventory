@@ -21,7 +21,10 @@ COPY services/web/inventory/ /app/inventory/
 
 WORKDIR /app/services/web/inventory
 
+# Django app
 EXPOSE 8000
+
+# Minio
 EXPOSE 9001
 
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
