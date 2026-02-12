@@ -1,14 +1,4 @@
 services:
-  wrf:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.wrf
-    container_name: wrf
-    volumes:
-      - ./data:/data
-    working_dir: /data
-    tty: true
-
   postgres:
     image: postgres:15
     restart: unless-stopped
@@ -45,6 +35,26 @@ services:
     command: server /data --console-address ":9001"
     volumes:
       - minio_data:/data
+    networks:
+      - backend_network
+
+  processor:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.wrf
+    env_file:
+      - .env
+    volumes:
+      - ./data:/data
+    depends_on:
+      redis:
+        condition: service_started
+      minio:
+        condition: service_started
+    environment:
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
+      MINIO_URL: http://minio:9000
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
     networks:
       - backend_network
 

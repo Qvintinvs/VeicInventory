@@ -79,12 +79,12 @@ RUN --mount=type=cache,target=/opt/cache/wrf-build \
 # ==============================
 # 🚀 Stage 4 — Runtime
 # ==============================
-FROM ubuntu:22.04 AS runtime
+FROM python:3.11.11-slim-bullseye as runtime
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Só dependências de execução (sem toolchain)
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y \
     libnetcdf-dev libnetcdff-dev libhdf5-serial-dev libpng-dev zlib1g-dev mpich openmpi-bin \
     && rm -rf /var/lib/apt/lists/*
 
@@ -102,4 +102,33 @@ COPY --from=build /opt/WRF/phys/noahmp/parameters/MPTABLE.TBL /opt/WRF/phys/noah
 ENV PATH=/usr/WRF/main:$PATH \
     LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 
-ENTRYPOINT ["/opt/wrf-bin/wrf.exe"]
+# ==============================
+# 🏗 Stage 5 - Processor
+# ==============================
+FROM runtime AS processor
+
+# Diretório de trabalho
+WORKDIR /processor
+
+# Atualiza apt e instala build-essential (necessário para algumas libs Python)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Garante que pip e pipenv estão instalados no Python da imagem
+RUN pip install --no-cache-dir pipenv
+
+# Copia Pipfile e Pipfile.lock
+COPY services/processor/Pipfile services/processor/Pipfile.lock* /processor/
+
+# Instala dependências Python direto no sistema (compatível com Pipfile)
+RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy --system
+
+# Copia o código Python do processor
+COPY services/processor/src /processor/src/
+
+# Define diretório de trabalho final
+WORKDIR /processor/src
+
+# Comando padrão para rodar o serviço
+CMD ["python3", "main.py"]
