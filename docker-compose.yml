@@ -41,7 +41,7 @@ services:
   processor:
     build:
       context: .
-      dockerfile: docker/Dockerfile.wrf
+      dockerfile: docker/Dockerfile.processor
     env_file:
       - .env
     volumes:
