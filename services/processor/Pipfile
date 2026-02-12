@@ -10,6 +10,7 @@ python-dotenv = "*"
 zstandard = "*"
 boto3 = "*"
 f90nml = "*"
+async-timeout = "*"
 
 [dev-packages]
 ruff = "*"
