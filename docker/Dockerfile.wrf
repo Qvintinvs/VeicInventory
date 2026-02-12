@@ -54,7 +54,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt
-RUN git clone --depth=1 https://github.com/wrf-model/WRF.git
+RUN git clone --branch v4.7.1 --depth=1 https://github.com/wrf-model/WRF.git
 
 WORKDIR /opt/WRF
 RUN cp share/landread.c.dist share/landread.c
