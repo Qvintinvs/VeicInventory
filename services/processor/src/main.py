@@ -12,7 +12,9 @@ from dotenv import load_dotenv
 from db import session
 from file import File
 
-r = redis.Redis(host="localhost", port=6379)
+REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379/0")
+
+r = redis.from_url(REDIS_URL)
 
 queue_name = "wrf-queue"
 

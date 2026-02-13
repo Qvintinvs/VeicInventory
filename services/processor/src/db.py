@@ -1,10 +1,15 @@
+import os
+
 from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import sessionmaker
 
 from file import Base
 
+# pega caminho do DB do ambiente
+db_path = os.getenv("SQLITE_DB_PATH", "instance/wrfem_blobs.db")
+
 # cria engine SQLite
-engine = create_engine("sqlite:///instance/wrfem_blobs.db", echo=True, future=True)
+engine = create_engine(f"sqlite:///{db_path}", echo=True, future=True)
 Base.metadata.create_all(engine)
 
 # executa PRAGMA no connect
