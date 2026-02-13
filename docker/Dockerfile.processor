@@ -127,6 +127,9 @@ RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy --system
 # Copia o código Python do processor
 COPY services/processor/src /processor/src/
 
+# Cria diretório para o SQLite
+RUN mkdir -p /app/instance && chown -R 1000:1000 /app/instance
+
 # Define diretório de trabalho final
 WORKDIR /processor/src
 
