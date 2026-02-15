@@ -1,12 +1,6 @@
 #!/bin/bash
 set -e
 
-# Carregar variáveis do .env
-# (ignora linhas comentadas e exporta chaves)
-set -a
-source "$(dirname "$0")/../.env"
-set +a
-
 # Absolute path to the project root
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"

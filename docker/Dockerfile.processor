@@ -145,5 +145,21 @@ RUN mkdir -p /app/instance && chown -R 1000:1000 /app/instance
 # Define diretório de trabalho final
 WORKDIR /processor/src
 
+# ==============================
+# 🌐 Variáveis internas do Processor
+# ==============================
+
+# Arquivos WRFEM gerados a partir do outputs.tar.gz
+ENV WRFEM_OUTPUT_00TO12=/processor/resources/wrfem_00to12z_d01.nc
+ENV WRFEM_OUTPUT_12TO24=/processor/resources/wrfem_12to24z_d01.nc
+
+# Diretórios de emissões
+ENV GHG_EMIS_DIR=/processor/resources/ghg_emis
+ENV WRF_EMIS_DIR=/processor/resources/wrf_emis
+ENV EMIS_EMIS_DIR=/processor/resources/emis_emis
+
+# Banco SQLite interno
+ENV SQLITE_DB_PATH=/app/instance/wrfem_blobs.db
+
 # Comando padrão para rodar o serviço
 CMD ["python3", "main.py"]
