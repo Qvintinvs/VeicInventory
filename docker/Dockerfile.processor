@@ -133,6 +133,12 @@ COPY services/processor/fortran /processor/fortran/
 # Compila o código FORTRAN
 RUN make -C /processor/fortran
 
+# Copia o pacote outputs.tar.gz para dentro da imagem
+COPY services/processor/resources/outputs.tar.gz /processor/resources/
+
+# Extrai arquivos Fortran e outros recursos para dentro de /processor/fortran
+RUN tar -xzf /processor/resources/outputs.tar.gz -C /processor/resources/
+
 # Cria diretório para o SQLite
 RUN mkdir -p /app/instance && chown -R 1000:1000 /app/instance
 

@@ -11,8 +11,8 @@ set +a
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
-# Usar variáveis do .env
-cd "$PROJECT_ROOT/data/raw" || exit 1
+# Usar variáveis de ambiente
+cd "$PROJECT_ROOT/resources" || exit 1
 
 if [ ! -f "$PROJECT_ROOT/fortran/build/emiss.exe" ]; then
   echo "❌ Executable not found. Run 'make' first."
