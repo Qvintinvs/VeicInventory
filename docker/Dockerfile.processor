@@ -150,8 +150,8 @@ WORKDIR /processor/src
 # ==============================
 
 # Arquivos WRFEM gerados a partir do outputs.tar.gz
-ENV WRFEM_OUTPUT_00TO12=/processor/resources/wrfem_00to12z_d01.nc
-ENV WRFEM_OUTPUT_12TO24=/processor/resources/wrfem_12to24z_d01.nc
+ENV WRFEM_OUTPUT_00TO12=/processor/resources/wrfem_00to12z_d01
+ENV WRFEM_OUTPUT_12TO24=/processor/resources/wrfem_12to24z_d01
 
 # Diretórios de emissões
 ENV GHG_EMIS_DIR=/processor/resources/ghg_emis
