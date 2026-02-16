@@ -145,33 +145,39 @@ RUN mkdir -p /app/instance && chown -R 1000:1000 /app/instance
 # Define diretório de trabalho final
 WORKDIR /processor/src
 
-# Diretórios em RAM
-RUN mkdir -p /dev/shm/wrfem00 && \
-    mkdir -p /dev/shm/wrfem12
-
-# Apaga qualquer coisa prévia
-RUN rm -rf /processor/resources/wrfem_00to12z_d01 && \
-    rm -rf /processor/resources/wrfem_12to24z_d01
-
-# Cria symlinks (diretórios) apontando para tmpfs
-RUN ln -s /dev/shm/wrfem00 /processor/resources/wrfem_00to12z_d01 && \
-    ln -s /dev/shm/wrfem12 /processor/resources/wrfem_12to24z_d01
-
 # ==============================
 # 🌐 Variáveis internas do Processor
 # ==============================
 
 # Arquivos WRFEM gerados a partir do outputs.tar.gz
-ENV WRFEM_OUTPUT_00TO12=/processor/resources/wrfem_00to12z_d01
-ENV WRFEM_OUTPUT_12TO24=/processor/resources/wrfem_12to24z_d01
+ARG PROCESSOR_RESOURCES_DIR=/processor/resources \
+    WRFEM_OUTPUT_00TO12=${PROCESSOR_RESOURCES_DIR}/wrfem_00to12z_d01 \
+    WRFEM_OUTPUT_12TO24=${PROCESSOR_RESOURCES_DIR}/wrfem_12to24z_d01
 
 # Diretórios de emissões
-ENV GHG_EMIS_DIR=/processor/resources/ghg_emis
-ENV WRF_EMIS_DIR=/processor/resources/wrf_emis
-ENV EMIS_EMIS_DIR=/processor/resources/emis_emis
+ENV GHG_EMIS_DIR=${PROCESSOR_RESOURCES_DIR}/ghg_emis \
+    WRF_EMIS_DIR=${PROCESSOR_RESOURCES_DIR}/wrf_emis \
+    EMIS_EMIS_DIR=${PROCESSOR_RESOURCES_DIR}/emis_emis
 
 # Banco SQLite interno
 ENV SQLITE_DB_PATH=/app/instance/wrfem_blobs.db
+
+# ==============================
+# 🚀 Estrutura em RAM + Symlinks
+# ==============================
+
+ARG SHM_BASE_DIR=/dev/shm \
+    WRFEM_RAM_00TO12=${SHM_BASE_DIR}/wrfem00 \
+    WRFEM_RAM_12TO24=${SHM_BASE_DIR}/wrfem12
+
+# Outputs do WRFEM → tmpfs (melhor desempenho de I/O)
+RUN set -eux \
+    mkdir -p ${WRFEM_RAM_00TO12} && \
+    mkdir -p ${WRFEM_RAM_12TO24} && \
+    rm -rf ${WRFEM_OUTPUT_00TO12} && \
+    rm -rf ${WRFEM_OUTPUT_12TO24} && \
+    ln -s ${WRFEM_RAM_00TO12} ${WRFEM_OUTPUT_00TO12} && \
+    ln -s ${WRFEM_RAM_12TO24} ${WRFEM_OUTPUT_12TO24}
 
 # Comando padrão para rodar o serviço
 CMD ["python3", "main.py"]
