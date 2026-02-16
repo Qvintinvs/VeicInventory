@@ -145,6 +145,18 @@ RUN mkdir -p /app/instance && chown -R 1000:1000 /app/instance
 # Define diretório de trabalho final
 WORKDIR /processor/src
 
+# Diretórios em RAM
+RUN mkdir -p /dev/shm/wrfem00 && \
+    mkdir -p /dev/shm/wrfem12
+
+# Apaga qualquer coisa prévia
+RUN rm -rf /processor/resources/wrfem_00to12z_d01 && \
+    rm -rf /processor/resources/wrfem_12to24z_d01
+
+# Cria symlinks (diretórios) apontando para tmpfs
+RUN ln -s /dev/shm/wrfem00 /processor/resources/wrfem_00to12z_d01 && \
+    ln -s /dev/shm/wrfem12 /processor/resources/wrfem_12to24z_d01
+
 # ==============================
 # 🌐 Variáveis internas do Processor
 # ==============================
