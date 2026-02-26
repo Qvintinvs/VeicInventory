@@ -1,31 +1,31 @@
 #!/bin/bash
 set -e
 
+# Paths to data directories
+resources_dir="$GHG_EMIS_DIR"
+wrf_emis="$WRF_EMIS_DIR"
+
 # Absolute path to the project root
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
-# Usar variáveis de ambiente
+fortran_executable="$PROJECT_ROOT/fortran/build/emiss.exe"
+
 cd "$PROJECT_ROOT/resources" || exit 1
 
-if [ ! -f "$PROJECT_ROOT/fortran/build/emiss.exe" ]; then
+if [ ! -f "$fortran_executable" ]; then
   echo "❌ Executable not found. Run 'make' first."
   exit 1
 fi
 
 # Run emiss.exe from the build folder, while being inside data/raw
-"$PROJECT_ROOT/fortran/build/emiss.exe" || {
+"$fortran_executable" || {
   echo "❌ Falha ao executar emiss.exe"
   exit 1
 }
 
-# Paths to data directories
-ghg_emis="$GHG_EMIS_DIR"
-wrf_emis="$WRF_EMIS_DIR"
-emis_emis="$EMIS_EMIS_DIR"
-
 # Check if wrfem_* files were generated
-if ls "$ghg_emis/wrfem_"* 1>/dev/null 2>&1; then
+if ls "$resources_dir/wrfem_"* 1>/dev/null 2>&1; then
   echo "✅ Arquivos binários gerados com sucesso!"
 else
   echo "❌ Falha ao gerar arquivos binários wrfem_*"
@@ -41,8 +41,8 @@ cd "$wrf_emis" || {
 rm -f wrfchemi_* wrfem_* 2>/dev/null
 
 # Copy generated wrfem files to current directory
-cp "$ghg_emis/wrfem_00to12z_d01" .
-cp "$ghg_emis/wrfem_12to24z_d01" .
+cp "$resources_dir/wrfem_00to12z_d01" .
+cp "$resources_dir/wrfem_12to24z_d01" .
 
 # ======================== 00-12 ========================
 echo "⏱️  Processando emissões WRF 00-12"

@@ -99,7 +99,7 @@ COPY --from=build /opt/WRF/main/*.exe /opt/WRF/main/
 COPY --from=build /opt/WRF/run /opt/WRF/run
 COPY --from=build /opt/WRF/phys/noahmp/parameters/MPTABLE.TBL /opt/WRF/phys/noahmp/parameters/MPTABLE.TBL
 
-ENV PATH=/usr/WRF/main:$PATH \
+ENV PATH=/opt/WRF/main:$PATH \
     LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 
 # ==============================
@@ -155,9 +155,8 @@ ARG PROCESSOR_RESOURCES_DIR=/processor/resources \
     WRFEM_OUTPUT_12TO24=${PROCESSOR_RESOURCES_DIR}/wrfem_12to24z_d01
 
 # Diretórios de emissões
-ENV GHG_EMIS_DIR=${PROCESSOR_RESOURCES_DIR}/ghg_emis \
-    WRF_EMIS_DIR=${PROCESSOR_RESOURCES_DIR}/wrf_emis \
-    EMIS_EMIS_DIR=${PROCESSOR_RESOURCES_DIR}/emis_emis
+ENV GHG_EMIS_DIR=${PROCESSOR_RESOURCES_DIR} \
+    WRF_EMIS_DIR=/opt/WRF/run
 
 # Banco SQLite interno
 ENV SQLITE_DB_PATH=/app/instance/wrfem_blobs.db
