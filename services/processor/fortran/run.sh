@@ -89,14 +89,6 @@ else
 fi
 
 # ======================== Final copy ========================
-cd "$emis_emis" || {
-  echo "❌ Falha ao acessar $emis_emis"
-  exit 1
-}
-
-# Copy final output files
-cp "$wrf_emis/wrfchemi_00z_d01" .
-cp "$wrf_emis/wrfchemi_12z_d01" .
 
 echo "🏁 Finalizado com sucesso."
 
