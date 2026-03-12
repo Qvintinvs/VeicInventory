@@ -47,6 +47,13 @@ class WRFRound(models.Model):
 
     queue = WRFRoundManager()
 
+    def send_to_queue(self):
+        """Despacha este round para a fila RQ."""
+
+        emission_data = serializers.serialize("json", (self,))[1:-1]
+        queue = django_rq.get_queue("emission_queue")
+        queue.enqueue("app.tasks.process_emission", emission_data)
+
     def run_if_pending(self):
         if self.status == RoundStatus.PENDING:
             self.status = RoundStatus.RUNNING
