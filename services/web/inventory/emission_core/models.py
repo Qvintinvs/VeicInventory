@@ -20,19 +20,19 @@ class CNHSubcategory(Enum):
 
 
 class CNHChoices(models.TextChoices):
-    A = "A"
-    B = "B"
-    C = "C"
-    D = "D"
-    E = "E"
+    A = "A", "A - Motos, motonetas e triciclos"
+    B = "B", "B - Carros de passeio, utilitário/SUV, minivan, picape"
+    C = "C", "C - Caminhões, caminhonetes, vans de carga"
+    D = "D", "D - Ônibus, microônibus, vans de passageiros"
+    E = "E", "E - Veículos pesados"
 
 
 class FuelChoices(models.TextChoices):
-    GASOLINE = "Gasoline"
-    ALCOHOL = "Alcohol"
-    DIESEL = "Diesel"
-    ELECTRIC = "Electric"
-    FLEX = "Flex"
+    GASOLINE = "Gasoline", "Gasolina"
+    ALCOHOL = "Alcohol", "Álcool"
+    DIESEL = "Diesel", "Diesel"
+    ELECTRIC = "Electric", "Elétrico"
+    FLEX = "Flex", "Flex"
 
 
 T = TypeVar("T", bound=models.Model)

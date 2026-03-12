@@ -53,15 +53,18 @@ class WRFStandardEmissionView:
     ):
         data_variable = request.args.get("data_variable")
         if not data_variable:
-            data_variable = "CO2_BIO"
+            # data_variable = "CO2_BIO"
+            data_variable = "number"
 
         altitude = request.args.get("altitude", type=int)
         if not altitude:
             altitude = 0
 
-        nc_file = self.__wrfchemi.read_file(prefix="round_1")
+        # nc_file = self.__wrfchemi.read_file(prefix="round_1")
+        nc_file = self.__wrfchemi.read_file(prefix="test.nc")
 
-        dataset = xr.open_dataset(nc_file, engine="scipy")
+        # dataset = xr.open_dataset(nc_file, engine="scipy")
+        dataset = xr.open_dataset(nc_file, engine="netcdf4")
 
         # --- Altitudes ---
         # Parece que você queria só um eixo vertical da grade
@@ -71,8 +74,11 @@ class WRFStandardEmissionView:
         # --- Latitudes e longitudes ---
         # XLAT e XLONG geralmente têm dims (time, south_north, west_east)
         # Selecionando slice na dimensão altitude (ou time se for o caso)
-        lats = dataset["south_north"].values
-        lons = dataset["west_east"].values
+        
+        # lats = dataset["south_north"].values
+        # lons = dataset["west_east"].values
+        lats = dataset["latitude"].values
+        lons = dataset["longitude"].values
 
         # Handle MaskedArrays
         if isinstance(lats, np.ma.MaskedArray):
@@ -81,7 +87,8 @@ class WRFStandardEmissionView:
             lons = lons.filled(np.nan)  # Replace masked values with NaN
 
         # Extract time and CO2_ANT data
-        times = dataset["Time"].values
+        # times = dataset["Time"].values
+        times = dataset["valid_time"].values
 
         # Get all variable names
         variable_names = dataset.variables.keys()
@@ -109,14 +116,14 @@ class WRFStandardEmissionView:
 
         variable_frames = []
 
-        for t_idx in range(variable.sizes["Time"]):  # iterando sobre a dimensão tempo
+        for t_idx in range(variable.sizes["valid_time"]):  # iterando sobre a dimensão tempo
             # isel seleciona por índice
-            frame = variable.isel(Time=t_idx).values  # np.ndarray 2D
+            frame = variable.isel(valid_time=t_idx).values  # np.ndarray 2D
             variable_frames.append(frame.tolist())
 
         # Close the dataset
         dataset.close()
-
+    
         # Prepare and return JSON response
         return jsonify(
             {
