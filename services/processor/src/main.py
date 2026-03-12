@@ -1,3 +1,4 @@
+import hashlib
 import io
 import json
 import os
@@ -8,9 +9,6 @@ import boto3
 import redis
 import zstandard as zstd
 from dotenv import load_dotenv
-
-from db import session
-from file import File
 
 REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379/0")
 
@@ -48,8 +46,12 @@ def compress_file(path: str):
     return cctx.compress(data)
 
 
-def insert_round_wrfem_output():
-    load_dotenv()  # carrega variáveis do .env
+def insert_round_wrfem_output(queue_item: dict):
+    """
+    queue_item: dict com os dados do item da fila.
+                Deve conter 'pk' e 'fields' com 'panel'
+    """
+    load_dotenv()
 
     file_00to12_path = os.getenv("WRFEM_OUTPUT_00TO12")
     file_12to24_path = os.getenv("WRFEM_OUTPUT_12TO24")
@@ -57,22 +59,23 @@ def insert_round_wrfem_output():
     if not file_00to12_path or not file_12to24_path:
         raise ValueError("Caminhos dos arquivos não configurados no .env")
 
-    new_file1: File = File(
-        name="wrfem_00to12z_d01", data=compress_file(file_00to12_path)
-    )
-    new_file2: File = File(
-        name="wrfem_12to24z_d01", data=compress_file(file_12to24_path)
-    )
+    data_00to12_path = compress_file(file_00to12_path)
+    data_12to24_path = compress_file(file_12to24_path)
 
-    session.add(new_file1)
-    session.add(new_file2)
-    session.commit()
+    pk = queue_item.get("pk")
+    panel_id = queue_item.get("fields", {}).get("panel")
 
-    object_key1 = f"wrfchemi/round_{new_file1.id}.zst"
-    object_key2 = f"wrfchemi/round_{new_file1.id}.zst"
+    base_string = f"queue_pk{pk}_panel{panel_id}"
+    round_id = hashlib.sha256(base_string.encode()).hexdigest()[:12]
 
-    upload_to_minio(new_file1.data, "wrfchemi-blobs", object_key1)
-    upload_to_minio(new_file2.data, "wrfchemi-blobs", object_key2)
+    object_key1 = f"wrfchemi/round_{round_id}_00to12.zst"
+    object_key2 = f"wrfchemi/round_{round_id}_12to24.zst"
+
+    # Upload para MinIO
+    upload_to_minio(data_00to12_path, "wrfchemi-blobs", object_key1)
+    upload_to_minio(data_12to24_path, "wrfchemi-blobs", object_key2)
+
+    return round_id
 
 
 def run_and_capture():
