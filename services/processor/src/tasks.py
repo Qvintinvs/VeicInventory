@@ -5,6 +5,7 @@ import os
 
 import boto3
 import zstandard as zstd
+from botocore.config import Config
 from dotenv import load_dotenv
 
 run_script_path = os.path.abspath(
@@ -15,9 +16,10 @@ env = os.environ.copy()
 
 s3 = boto3.client(
     "s3",
-    endpoint_url="http://minio:9000",
-    aws_access_key_id="minioadmin",
-    aws_secret_access_key="minioadmin",
+    endpoint_url=os.getenv("S3_ENDPOINT_URL"),
+    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+    config=Config(signature_version="s3v4"),
 )
 
 
