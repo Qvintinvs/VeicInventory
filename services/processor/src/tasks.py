@@ -105,4 +105,4 @@ def process_emission(emission_json: str):
     if status:
         print("Erro no run.sh")
 
-    # insert_round_wrfem_output(data)
+    insert_round_wrfem_output(data)
