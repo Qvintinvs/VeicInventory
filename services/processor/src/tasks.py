@@ -73,8 +73,9 @@ def insert_round_wrfem_output(queue_item: dict):
 
     pk = queue_item.get("pk")
     panel_id = queue_item.get("fields", {}).get("panel")
+    timestamp = queue_item.get("timestamp")
 
-    base_string = f"queue_pk{pk}_panel{panel_id}"
+    base_string = f"queue_pk{pk}_panel{panel_id}_timestamp{timestamp}"
     round_id = hashlib.sha256(base_string.encode()).hexdigest()[:12]
 
     upload_to_minio(
