@@ -7,6 +7,7 @@ name = "pypi"
 netcdf4 = "*"
 django = "5.2.6"
 django-rq = "3.1"
+django-redis = "==6.0.0"
 dj-database-url = "3.0.1"
 django-storages = {extras = ["boto3"], version = "==1.14.6"}
 psycopg2-binary = "2.9.11"
