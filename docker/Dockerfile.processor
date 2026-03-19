@@ -7,10 +7,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # 🔧 Ferramentas básicas (compiladores e utilitários)
 RUN apt-get update && apt-get install -y \
-    build-essential gfortran g++ gcc m4 make cmake \
+    build-essential gfortran g++ gcc m4 make cmake ccache \
     perl csh tcsh wget git curl time gawk file \
     binutils coreutils findutils tar grep sed util-linux \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && update-ccache-symlinks
 
 ENV PATH=/opt/wrf-bin:$PATH \
     LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH \
