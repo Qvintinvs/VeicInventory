@@ -13,10 +13,19 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/* \
     && update-ccache-symlinks
 
-ENV PATH=/opt/wrf-bin:$PATH \
-    LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH \
+ENV PATH="/usr/lib/ccache:${PATH}:/opt/wrf-bin" \
+    LD_LIBRARY_PATH="/usr/local/lib:/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}" \
     CPPFLAGS="-I/usr/include -I/usr/include/hdf5/serial" \
-    LDFLAGS="-L/usr/lib/x86_64-linux-gnu"
+    LDFLAGS="-L/usr/lib/x86_64-linux-gnu" \
+    CC="ccache gcc" \
+    CXX="ccache g++" \
+    FC="ccache gfortran" \
+    F77="ccache gfortran" \
+    CCACHE_BASEDIR="/opt/WRF" \
+    CCACHE_DIR="/root/.ccache" \
+    CCACHE_NOHASHDIR=1 \
+    CCACHE_COMPRESS=1 \
+    CCACHE_MAXSIZE=5G
 
 # ==============================
 # 🧱 Stage 2 — Dependências científicas (NetCDF, Jasper, HDF5)
