@@ -40,6 +40,26 @@ RUN apt-get update && apt-get install -y \
     libnetcdf-dev libnetcdff-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# 🧰 Wrap MPIF90 with ccache
+RUN mv $(which mpif90) /usr/bin/mpif90.real \
+ && echo '#!/bin/bash' > /usr/bin/mpif90 \
+ && echo 'exec ccache /usr/bin/mpif90.real "$@"' >> /usr/bin/mpif90 \
+ && chmod +x /usr/bin/mpif90
+
+# 🧰 Wrap MPI C/C++ compilers (mpicc, mpicxx, mpiCC) with ccache
+RUN for x in mpicc mpicxx mpiCC; do \
+      if command -v "$x" >/dev/null 2>&1; then \
+        real="/usr/bin/${x}.real"; \
+        bin="$(command -v "$x")"; \
+        mv "$bin" "$real"; \
+        { \
+          echo '#!/bin/bash'; \
+          echo "exec ccache $real \"\$@\""; \
+        } > "/usr/bin/$x"; \
+        chmod +x "/usr/bin/$x"; \
+      fi; \
+    done
+
 # 📦 Compila e instala Jasper (com cache persistente BuildKit)
 WORKDIR /opt/libs
 RUN --mount=type=cache,target=/opt/cache \
