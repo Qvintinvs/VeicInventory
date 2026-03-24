@@ -45,7 +45,9 @@ class WRFStandardEmissionView:
 
     # TODO: move this method to a dedicated class
     def visualize(self):
-        return render_template("render_plot.html")
+        from django.shortcuts import render
+
+        return render(request, "render_plot.html")
 
     # TODO: move this method to a dedicated class, same as visualize
     def get_netcdf_data(

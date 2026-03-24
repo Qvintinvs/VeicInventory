@@ -16,10 +16,13 @@ COPY services/web/Pipfile services/web/Pipfile.lock* /app/
 # Install dependencies system-wide (so Django runs normally)
 RUN pipenv install --system --skip-lock
 
+# hack
+RUN pip install --no-cache-dir xarray
+
 # Copy the Django project
 COPY services/web/inventory/ /app/inventory/
 
-WORKDIR /app/services/web/inventory
+WORKDIR /app/inventory
 
 # Django app
 EXPOSE 8000
